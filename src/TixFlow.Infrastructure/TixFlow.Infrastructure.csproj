@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TixFlow.Application\TixFlow.Application.csproj" />
+    <ProjectReference Include="..\TixFlow.Domain\TixFlow.Domain.csproj" />
+  </ItemGroup>
+</Project>
