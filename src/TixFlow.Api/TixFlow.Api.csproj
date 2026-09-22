@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="..\TixFlow.Application\TixFlow.Application.csproj" />
+    <ProjectReference Include="..\TixFlow.Infrastructure\TixFlow.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
+
