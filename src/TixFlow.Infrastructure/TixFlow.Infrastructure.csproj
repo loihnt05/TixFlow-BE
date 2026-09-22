@@ -3,6 +3,7 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
       <PrivateAssets>all</PrivateAssets>
@@ -11,6 +12,8 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
   </ItemGroup>
   <ItemGroup>
+=======
+>>>>>>> 89d75a4e2fee96441a9fc51381ee676f0216da88
     <ProjectReference Include="..\TixFlow.Application\TixFlow.Application.csproj" />
     <ProjectReference Include="..\TixFlow.Domain\TixFlow.Domain.csproj" />
   </ItemGroup>
