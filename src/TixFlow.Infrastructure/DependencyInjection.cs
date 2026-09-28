@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TixFlow.Infrastructure.Persistence;
+using TixFlow.Application.Identity;
+using TixFlow.Infrastructure.Identity;
 
 namespace TixFlow.Infrastructure;
 
@@ -26,6 +28,7 @@ public static class DependencyInjection
                         errorCodesToAdd: null))
                 .UseSnakeCaseNamingConvention());
 
+        services.AddScoped<ILocalUserSynchronizer, LocalUserSynchronizer>();
         return services;
     }
 }

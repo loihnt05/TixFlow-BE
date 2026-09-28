@@ -2,6 +2,7 @@ using TixFlow.Domain.Common;
 
 namespace TixFlow.Domain.Identity;
 
+// DEPRECATED / UNUSED: retained for schema compatibility, never used by OIDC authentication.
 public sealed class RefreshToken : Entity
 {
     private RefreshToken()

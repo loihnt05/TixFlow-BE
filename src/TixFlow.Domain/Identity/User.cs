@@ -27,7 +27,10 @@ public sealed class User : Entity
 
     public string DisplayName { get; private set; } = string.Empty;
 
-    public string PasswordHash { get; private set; } = string.Empty;
+    // Legacy only. OIDC profiles have no password in the business database.
+    public string? PasswordHash { get; private set; }
+
+    public string? IdentitySubject { get; private set; }
 
     public UserRole Role { get; private set; } = UserRole.Customer;
 

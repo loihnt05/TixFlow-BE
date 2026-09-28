@@ -71,7 +71,10 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
             entity.Property(item => item.Email).HasMaxLength(320).IsRequired();
             entity.Property(item => item.NormalizedEmail).HasMaxLength(320).IsRequired();
             entity.Property(item => item.DisplayName).HasMaxLength(120).IsRequired();
-            entity.Property(item => item.PasswordHash).HasMaxLength(500).IsRequired();
+            entity.Property(item => item.PasswordHash).HasMaxLength(500);
+            entity.Property(item => item.IdentitySubject).HasMaxLength(255);
+            entity.HasIndex(item => item.IdentitySubject).IsUnique()
+                .HasDatabaseName("ux_users_identity_subject");
             entity.Property(item => item.Role).HasConversion<string>().HasMaxLength(24).IsRequired();
             entity.Property(item => item.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
             entity.HasIndex(item => item.NormalizedEmail).IsUnique();
