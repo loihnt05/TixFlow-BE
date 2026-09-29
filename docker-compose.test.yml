@@ -1,0 +1,20 @@
+name: tixflow-auth-tests
+services:
+  postgres-test:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: tixflow_auth_tests
+      POSTGRES_USER: tixflow_test
+      POSTGRES_PASSWORD: isolated_test_only
+    ports:
+      - "127.0.0.1:15433:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    volumes:
+      - ./database/init/001_initial_schema.sql:/docker-entrypoint-initdb.d/001_initial_schema.sql:ro
+      - ./database/migrations/002_keycloak_identity.sql:/docker-entrypoint-initdb.d/002_keycloak_identity.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tixflow_test -d tixflow_auth_tests"]
+      interval: 2s
+      timeout: 5s
+      retries: 20

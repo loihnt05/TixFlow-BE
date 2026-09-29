@@ -1,0 +1,161 @@
+name: tixflow
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-tixflow}
+      POSTGRES_USER: ${POSTGRES_USER:-tixflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7.4-alpine
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-tixflow}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: src/TixFlow.Api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=${POSTGRES_DB:-tixflow};Username=${POSTGRES_USER:-tixflow};Password=${POSTGRES_PASSWORD}
+      ConnectionStrings__Redis: redis:6379
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: ${RABBITMQ_USER:-tixflow}
+      RabbitMq__Password: ${RABBITMQ_PASSWORD}
+      Frontend__Origin: http://localhost:3000
+      Authentication__Authority: http://localhost:8180/realms/tixflow
+      Authentication__MetadataAddress: http://keycloak:8080/realms/tixflow/.well-known/openid-configuration
+      Authentication__Audience: tixflow-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      database-migrate:
+        condition: service_completed_successfully
+      keycloak:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: .
+      dockerfile: src/TixFlow.Worker/Dockerfile
+    environment:
+      DOTNET_ENVIRONMENT: Development
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=${POSTGRES_DB:-tixflow};Username=${POSTGRES_USER:-tixflow};Password=${POSTGRES_PASSWORD}
+      ConnectionStrings__Redis: redis:6379
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: ${RABBITMQ_USER:-tixflow}
+      RabbitMq__Password: ${RABBITMQ_PASSWORD}
+    depends_on:
+      api:
+        condition: service_started
+
+  # Applies additive SQL to both existing and newly initialized business volumes.
+  database-migrate:
+    image: postgres:16-alpine
+    environment:
+      PGHOST: postgres
+      PGDATABASE: ${POSTGRES_DB:-tixflow}
+      PGUSER: ${POSTGRES_USER:-tixflow}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./database/migrations:/migrations:ro
+    command: ["psql", "-v", "ON_ERROR_STOP=1", "-f", "/migrations/002_keycloak_identity.sql"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  keycloak-postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    volumes:
+      - keycloak_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak -d keycloak"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Development only. Production uses `start`, HTTPS and deployment secrets.
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.7.4
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_HOSTNAME: http://localhost:8180
+      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+    ports:
+      - "127.0.0.1:8180:8080"
+      - "127.0.0.1:9001:9000"
+    volumes:
+      - ./infrastructure/keycloak:/opt/keycloak/data/import:ro
+    depends_on:
+      keycloak-postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "bash -ec 'exec 3<>/dev/tcp/127.0.0.1/9000; printf \"GET /health/ready HTTP/1.0\\r\\n\\r\\n\" >&3; grep -q \"200 OK\" <&3'"
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 18
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  keycloak_postgres_data:
