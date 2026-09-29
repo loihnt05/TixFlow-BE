@@ -1,0 +1,187 @@
+{
+  "realm": "tixflow",
+  "enabled": true,
+  "displayName": "TixFlow",
+  "sslRequired": "external",
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "rememberMe": false,
+  "verifyEmail": false,
+  "accessTokenLifespan": 300,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "roles": {
+    "realm": [
+      {
+        "name": "Admin"
+      },
+      {
+        "name": "Organizer"
+      },
+      {
+        "name": "Customer"
+      },
+      {
+        "name": "default-roles-tixflow",
+        "description": "New registrations are Customers only",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "Customer"
+          ]
+        }
+      }
+    ]
+  },
+  "defaultRole": {
+    "name": "default-roles-tixflow",
+    "composite": true
+  },
+  "clients": [
+    {
+      "clientId": "tixflow-api",
+      "name": "TixFlow API audience",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "bearerOnly": true,
+      "publicClient": false,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false
+    },
+    {
+      "clientId": "tixflow-web",
+      "name": "TixFlow web",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": false,
+      "redirectUris": [
+        "http://localhost:3000/auth/callback"
+      ],
+      "webOrigins": [
+        "http://localhost:3000"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3000/"
+      },
+      "defaultClientScopes": [
+        "profile",
+        "email",
+        "web-origins"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "tixflow-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "tixflow-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        },
+        {
+          "name": "tixflow-roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "usermodel.realmRoleMapping.rolePrefix": "",
+            "multivalued": "true",
+            "claim.name": "roles",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "tixflow-swagger",
+      "name": "TixFlow Swagger (development)",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": false,
+      "redirectUris": [
+        "http://localhost:8080/swagger/oauth2-redirect.html"
+      ],
+      "webOrigins": [
+        "http://localhost:8080"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:8080/swagger/"
+      },
+      "defaultClientScopes": [
+        "profile",
+        "email",
+        "web-origins"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "tixflow-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "tixflow-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        },
+        {
+          "name": "tixflow-roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "usermodel.realmRoleMapping.rolePrefix": "",
+            "multivalued": "true",
+            "claim.name": "roles",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "scopeMappings": [
+    {
+      "client": "tixflow-web",
+      "roles": [
+        "Admin",
+        "Organizer",
+        "Customer"
+      ]
+    },
+    {
+      "client": "tixflow-swagger",
+      "roles": [
+        "Admin",
+        "Organizer",
+        "Customer"
+      ]
+    }
+  ]
+}
