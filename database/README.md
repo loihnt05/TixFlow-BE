@@ -26,6 +26,23 @@ Get-Content .\database\verify.sql -Raw |
     docker compose exec -T postgres psql -v ON_ERROR_STOP=1 -U tixflow -d tixflow
 ```
 
+## Xác minh Phase 0
+
+Sau khi cấu hình `.env`, chạy kiểm tra tái lập cho cả Compose, Keycloak, API và PostgreSQL:
+
+```powershell
+.\scripts\Invoke-Phase0Smoke.ps1 -StartStack
+```
+
+Nếu chỉ cần xác minh PostgreSQL của stack đang chạy, script SQL bên dưới sẽ trả lỗi khác `0` khi baseline không đúng 20 bảng, thiếu migration Keycloak hoặc thiếu sự kiện seed đã publish:
+
+```powershell
+Get-Content .\database\phase0-smoke.sql -Raw |
+    docker compose exec -T postgres sh -ec 'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"'
+```
+
+Script này chỉ dành cho baseline Phase 0. Các migration thêm bảng sau này cần có kiểm tra phiên bản riêng, không thay đổi tiêu chí 20 bảng của baseline.
+
 ## Áp dụng vào volume cũ chưa có schema
 
 ```powershell

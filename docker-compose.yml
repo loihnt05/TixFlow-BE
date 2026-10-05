@@ -65,6 +65,14 @@ services:
       Authentication__Audience: tixflow-api
     ports:
       - "8080:8080"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "bash -ec 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \"GET /health HTTP/1.0\\r\\n\\r\\n\" >&3; grep -q \"200\" <&3'"
+      interval: 10s
+      timeout: 5s
+      start_period: 20s
+      retries: 12
     depends_on:
       postgres:
         condition: service_healthy
@@ -90,7 +98,7 @@ services:
       RabbitMq__Password: ${RABBITMQ_PASSWORD}
     depends_on:
       api:
-        condition: service_started
+        condition: service_healthy
 
   # Applies additive SQL to both existing and newly initialized business volumes.
   database-migrate:
@@ -102,7 +110,15 @@ services:
       PGPASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./database/migrations:/migrations:ro
-    command: ["psql", "-v", "ON_ERROR_STOP=1", "-f", "/migrations/002_keycloak_identity.sql"]
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        for migration in /migrations/*.sql; do
+          [ -f "$$migration" ] || continue
+          echo "Applying $$migration"
+          psql -v ON_ERROR_STOP=1 -f "$$migration"
+        done
     depends_on:
       postgres:
         condition: service_healthy

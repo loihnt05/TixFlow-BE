@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 using Npgsql;
 
 namespace TixFlow.Api.Tests;
@@ -26,6 +27,13 @@ public sealed class AuthenticationTests(AuthApiFactory factory) : IClassFixture<
         using HttpClient client = Client();
         foreach (string path in new[] { "/health", "/api/v1/events", "/api/v1/system/info", "/api/v1/bookings/status", "/api/v1/assistant/status" })
             Assert.Equal(HttpStatusCode.OK, (await client.GetAsync(path)).StatusCode);
+
+        using HttpResponseMessage swagger = await client.GetAsync("/swagger/v1/swagger.json");
+        Assert.Equal(HttpStatusCode.OK, swagger.StatusCode);
+        using JsonDocument openApi = JsonDocument.Parse(await swagger.Content.ReadAsStringAsync());
+        Assert.True(openApi.RootElement.GetProperty("components")
+            .GetProperty("securitySchemes").TryGetProperty("oidc", out _));
+
         Assert.Equal(HttpStatusCode.Unauthorized, (await client.GetAsync("/api/v1/users/me")).StatusCode);
     }
 
