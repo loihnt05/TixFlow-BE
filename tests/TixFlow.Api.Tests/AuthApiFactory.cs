@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
@@ -26,6 +27,10 @@ public sealed class AuthApiFactory : WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        // TestServer inherits host logging providers on Windows. The EventLog provider
+        // can throw AccessDenied before negative-authentication assertions run.
+        // These tests verify HTTP behavior, not host logging.
+        builder.ConfigureLogging(logging => logging.ClearProviders());
         if (new NpgsqlConnectionStringBuilder(ConnectionString).Database != "tixflow_auth_tests")
             throw new InvalidOperationException("Tests must use the isolated tixflow_auth_tests database.");
         builder.UseEnvironment("Development");

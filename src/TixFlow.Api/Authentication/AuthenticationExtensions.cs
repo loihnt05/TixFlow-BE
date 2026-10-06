@@ -46,6 +46,18 @@ public static class AuthenticationExtensions
             };
             options.Events = new JwtBearerEvents
             {
+                OnAuthenticationFailed = context =>
+                {
+                    ILogger logger = context.HttpContext.RequestServices
+                        .GetRequiredService<ILoggerFactory>()
+                        .CreateLogger("TixFlow.Api.Authentication");
+                    // Do not log the bearer token or its claims; exception details are enough to diagnose
+                    // a configuration or signing-key problem without exposing credentials.
+                    logger.LogWarning(context.Exception, "JWT authentication failed for {Path}", context.Request.Path);
+                    if (environment.IsDevelopment())
+                        context.Response.Headers["X-TixFlow-Authentication-Error"] = context.Exception.GetType().Name;
+                    return Task.CompletedTask;
+                },
                 OnTokenValidated = context =>
                 {
                     string? subject = context.Principal?.FindFirst("sub")?.Value;
@@ -83,6 +95,12 @@ public static class AuthenticationExtensions
             });
             options.OperationFilter<AuthorizationOperationFilter>();
         });
+
+        Console.WriteLine("=== TIXFLOW AUTH CONFIG LOADED ===");
+        Console.WriteLine($"Authority: {authority}");
+        Console.WriteLine($"Metadata: {metadata}");
+        Console.WriteLine($"Audience: {audience}");
+        
         return services;
     }
 
