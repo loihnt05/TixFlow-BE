@@ -82,6 +82,11 @@ public static class AuthenticationExtensions
             options.DefaultPolicy = userPolicy;
             foreach (string role in TokenClaims.ApplicationRoles)
                 options.AddPolicy(role, policy => policy.Combine(userPolicy).RequireRole(role));
+            // RequireRole(a, b) means either role. Combining two named policies would require both.
+            options.AddPolicy("OrganizerOrAdmin", policy =>
+                policy.Combine(userPolicy).RequireRole("Organizer", "Admin"));
+            options.AddPolicy("CustomerOrAdmin", policy =>
+                policy.Combine(userPolicy).RequireRole("Customer", "Admin"));
         });
 
         services.AddEndpointsApiExplorer();

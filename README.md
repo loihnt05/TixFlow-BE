@@ -100,6 +100,8 @@ Lệnh `down` ở trên không có `-v`; test database dùng `tmpfs` nên không
 
 Bộ đặc tả actor, business rules, ERD, state/sequence, API và ADR nằm tại [thiết kế Giai đoạn 1](docs/phase-1-design-index.md). Các chính sách sản phẩm đã được người dùng xác nhận; cổng phê duyệt giảng viên được theo dõi trong tài liệu.
 
+Hai đầu việc đầu Giai đoạn 2 được ghi tại [JWT, role policy và middleware](docs/phase-2-authentication-foundation.md), cùng [token contract Keycloak](docs/phase-2-token-contract.md). API yêu cầu `sub`, `email`, `preferred_username`, audience `tixflow-api` và đúng một role nghiệp vụ; không dùng email thay subject.
+
 1. Xây dựng CRUD Organizer/Event/EventSession/TicketType/Seat và public event detail.
 2. Xây dựng cơ chế hold bằng transaction + atomic update + idempotency.
 3. Bổ sung xử lý expiry, outbox, RabbitMQ và Worker nghiệp vụ.
