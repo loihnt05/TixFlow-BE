@@ -5,11 +5,13 @@ namespace TixFlow.Application.Identity;
 public sealed record IdentityProfile(string Subject, string Email, string Name, string[] Roles)
 {
     // The legacy single role is a profile snapshot, never an authorization source.
-    public UserRole PrimaryRole => Roles.Contains(nameof(UserRole.Admin), StringComparer.Ordinal)
-        ? UserRole.Admin
-        : Roles.Contains(nameof(UserRole.Organizer), StringComparer.Ordinal)
-            ? UserRole.Organizer
-            : UserRole.Customer;
+    public UserRole PrimaryRole => Roles switch
+    {
+        [nameof(UserRole.Admin)] => UserRole.Admin,
+        [nameof(UserRole.Organizer)] => UserRole.Organizer,
+        [nameof(UserRole.Customer)] => UserRole.Customer,
+        _ => throw new InvalidOperationException("An identity profile must have exactly one business role.")
+    };
 }
 
 public interface ILocalUserSynchronizer

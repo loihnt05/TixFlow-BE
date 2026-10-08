@@ -82,7 +82,7 @@ public sealed class AuthenticationTests(AuthApiFactory factory) : IClassFixture<
     public async Task ConcurrentAndRepeatedRequestsCreateOnlyOnePasswordlessProfile()
     {
         var identity = Identity();
-        using HttpClient client = Client(factory.Token(identity.Sub, identity.Email, ["Customer", "Organizer"]));
+        using HttpClient client = Client(factory.Token(identity.Sub, identity.Email, ["Customer"]));
         Me[] users = await Task.WhenAll(Enumerable.Range(0, 20).Select(async _ =>
         {
             using HttpResponseMessage response = await client.GetAsync("/api/v1/users/me");
@@ -95,7 +95,7 @@ public sealed class AuthenticationTests(AuthApiFactory factory) : IClassFixture<
             Assert.Equal(identity.Sub, user.Sub);
             Assert.Equal(identity.Email, user.Email);
             Assert.Equal("Auth Test", user.Name);
-            Assert.Equal(new[] { "Customer", "Organizer" }, user.Roles);
+            Assert.Equal(new[] { "Customer" }, user.Roles);
         });
         await using var connection = new NpgsqlConnection(factory.ConnectionString);
         await connection.OpenAsync();
@@ -130,11 +130,11 @@ public sealed class AuthenticationTests(AuthApiFactory factory) : IClassFixture<
     }
 
     [Fact]
-    public async Task MissingEmailReturnsActionableProfileError()
+    public async Task MissingEmailInvalidatesAuthentication()
     {
         var identity = Identity();
         using HttpClient client = Client(factory.Token(identity.Sub, identity.Email, ["Customer"], includeEmail: false));
-        Assert.Equal(HttpStatusCode.UnprocessableEntity, (await client.GetAsync("/api/v1/users/me")).StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, (await client.GetAsync("/api/v1/users/me")).StatusCode);
     }
 
     [Fact]

@@ -2,7 +2,7 @@
 
 **Giai đoạn:** 1 - Khóa yêu cầu và thiết kế  
 **Phạm vi:** Hai đầu việc đầu: quyền Customer, Organizer, Admin và use case nghiệp vụ  
-**Trạng thái:** Bản dự thảo để chốt; các mục `Decision Pending` cần xác nhận trước 11/10/2026.
+**Trạng thái:** Quyết định sản phẩm đã được người dùng chốt; cập nhật 07/10/2026. `Decision Pending GV-01`: giảng viên xác nhận bộ thiết kế trước 11/10/2026.
 
 Tài liệu này chuyển phạm vi kế hoạch TixFlow thành một mô hình quyền và các luồng nghiệp vụ có thể kiểm tra. Đây là đặc tả thiết kế, không khẳng định rằng các luồng đã được cài đặt: ở baseline hiện tại phần lớn API catalog, booking, order, payment, ticket và AI vẫn chưa hoàn chỉnh.
 
@@ -50,7 +50,7 @@ authenticated sub -> users.id -> organizers.owner_user_id
 
 ### 2.3 Admin
 
-Admin được quản trị mọi hồ sơ Organizer, Event và giao dịch khi cần hỗ trợ hoặc xử lý vận hành. Admin được hủy Hold, Order, Ticket và thực hiện check-in cho Event thuộc bất kỳ Organizer nào. Các thao tác này phải ghi actor, object, thời điểm và lý do vào audit log. Quyền hủy Order/Ticket không tự quyết định việc hoàn tiền; chính sách hoàn tiền vẫn cần chốt riêng. Admin không được tự đánh dấu một khoản Payment là thành công để bỏ qua luồng thanh toán.
+Admin được quản trị mọi hồ sơ Organizer, Event và giao dịch khi cần hỗ trợ hoặc xử lý vận hành. Admin được hủy Hold, Order, Ticket và thực hiện check-in cho Event thuộc bất kỳ Organizer nào. Các thao tác này phải ghi actor, object, thời điểm và lý do vào audit log. Hủy không hoàn tiền; refund đã được xác định ngoài phạm vi hiện tại. Admin không được tự đánh dấu một khoản Payment là thành công để bỏ qua luồng thanh toán.
 
 ### 2.4 Ma trận quyền đề xuất
 
@@ -68,7 +68,7 @@ Admin được quản trị mọi hồ sơ Organizer, Event và giao dịch khi 
 | Xem hoặc tải Ticket/QR của khách | - | ✓ (own) | - | ✓ khi hỗ trợ; audit |
 | Kiểm tra trạng thái Ticket và check-in | - | - | ✓ (own Event) | ✓ (toàn hệ thống); audit |
 | Hủy Hold | - | ✓ (own, còn hiệu lực) | - | ✓ toàn hệ thống; audit |
-| Hủy Order/Ticket hoặc xử lý hoàn tiền | - | ✓ theo chính sách chờ chốt | - | ✓ toàn hệ thống; refund theo chính sách chờ chốt; audit |
+| Hủy Order/Ticket | - | ✓ (own Order PendingPayment); không tự hủy Ticket | - | ✓ toàn hệ thống; audit; refund ngoài phạm vi |
 | Hủy Event | - | - | ✓ (own) | ✓ |
 | Dùng AI Assistant để tìm và đề xuất | - | ✓ | Chỉ đọc catalog công khai | Chỉ đọc catalog công khai |
 | Yêu cầu AI tạo Hold | - | ✓, sau xác nhận rõ ràng | - | - |
@@ -82,7 +82,7 @@ Admin được quản trị mọi hồ sơ Organizer, Event và giao dịch khi 
 3. Hold chứa giá snapshot tại thời điểm giữ; checkout không âm thầm đổi giá đã hiển thị trong Hold.
 4. Request có thể retry phải nhận kết quả idempotent khi cùng key và cùng payload. Dùng lại key với payload khác phải bị từ chối; chi tiết HTTP/status thuộc đầu việc API contract sau.
 5. Hold nhiều vé/ghế là all-or-nothing: nếu một phần không khả dụng thì không để lại một phần tài nguyên đã giữ.
-6. Ticket chỉ phát hành sau khi Payment thành công. QR thô chỉ được đưa cho người sở hữu vé lúc phát hành/hiển thị; database lưu hash như schema hiện có.
+6. Ticket chỉ phát hành cùng transaction Payment thành công. QR thô chỉ được đưa cho người sở hữu vé hoặc Admin hỗ trợ có lý do/audit; database lưu hash và metadata tái tạo an toàn theo API contract.
 7. Không thao tác qua AI được coi là hoàn tất cho đến khi API nghiệp vụ xác nhận. Availability AI đọc được không bảo đảm Hold thành công.
 
 ## 4. Đặc tả use case
@@ -135,7 +135,7 @@ Admin được quản trị mọi hồ sơ Organizer, Event và giao dịch khi 
 **Luồng chính:**
 
 1. Customer chọn vé hoặc ghế và gửi yêu cầu Hold.
-2. API kiểm tra sale window, trạng thái EventSession/TicketType, thông tin request và các giới hạn áp dụng cho Customer đã được chốt.
+2. API kiểm tra sale window, trạng thái Event/Session, thông tin request và max_per_order riêng từng TicketType; TicketType không có cột status.
 3. PostgreSQL xác nhận sức chứa/ghế còn khả dụng và tạo Hold cùng HoldItem/SeatAllocation trong một transaction.
 4. API trả Hold ID, mặt hàng, giá snapshot, thời hạn UTC và trạng thái.
 5. Customer có thể chủ động hủy Hold còn `Active`; tài nguyên được giải phóng đúng một lần.
@@ -156,7 +156,7 @@ Admin được quản trị mọi hồ sơ Organizer, Event và giao dịch khi 
 1. Customer yêu cầu checkout cho Hold.
 2. API kiểm tra lại chủ sở hữu, thời hạn và trạng thái Hold.
 3. API tạo Order/OrderItem từ giá và số lượng snapshot trong Hold.
-4. Hold được xác nhận chuyển trạng thái theo cùng ranh giới giao dịch; Order ở `PendingPayment`.
+4. Hold giữ `Active`, allocation giữ `Held`, tăng version khi gắn Order; Order ở `PendingPayment`. Deadline thanh toán bằng expiry gốc của Hold, không gia hạn. Hold chỉ thành `Confirmed` khi payment thành công.
 5. API trả mã Order, tổng tiền, tiền tệ và trạng thái.
 
 **Ngoại lệ:** Hold không còn hiệu lực thì checkout bị từ chối và không tạo Order. Lặp checkout không tạo Order thứ hai; Hold đã có Order trả lại cùng Order theo quy tắc idempotency.
@@ -174,7 +174,7 @@ Admin được quản trị mọi hồ sơ Organizer, Event và giao dịch khi 
 
 1. Customer khởi tạo Payment giả lập bằng key chống lặp.
 2. API tạo/tra Payment `Pending` gắn với Order và chạy kết quả mô phỏng theo cấu hình môi trường phát triển.
-3. Kết quả thành công được áp dụng tối đa một lần: Payment thành `Succeeded`, Order thành `Paid`, sau đó phát hành Ticket.
+3. Kết quả thành công được áp dụng tối đa một lần trong cùng transaction: Payment thành `Succeeded`, Order thành `Paid`, Hold thành `Confirmed`, tài nguyên thành `Sold` và phát hành đủ Ticket.
 4. Kết quả thất bại không phát hành Ticket và trả trạng thái Payment/Order có thể xử lý tiếp theo quy tắc đã chốt.
 5. API trả kết quả; callback giả lập gửi lặp được nhận diện bằng provider event ID và không áp dụng lại.
 
@@ -209,7 +209,7 @@ Admin được quản trị mọi hồ sơ Organizer, Event và giao dịch khi 
 
 **Luồng chính:**
 
-1. Nhân viên Organizer quét QR hoặc nhập mã vé.
+1. Tài khoản Organizer quét QR hoặc nhập mã vé thủ công kèm lý do; Admin được cùng thao tác trên toàn hệ thống. Check-in trong khoảng [giờ bắt đầu session - 60 phút, giờ kết thúc session).
 2. API xác thực Ticket, session, trạng thái và quyền sở hữu Event của Organizer.
 3. API thực hiện chuyển trạng thái `Issued` → `Used` một cách nguyên tử, ghi `checked_in_at_utc` và actor.
 4. API trả kết quả check-in và thông tin tối thiểu để xác nhận người tham dự.
@@ -264,17 +264,17 @@ Admin được quản trị mọi hồ sơ Organizer, Event và giao dịch khi 
 | DP-02 | Mỗi hồ sơ Organizer có một owner; một Organizer có thể quản lý nhiều Event cùng lúc. Không cần cộng tác viên hoặc nhiều tài khoản owner cho cùng Organizer. | Ownership tiếp tục dựa trên `organizers.owner_user_id`; `events.organizer_id` liên kết mỗi Event với Organizer sở hữu. |
 | DP-03 | Admin được hủy Hold, Order, Ticket và check-in trên toàn hệ thống, không phụ thuộc Organizer sở hữu Event. | Các thao tác thay đổi trạng thái phải được audit. Quyền hủy không tự đồng nghĩa hoàn tiền; Admin không tự đánh dấu Payment thành công. |
 
-### 5.2 Decision Pending cần xác nhận
+### 5.2 Quyết định bổ sung ngày 07/10/2026
 
-Các mục dưới đây chưa được quyết định. Hạn chốt theo cổng Giai đoạn 1 là **11/10/2026**. Khuyến nghị tạm thời phục vụ bản đặc tả, chưa phải quy tắc sản phẩm.
+| ID cũ | Kết luận của người dùng | Đặc tả chi tiết |
+|---|---|---|
+| DP-04 | Check-in từ 60 phút trước session đến trước giờ kết thúc; quét lặp báo đã dùng. | BR-08, state Ticket và API check-in. |
+| DP-05 | Customer hủy trước thanh toán; Admin hủy paid; hủy Event vô hiệu vé; vé chưa dùng trả chỗ, vé đã dùng giữ consumption; chưa triển khai refund. | BR-06 và state/sequence cancellation. |
+| DP-06 | Customer chọn success/failure để demo, retry trong hạn Hold 10 phút gốc; checkout không gia hạn. | BR-04, BR-07 và state/sequence payment. |
 
-| ID | Quyết định cần chốt | Căn cứ hiện tại | Khuyến nghị tạm thời |
-|---|---|---|---|
-| DP-04 | Check-in được mở/đóng trong khoảng thời gian nào; quét lặp trả kết quả nào? | Ticket có `Issued`, `Used`, `Cancelled`, `Refunded`, `checked_in_at_utc`; chưa có policy giờ check-in. | Chấp nhận lần đầu theo cập nhật nguyên tử; lần sau trả trạng thái đã dùng; chốt cửa sổ thời gian theo yêu cầu địa điểm/demo. |
-| DP-05 | Điều kiện hủy Order/Ticket, thời hạn, phí và refund giả lập? Organizer hủy Event ảnh hưởng giao dịch ra sao? | Phạm vi loại trừ hoàn tiền nhiều bước; schema có trạng thái `Cancelled`/`Refunded` nhưng chưa có policy. | Phân biệt hủy Hold (giải phóng vé) với hủy Order đã thanh toán (cần chính sách refund riêng); không tự coi hủy là refund. |
-| DP-06 | Payment giả lập sinh success/failure theo cách nào và Order `PendingPayment` giữ chỗ đến thời điểm nào? | `Payment` hỗ trợ `Pending`, `Succeeded`, `Failed`, `Refunded`; timeout/expiry chưa chốt. | Dùng lựa chọn mô phỏng rõ ràng cho demo; expiry và race được chốt cùng quy tắc hold/order ở đầu việc nghiệp vụ sau. |
+**Decision Pending GV-01:** chưa có bằng chứng giảng viên phê duyệt các rule; hạn 11/10/2026. Đây là cổng phê duyệt riêng, không phải những câu hỏi sản phẩm người dùng chưa trả lời.
 
-Ngoài ra, thời hạn Hold, sức chứa, giá, sale window và số vé tối đa mỗi người thuộc đầu việc số 3 của Giai đoạn 1; tài liệu này không gán giá trị cho các quy tắc đó.
+Ngoài ra, thời hạn Hold, sức chứa, giá, sale window và hạn mức vé theo Order thuộc đầu việc số 3 của Giai đoạn 1; các rule và Decision Pending tương ứng được theo dõi trong [phase-1-business-rules.md](phase-1-business-rules.md).
 
 ## 6. Đối chiếu với baseline source
 
@@ -292,4 +292,5 @@ Ngoài ra, thời hạn Hold, sức chứa, giá, sale window và số vé tối
 - Đã đặc tả actor, quyền cấp role, ownership của Organizer và quy tắc kiểm tra object-level.
 - Đã viết use case catalog, quản lý catalog thuộc Organizer, Hold, checkout, Payment giả lập, Ticket, check-in, cancellation và AI Assistant.
 - Đã gắn kịch bản nghiệm thu dự kiến cho từng use case để chuyển thành test khi triển khai.
-- Chưa cập nhật ERD, state/sequence diagram, API contract, ADR hay chốt các quy tắc sức chứa/giá/thời gian/hủy thuộc các đầu việc tiếp theo.
+- Quy tắc sức chứa, giá, mở bán, hold, hạn mức và hủy được theo dõi riêng tại [phase-1-business-rules.md](phase-1-business-rules.md); ERD và từ điển khóa/index/version/UTC nằm tại [database.md](database.md).
+- State diagram, sequence diagram, API contract và ADR đã được bổ sung trong [bộ thiết kế Giai đoạn 1](phase-1-design-index.md); kiểm thử implementation thuộc giai đoạn triển khai tiếp theo.

@@ -59,7 +59,10 @@ public sealed class AuthApiFactory : WebApplicationFactory<Program>
         string audience = "tixflow-api", bool expired = false, bool wrongSignature = false,
         bool includeSubject = true, bool includeEmail = true, string name = "Auth Test")
     {
-        var claims = new Dictionary<string, object> { ["name"] = name, ["roles"] = roles };
+        var claims = new Dictionary<string, object>
+        {
+            ["name"] = name, ["preferred_username"] = email, ["roles"] = roles
+        };
         if (includeSubject) claims["sub"] = subject;
         if (includeEmail) claims["email"] = email;
         using RSA otherKey = RSA.Create(2048);

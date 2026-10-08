@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using TixFlow.Application.Identity;
 using TixFlow.Domain.Identity;
 
@@ -10,13 +13,18 @@ public sealed class LocalUserMiddleware(RequestDelegate next)
 
     public async Task InvokeAsync(HttpContext context, ILocalUserSynchronizer synchronizer)
     {
-        if (context.User.Identity?.IsAuthenticated == true)
+        Endpoint? endpoint = context.GetEndpoint();
+        bool requiresUser = (endpoint?.Metadata.GetOrderedMetadata<IAuthorizeData>().Count > 0
+            || endpoint?.Metadata.GetOrderedMetadata<AuthorizationPolicy>().Count > 0)
+            && endpoint.Metadata.GetMetadata<IAllowAnonymous>() is null;
+        // Authorization runs first: denied requests never synchronize a profile.
+        // Public routes, including health and Swagger, must not create/update users.
+        if (requiresUser && context.User.Identity?.IsAuthenticated == true)
         {
             IdentityProfile? profile = TokenClaims.ReadProfile(context.User);
             if (profile is null)
             {
-                await Results.Problem(statusCode: 422, title: "Incomplete identity profile",
-                    detail: "The identity provider must supply sub and email claims.").ExecuteAsync(context);
+                await context.ForbidAsync(JwtBearerDefaults.AuthenticationScheme);
                 return;
             }
             try

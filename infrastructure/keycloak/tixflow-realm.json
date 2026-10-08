@@ -11,6 +11,7 @@
   "rememberMe": false,
   "verifyEmail": false,
   "accessTokenLifespan": 300,
+  "defaultSignatureAlgorithm": "RS256",
   "ssoSessionIdleTimeout": 1800,
   "ssoSessionMaxLifespan": 36000,
   "roles": {
@@ -72,6 +73,8 @@
       ],
       "attributes": {
         "pkce.code.challenge.method": "S256",
+        "access.token.signed.response.alg": "RS256",
+        "client.use.lightweight.access.token.enabled": "false",
         "post.logout.redirect.uris": "http://localhost:3000/"
       },
       "defaultClientScopes": [
@@ -129,6 +132,8 @@
       ],
       "attributes": {
         "pkce.code.challenge.method": "S256",
+        "access.token.signed.response.alg": "RS256",
+        "client.use.lightweight.access.token.enabled": "false",
         "post.logout.redirect.uris": "http://localhost:8080/swagger/"
       },
       "defaultClientScopes": [

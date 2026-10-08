@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -15,6 +16,8 @@ public static class AuthenticationExtensions
             ?? $"{authority}/.well-known/openid-configuration";
         string audience = configuration["Authentication:Audience"]
             ?? throw new InvalidOperationException("Authentication:Audience is required.");
+        if (!string.Equals(audience, TokenClaims.ApiAudience, StringComparison.Ordinal))
+            throw new InvalidOperationException("Authentication:Audience must be tixflow-api.");
         ValidateUrl(authority, environment.IsDevelopment());
         ValidateUrl(metadata, environment.IsDevelopment());
 
@@ -36,13 +39,15 @@ public static class AuthenticationExtensions
                 IssuerValidator = (issuer, _, _) => string.Equals(issuer, authority, StringComparison.Ordinal)
                     ? issuer : throw new SecurityTokenInvalidIssuerException("Unexpected token issuer."),
                 ValidateAudience = true,
+                RequireAudience = true,
                 ValidAudience = audience,
+                IgnoreTrailingSlashWhenValidatingAudience = false,
                 ValidateLifetime = true,
                 RequireExpirationTime = true,
                 ClockSkew = TimeSpan.FromSeconds(30),
                 ValidAlgorithms = [SecurityAlgorithms.RsaSha256],
-                NameClaimType = "name",
-                RoleClaimType = "roles"
+                NameClaimType = TokenClaims.Username,
+                RoleClaimType = TokenClaims.Roles
             };
             options.Events = new JwtBearerEvents
             {
@@ -51,26 +56,32 @@ public static class AuthenticationExtensions
                     ILogger logger = context.HttpContext.RequestServices
                         .GetRequiredService<ILoggerFactory>()
                         .CreateLogger("TixFlow.Api.Authentication");
-                    // Do not log the bearer token or its claims; exception details are enough to diagnose
-                    // a configuration or signing-key problem without exposing credentials.
-                    logger.LogWarning(context.Exception, "JWT authentication failed for {Path}", context.Request.Path);
+                    // Exception messages can contain token data. Log only the failure type and route.
+                    logger.LogWarning("JWT authentication failed ({FailureType}) for {Path}",
+                        context.Exception.GetType().Name, context.Request.Path);
                     if (environment.IsDevelopment())
                         context.Response.Headers["X-TixFlow-Authentication-Error"] = context.Exception.GetType().Name;
                     return Task.CompletedTask;
                 },
                 OnTokenValidated = context =>
                 {
-                    string? subject = context.Principal?.FindFirst("sub")?.Value;
-                    if (string.IsNullOrWhiteSpace(subject) || subject.Length > 255)
-                        context.Fail("A valid subject is required.");
+                    if (context.Principal is null || !TokenClaims.HasRequiredIdentityClaims(context.Principal))
+                        context.Fail("Valid sub, email and preferred_username claims are required.");
                     return Task.CompletedTask;
                 }
             };
         });
         services.AddAuthorization(options =>
         {
+            // RequireAuthorization() and every named business policy share this invariant.
+            // Technical Keycloak roles do not count; Admin does not inherit Customer/Organizer.
+            AuthorizationPolicy userPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .RequireAssertion(context => TokenClaims.HasSingleApplicationRole(context.User))
+                .Build();
+            options.DefaultPolicy = userPolicy;
             foreach (string role in TokenClaims.ApplicationRoles)
-                options.AddPolicy(role, policy => policy.RequireAuthenticatedUser().RequireRole(role));
+                options.AddPolicy(role, policy => policy.Combine(userPolicy).RequireRole(role));
         });
 
         services.AddEndpointsApiExplorer();
@@ -96,11 +107,6 @@ public static class AuthenticationExtensions
             options.OperationFilter<AuthorizationOperationFilter>();
         });
 
-        Console.WriteLine("=== TIXFLOW AUTH CONFIG LOADED ===");
-        Console.WriteLine($"Authority: {authority}");
-        Console.WriteLine($"Metadata: {metadata}");
-        Console.WriteLine($"Audience: {audience}");
-        
         return services;
     }
 

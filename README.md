@@ -98,6 +98,8 @@ Lệnh `down` ở trên không có `-v`; test database dùng `tmpfs` nên không
 
 ## Bước tiếp theo
 
+Bộ đặc tả actor, business rules, ERD, state/sequence, API và ADR nằm tại [thiết kế Giai đoạn 1](docs/phase-1-design-index.md). Các chính sách sản phẩm đã được người dùng xác nhận; cổng phê duyệt giảng viên được theo dõi trong tài liệu.
+
 1. Xây dựng CRUD Organizer/Event/EventSession/TicketType/Seat và public event detail.
 2. Xây dựng cơ chế hold bằng transaction + atomic update + idempotency.
 3. Bổ sung xử lý expiry, outbox, RabbitMQ và Worker nghiệp vụ.
