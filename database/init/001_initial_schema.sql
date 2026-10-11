@@ -50,6 +50,7 @@ CREATE TABLE organizers
 CREATE TABLE venues
 (
     id             uuid PRIMARY KEY,
+    organizer_id   uuid         NOT NULL,
     name           varchar(180) NOT NULL,
     address_line   varchar(300) NOT NULL,
     ward           varchar(120),
@@ -58,8 +59,12 @@ CREATE TABLE venues
     country_code   char(2)      NOT NULL DEFAULT 'VN',
     time_zone      varchar(80)  NOT NULL DEFAULT 'Asia/Ho_Chi_Minh',
     created_at_utc timestamptz  NOT NULL DEFAULT now(),
-    updated_at_utc timestamptz  NOT NULL DEFAULT now()
+    updated_at_utc timestamptz  NOT NULL DEFAULT now(),
+    CONSTRAINT fk_venues_organizers_organizer_id
+        FOREIGN KEY (organizer_id) REFERENCES organizers (id) ON DELETE RESTRICT
 );
+
+CREATE INDEX ix_venues_organizer_id_name ON venues (organizer_id, name);
 
 CREATE TABLE events
 (
@@ -77,6 +82,7 @@ CREATE TABLE events
     published_at_utc   timestamptz,
     created_at_utc     timestamptz   NOT NULL DEFAULT now(),
     updated_at_utc     timestamptz   NOT NULL DEFAULT now(),
+    version            bigint        NOT NULL DEFAULT 0,
     CONSTRAINT ck_events_status CHECK (status IN ('Draft', 'Published', 'Cancelled', 'Completed')),
     CONSTRAINT ck_events_sale_window CHECK (
         sale_starts_at_utc IS NULL
@@ -100,6 +106,7 @@ CREATE TABLE event_sessions
     status         varchar(24)  NOT NULL DEFAULT 'Scheduled',
     created_at_utc timestamptz  NOT NULL DEFAULT now(),
     updated_at_utc timestamptz  NOT NULL DEFAULT now(),
+    version        bigint       NOT NULL DEFAULT 0,
     CONSTRAINT ck_event_sessions_time CHECK (ends_at_utc > starts_at_utc),
     CONSTRAINT ck_event_sessions_status CHECK (
         status IN ('Scheduled', 'OnSale', 'SoldOut', 'Cancelled', 'Completed')),
@@ -406,9 +413,10 @@ VALUES
      'organizer@tixflow.local');
 
 INSERT INTO venues
-    (id, name, address_line, district, city)
+    (id, organizer_id, name, address_line, district, city)
 VALUES
     ('20000000-0000-0000-0000-000000000001',
+     '10000000-0000-0000-0000-000000000001',
      'TixFlow Arena',
      '01 Đường Demo',
      'Quận 1',

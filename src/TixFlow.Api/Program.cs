@@ -11,6 +11,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddIdentityAuthentication(builder.Configuration, builder.Environment);
 builder.Services.AddHealthChecks()
     .AddCheck<PostgresHealthCheck>("postgres");
@@ -56,6 +57,7 @@ api.MapGet("/system/info", (IHostEnvironment environment) => Results.Ok(new
 }));
 
 api.MapEventsModule();
+api.MapCatalogManagementModule();
 api.MapBookingModule();
 api.MapAssistantModule();
 api.MapUsersModule();

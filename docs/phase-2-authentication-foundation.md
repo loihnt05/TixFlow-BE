@@ -69,7 +69,7 @@ Middleware nhận cả metadata `IAuthorizeData` và `AuthorizationPolicy`. Các
 ## 4. Kết quả build và xác nhận
 
 - Build solution bằng `.NET SDK 8.0.424`: thành công, **0 warning, 0 error**.
-- Chạy **11 kiểm tra có sẵn** tập trung vào cấu hình HTTPS, claim mapping, issuer/audience/signature/lifetime/sub/email và Customer truy cập sai role: **11/11 đạt**. Đây là xác nhận cho phạm vi JWT/claims; chưa đánh dấu toàn bộ đầu việc Auth tests của Giai đoạn 2 hoàn tất.
+- Lần xác nhận nền tảng chạy **11 kiểm tra** cho cấu hình HTTPS, claim mapping, issuer/audience/signature/lifetime/sub/email và Customer truy cập sai role: **11/11 đạt**. Bộ hoàn chỉnh sau đó đạt **27/27**, xem [biên bản hoàn tất Giai đoạn 2](phase-2-frontend-current-user.md).
 - Fixture token hiện có được bổ sung `preferred_username`; kỳ vọng multi-role thành công cũ được đổi thành một Customer; kỳ vọng thiếu email đổi từ 422 thành 401. Không thêm bộ test cho các đầu việc sau.
 - Bằng chứng token thực tế, môi trường và giới hạn xác nhận nằm trong [token contract](phase-2-token-contract.md).
 
@@ -85,7 +85,7 @@ Các thay đổi nằm trong source; để áp dụng vào API Docker đang ch�
 docker compose up -d --build --no-deps api
 ```
 
-Frontend PKCE, hoàn thiện hồ sơ, navigation/logout/refresh, kiểm tra mạng Docker/CORS đầy đủ và bộ Auth tests toàn diện thuộc những đầu việc tiếp theo; không đánh dấu cả Giai đoạn 2 hoàn tất từ kết quả này.
+Toàn bộ Giai đoạn 2 đã hoàn tất ngày **11/10/2026**, gồm frontend `keycloak-js`, current-user API, role navigation, logout/refresh, kiểm tra Docker/CORS và bộ auth tests; xem [biên bản hoàn tất Giai đoạn 2](phase-2-frontend-current-user.md).
 
 ## Tài liệu kỹ thuật tham chiếu
 
