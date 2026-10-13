@@ -387,21 +387,55 @@ public static class CatalogManagementModule
         TixFlowDbContext dbContext,
         CancellationToken cancellationToken)
     {
-        Event? item = await Scope(dbContext.Events, context)
+        Event? item = await Scope(dbContext.Events
+                .Include(candidate => candidate.Sessions).ThenInclude(session => session.Seats), context)
             .SingleOrDefaultAsync(candidate => candidate.Id == eventId, cancellationToken);
         if (item is null) return NotFound("EVENT_NOT_FOUND", "Event was not found.");
         if (item.Status != EventStatus.Draft)
             return Conflict("INVALID_EVENT_STATE", "Only draft events can be deleted.");
         if (item.Version != version) return VersionConflict(item.Version);
+        Guid[] seatIds = item.Sessions.SelectMany(session => session.Seats).Select(seat => seat.Id).ToArray();
+        if (seatIds.Length > 0 && (await dbContext.SeatAllocations.AnyAsync(
+                allocation => seatIds.Contains(allocation.SeatId), cancellationToken)
+            || await dbContext.Tickets.AnyAsync(ticket => ticket.SeatId.HasValue
+                && seatIds.Contains(ticket.SeatId.Value), cancellationToken)))
+            return Conflict("EVENT_IN_USE", "An event with seat booking history cannot be deleted.");
+        dbContext.Seats.RemoveRange(item.Sessions.SelectMany(session => session.Seats));
         dbContext.Events.Remove(item);
         await dbContext.SaveChangesAsync(cancellationToken);
         return Results.NoContent();
     }
 
-    private static Task<IResult> PublishEventAsync(Guid eventId, VersionRequest request, HttpContext context,
-        TixFlowDbContext dbContext, TimeProvider timeProvider, CancellationToken cancellationToken) =>
-        TransitionEventAsync(eventId, request.Version, context, dbContext, cancellationToken,
-            item => item.Publish(timeProvider.GetUtcNow()));
+    private static async Task<IResult> PublishEventAsync(Guid eventId, VersionRequest request, HttpContext context,
+        TixFlowDbContext dbContext, TimeProvider timeProvider, CancellationToken cancellationToken)
+    {
+        IQueryable<Event> query = dbContext.Events
+            .Include(item => item.Organizer)
+            .Include(item => item.Sessions).ThenInclude(session => session.TicketTypes)
+                .ThenInclude(ticket => ticket.Inventory)
+            .Include(item => item.Sessions).ThenInclude(session => session.TicketTypes)
+                .ThenInclude(ticket => ticket.Seats);
+        Event? item = await Scope(query, context)
+            .AsSplitQuery().SingleOrDefaultAsync(candidate => candidate.Id == eventId, cancellationToken);
+        if (item is null) return NotFound("EVENT_NOT_FOUND", "Event was not found.");
+        if (item.Version != request.Version) return VersionConflict(item.Version);
+        try
+        {
+            item.Publish(timeProvider.GetUtcNow());
+            await dbContext.SaveChangesAsync(cancellationToken);
+            Event updated = await ManagedEvents(dbContext)
+                .SingleAsync(candidate => candidate.Id == item.Id, cancellationToken);
+            return Results.Ok(ToResponse(updated));
+        }
+        catch (InvalidOperationException exception)
+        {
+            return Conflict("INVALID_EVENT_STATE", exception.Message);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return Conflict("VERSION_CONFLICT", "The event was changed by another request.");
+        }
+    }
 
     private static Task<IResult> CancelEventAsync(Guid eventId, CancellationRequest request, HttpContext context,
         TixFlowDbContext dbContext, CancellationToken cancellationToken)
@@ -452,6 +486,7 @@ public static class CatalogManagementModule
         if (!await Scope(dbContext.Events, context).AnyAsync(item => item.Id == eventId, cancellationToken))
             return NotFound("EVENT_NOT_FOUND", "Event was not found.");
         EventSession[] items = await dbContext.EventSessions.AsNoTracking()
+            .Include(item => item.TicketTypes).ThenInclude(ticket => ticket.Inventory)
             .Where(item => item.EventId == eventId).OrderBy(item => item.StartsAtUtc)
             .ToArrayAsync(cancellationToken);
         return Results.Ok(items.Select(ToResponse).ToArray());
@@ -485,7 +520,8 @@ public static class CatalogManagementModule
     private static async Task<IResult> GetSessionAsync(Guid sessionId, HttpContext context,
         TixFlowDbContext dbContext, CancellationToken cancellationToken)
     {
-        EventSession? session = await ScopeSessions(dbContext.EventSessions.AsNoTracking(), context)
+        EventSession? session = await ScopeSessions(dbContext.EventSessions.AsNoTracking()
+                .Include(item => item.TicketTypes).ThenInclude(ticket => ticket.Inventory), context)
             .SingleOrDefaultAsync(item => item.Id == sessionId, cancellationToken);
         return session is null ? NotFound("SESSION_NOT_FOUND", "Session was not found.") : Results.Ok(ToResponse(session));
     }
@@ -528,19 +564,30 @@ public static class CatalogManagementModule
     private static async Task<IResult> DeleteSessionAsync(Guid sessionId, long version, HttpContext context,
         TixFlowDbContext dbContext, CancellationToken cancellationToken)
     {
-        EventSession? session = await ScopeSessions(dbContext.EventSessions.Include(item => item.Event), context)
+        EventSession? session = await ScopeSessions(dbContext.EventSessions.Include(item => item.Event)
+                .Include(item => item.Seats), context)
             .SingleOrDefaultAsync(item => item.Id == sessionId, cancellationToken);
         if (session is null) return NotFound("SESSION_NOT_FOUND", "Session was not found.");
         if (session.Version != version) return VersionConflict(session.Version);
         if (session.Event.Status != EventStatus.Draft)
             return Conflict("INVALID_EVENT_STATE", "Sessions can only be deleted while the event is a draft.");
+        Guid[] seatIds = session.Seats.Select(seat => seat.Id).ToArray();
+        if (seatIds.Length > 0 && (await dbContext.SeatAllocations.AnyAsync(
+                allocation => seatIds.Contains(allocation.SeatId), cancellationToken)
+            || await dbContext.Tickets.AnyAsync(ticket => ticket.SeatId.HasValue
+                && seatIds.Contains(ticket.SeatId.Value), cancellationToken)))
+            return Conflict("SESSION_IN_USE", "A session with seat booking history cannot be deleted.");
+        dbContext.Seats.RemoveRange(session.Seats);
         dbContext.EventSessions.Remove(session);
         await dbContext.SaveChangesAsync(cancellationToken);
         return Results.NoContent();
     }
 
     private static IQueryable<Event> ManagedEvents(TixFlowDbContext dbContext) => dbContext.Events.AsNoTracking()
-        .Include(item => item.Organizer).Include(item => item.Venue).Include(item => item.Sessions);
+        .Include(item => item.Organizer).Include(item => item.Venue)
+        .Include(item => item.Sessions).ThenInclude(session => session.TicketTypes)
+            .ThenInclude(ticket => ticket.Inventory)
+        .AsSplitQuery();
 
     private static IQueryable<Event> Scope(IQueryable<Event> query, HttpContext context) =>
         IsAdmin(context) ? query : query.Where(item => item.Organizer.OwnerUserId == CurrentUser(context).Id);
@@ -585,7 +632,12 @@ public static class CatalogManagementModule
 
     private static SessionResponse ToResponse(EventSession item) => new(
         item.Id, item.EventId, item.Name, item.StartsAtUtc, item.EndsAtUtc,
-        item.Status.ToString(), item.Version, item.CreatedAtUtc, item.UpdatedAtUtc);
+        item.Status.ToString(), item.Version, item.CreatedAtUtc, item.UpdatedAtUtc,
+        item.TicketTypes.OrderBy(ticket => ticket.Price).Select(ticket => new TicketSummaryResponse(
+            ticket.Id, ticket.Name, ticket.Code, ticket.Price, ticket.Currency,
+            ticket.InventoryMode.ToString(), ticket.Capacity,
+            ticket.Inventory is null ? 0 : ticket.Inventory.AvailableQuantity,
+            ticket.MaxPerOrder, ticket.Version)).ToArray());
 
     private static string Slug(string? value, string fallback)
     {
@@ -647,7 +699,11 @@ public static class CatalogManagementModule
         string? Ward, string? District, string City, string CountryCode, string TimeZone,
         DateTimeOffset CreatedAtUtc, DateTimeOffset UpdatedAtUtc);
     private sealed record SessionResponse(Guid Id, Guid EventId, string Name, DateTimeOffset StartsAtUtc,
-        DateTimeOffset EndsAtUtc, string Status, long Version, DateTimeOffset CreatedAtUtc, DateTimeOffset UpdatedAtUtc);
+        DateTimeOffset EndsAtUtc, string Status, long Version, DateTimeOffset CreatedAtUtc,
+        DateTimeOffset UpdatedAtUtc, TicketSummaryResponse[] TicketTypes);
+    private sealed record TicketSummaryResponse(Guid Id, string Name, string Code, decimal Price,
+        string Currency, string InventoryMode, int Capacity, int AvailableQuantity,
+        int MaxPerOrder, long Version);
     private sealed record EventResponse(Guid Id, Guid OrganizerId, string Name, string Slug,
         string Description, string Category, string? ImageUrl, string Status,
         DateTimeOffset? SaleStartsAtUtc, DateTimeOffset? SaleEndsAtUtc, DateTimeOffset? PublishedAtUtc,

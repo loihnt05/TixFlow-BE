@@ -132,6 +132,7 @@ CREATE TABLE ticket_types
     sale_ends_at_utc   timestamptz,
     created_at_utc     timestamptz  NOT NULL DEFAULT now(),
     updated_at_utc     timestamptz  NOT NULL DEFAULT now(),
+    version            bigint       NOT NULL DEFAULT 0,
     CONSTRAINT ck_ticket_types_price CHECK (price >= 0),
     CONSTRAINT ck_ticket_types_capacity CHECK (capacity > 0),
     CONSTRAINT ck_ticket_types_max_per_order CHECK (max_per_order > 0),
@@ -160,6 +161,10 @@ CREATE TABLE seats
 );
 
 CREATE INDEX ix_seats_ticket_type_id ON seats (ticket_type_id);
+CREATE INDEX ix_seats_session_ticket_type_active
+    ON seats (event_session_id, ticket_type_id, is_active);
+CREATE UNIQUE INDEX ux_seats_session_code_ci
+    ON seats (event_session_id, upper(section), upper(row_label), upper(seat_number));
 
 CREATE TABLE ticket_inventories
 (
@@ -177,6 +182,9 @@ CREATE TABLE ticket_inventories
     CONSTRAINT ck_ticket_inventories_available CHECK (
         held_quantity + sold_quantity <= total_quantity)
 );
+
+CREATE INDEX ix_ticket_inventories_availability
+    ON ticket_inventories (ticket_type_id, held_quantity, sold_quantity, total_quantity);
 
 CREATE TABLE holds
 (

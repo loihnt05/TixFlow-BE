@@ -64,9 +64,50 @@ public sealed class TicketType : Entity
 
     public DateTimeOffset UpdatedAtUtc { get; private set; } = DateTimeOffset.UtcNow;
 
+    public long Version { get; private set; }
+
     public EventSession EventSession { get; private set; } = null!;
 
     public TicketInventory Inventory { get; private set; } = null!;
 
     public ICollection<Seat> Seats { get; private set; } = new List<Seat>();
+
+    public void Update(
+        string name,
+        string code,
+        string? description,
+        decimal price,
+        int maxPerOrder,
+        DateTimeOffset? saleStartsAtUtc,
+        DateTimeOffset? saleEndsAtUtc)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(code);
+        if (price < 0) throw new ArgumentOutOfRangeException(nameof(price));
+        if (maxPerOrder <= 0) throw new ArgumentOutOfRangeException(nameof(maxPerOrder));
+        if (saleStartsAtUtc.HasValue && saleEndsAtUtc.HasValue && saleEndsAtUtc <= saleStartsAtUtc)
+            throw new ArgumentOutOfRangeException(nameof(saleEndsAtUtc), "Sale end must be after sale start.");
+
+        Name = name.Trim();
+        Code = code.Trim().ToUpperInvariant();
+        Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim();
+        Price = price;
+        MaxPerOrder = maxPerOrder;
+        SaleStartsAtUtc = saleStartsAtUtc;
+        SaleEndsAtUtc = saleEndsAtUtc;
+        Touch();
+    }
+
+    public void SetCapacity(int capacity)
+    {
+        if (capacity <= 0) throw new ArgumentOutOfRangeException(nameof(capacity));
+        Capacity = capacity;
+        Touch();
+    }
+
+    private void Touch()
+    {
+        Version++;
+        UpdatedAtUtc = DateTimeOffset.UtcNow;
+    }
 }

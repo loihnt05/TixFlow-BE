@@ -158,6 +158,7 @@ services:
       - "127.0.0.1:9001:9000"
     volumes:
       - ./infrastructure/keycloak:/opt/keycloak/data/import:ro
+      - ./infrastructure/keycloak/providers:/opt/keycloak/providers:ro
     depends_on:
       keycloak-postgres:
         condition: service_healthy

@@ -1,4 +1,5 @@
 using TixFlow.Domain.Common;
+using TixFlow.Domain.Booking;
 
 namespace TixFlow.Domain.Events;
 
@@ -13,7 +14,8 @@ public sealed class Seat : Entity
         Guid ticketTypeId,
         string section,
         string rowLabel,
-        string seatNumber)
+        string seatNumber,
+        bool isAccessible = false)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(section);
         ArgumentException.ThrowIfNullOrWhiteSpace(rowLabel);
@@ -21,9 +23,10 @@ public sealed class Seat : Entity
 
         EventSessionId = eventSessionId;
         TicketTypeId = ticketTypeId;
-        Section = section.Trim();
-        RowLabel = rowLabel.Trim();
-        SeatNumber = seatNumber.Trim();
+        Section = Normalize(section);
+        RowLabel = Normalize(rowLabel);
+        SeatNumber = Normalize(seatNumber);
+        IsAccessible = isAccessible;
     }
 
     public Guid EventSessionId { get; private set; }
@@ -45,4 +48,20 @@ public sealed class Seat : Entity
     public EventSession EventSession { get; private set; } = null!;
 
     public TicketType TicketType { get; private set; } = null!;
+
+    public ICollection<SeatAllocation> Allocations { get; private set; } = new List<SeatAllocation>();
+
+    public void Update(string section, string rowLabel, string seatNumber, bool isAccessible, bool isActive)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(section);
+        ArgumentException.ThrowIfNullOrWhiteSpace(rowLabel);
+        ArgumentException.ThrowIfNullOrWhiteSpace(seatNumber);
+        Section = Normalize(section);
+        RowLabel = Normalize(rowLabel);
+        SeatNumber = Normalize(seatNumber);
+        IsAccessible = isAccessible;
+        IsActive = isActive;
+    }
+
+    private static string Normalize(string value) => value.Trim().ToUpperInvariant();
 }

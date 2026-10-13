@@ -195,6 +195,7 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
             entity.Property(item => item.Price).HasPrecision(14, 2);
             entity.Property(item => item.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
             entity.Property(item => item.InventoryMode).HasConversion<string>().HasMaxLength(32).IsRequired();
+            entity.Property(item => item.Version).IsConcurrencyToken();
             entity.HasIndex(item => new { item.EventSessionId, item.Code }).IsUnique();
             entity.HasOne(item => item.EventSession)
                 .WithMany(item => item.TicketTypes)
@@ -302,7 +303,7 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
                 .HasFilter("status IN ('Held', 'Sold')");
             entity.HasIndex(item => new { item.Status, item.ExpiresAtUtc });
             entity.HasOne(item => item.Seat)
-                .WithMany()
+                .WithMany(item => item.Allocations)
                 .HasForeignKey(item => item.SeatId)
                 .OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(item => item.HoldItem)

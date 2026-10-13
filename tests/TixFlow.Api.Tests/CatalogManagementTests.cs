@@ -80,6 +80,16 @@ public sealed class CatalogManagementTests(AuthApiFactory factory) : IClassFixtu
             $"/api/v1/management/events/{eventId}/sessions",
             new { name = "Main session", startsAtUtc = startsAt, endsAtUtc = endsAt });
         Assert.Equal(HttpStatusCode.Created, sessionResponse.StatusCode);
+        JsonElement session = await Body(sessionResponse);
+
+        using HttpResponseMessage ticketTypeResponse = await organizer.PostAsJsonAsync(
+            $"/api/v1/management/event-sessions/{session.GetProperty("id").GetGuid()}/ticket-types",
+            new
+            {
+                name = "General Admission", code = "GENERAL", description = "Test inventory",
+                price = 250000, inventoryMode = "GeneralAdmission", capacity = 100, maxPerOrder = 4
+            });
+        Assert.Equal(HttpStatusCode.Created, ticketTypeResponse.StatusCode);
 
         using HttpResponseMessage publishResponse = await organizer.PostAsJsonAsync(
             $"/api/v1/management/events/{eventId}/publish",

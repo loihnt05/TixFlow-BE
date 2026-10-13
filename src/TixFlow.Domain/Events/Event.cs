@@ -92,6 +92,15 @@ public sealed class Event : Entity
             throw new InvalidOperationException("An event needs at least one session before publishing.");
         if (Sessions.Any(session => session.EndsAtUtc <= publishedAtUtc))
             throw new InvalidOperationException("All sessions must end after the publish time.");
+        if (Sessions.Any(session => session.TicketTypes.Count == 0))
+            throw new InvalidOperationException("Every session needs at least one ticket type before publishing.");
+        if (Sessions.SelectMany(session => session.TicketTypes).Any(ticket =>
+                ticket.Inventory is null || ticket.Inventory.TotalQuantity != ticket.Capacity))
+            throw new InvalidOperationException("Every ticket type needs inventory that matches its capacity.");
+        if (Sessions.SelectMany(session => session.TicketTypes)
+            .Any(ticket => ticket.InventoryMode == InventoryMode.ReservedSeating
+                && ticket.Seats.Count(seat => seat.IsActive) != ticket.Capacity))
+            throw new InvalidOperationException("Reserved seating capacity must match the active seat map.");
 
         Status = EventStatus.Published;
         PublishedAtUtc = publishedAtUtc;

@@ -15,6 +15,8 @@ services:
       - ./database/migrations/002_keycloak_identity.sql:/docker-entrypoint-initdb.d/002_keycloak_identity.sql:ro
       - ./database/migrations/003_catalog_management.sql:/docker-entrypoint-initdb.d/003_catalog_management.sql:ro
       - ./database/migrations/004_phase3_catalog_seed.sql:/docker-entrypoint-initdb.d/004_phase3_catalog_seed.sql:ro
+      - ./database/migrations/005_phase4_inventory.sql:/docker-entrypoint-initdb.d/005_phase4_inventory.sql:ro
+      - ./database/migrations/006_phase4_inventory_seed.sql:/docker-entrypoint-initdb.d/006_phase4_inventory_seed.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U tixflow_test -d tixflow_auth_tests"]
       interval: 2s

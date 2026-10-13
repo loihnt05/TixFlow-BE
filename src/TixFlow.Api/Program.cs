@@ -6,12 +6,15 @@ using TixFlow.Infrastructure;
 using TixFlow.Infrastructure.Health;
 using TixFlow.Api.Authentication;
 using TixFlow.Api.Modules.Users;
+using System.Text.Json.Serialization;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.ConfigureHttpJsonOptions(options =>
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddIdentityAuthentication(builder.Configuration, builder.Environment);
 builder.Services.AddHealthChecks()
     .AddCheck<PostgresHealthCheck>("postgres");
@@ -58,6 +61,7 @@ api.MapGet("/system/info", (IHostEnvironment environment) => Results.Ok(new
 
 api.MapEventsModule();
 api.MapCatalogManagementModule();
+api.MapInventoryModule();
 api.MapBookingModule();
 api.MapAssistantModule();
 api.MapUsersModule();

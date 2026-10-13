@@ -100,10 +100,9 @@ Lệnh `down` ở trên không có `-v`; test database dùng `tmpfs` nên không
 
 Bộ đặc tả actor, business rules, ERD, state/sequence, API và ADR nằm tại [thiết kế Giai đoạn 1](docs/phase-1-design-index.md). Các chính sách sản phẩm đã được người dùng xác nhận; cổng phê duyệt giảng viên được theo dõi trong tài liệu.
 
-Toàn bộ Giai đoạn 2 được ghi tại [JWT, role policy và middleware](docs/phase-2-authentication-foundation.md), [token contract Keycloak](docs/phase-2-token-contract.md) và [biên bản hoàn tất Authentication/current user](docs/phase-2-frontend-current-user.md). API yêu cầu `sub`, `email`, `preferred_username`, audience `tixflow-api` và đúng một role nghiệp vụ; không dùng email thay subject.
+Toàn bộ Giai đoạn 2 được ghi tại [JWT, role policy và middleware](docs/phase-2-authentication-foundation.md), [token contract Keycloak](docs/phase-2-token-contract.md) và [biên bản hoàn tất Authentication/current user](docs/phase-2-frontend-current-user.md). Giai đoạn 3 nằm tại [Catalog và quản trị sự kiện](docs/phase-3-catalog-management.md); Giai đoạn 4 nằm tại [Suất diễn, ghế, loại vé và inventory](docs/phase-4-inventory.md).
 
-1. Xây dựng CRUD Organizer/Event/EventSession/TicketType/Seat và public event detail.
-2. Xây dựng cơ chế hold bằng transaction + atomic update + idempotency.
-3. Bổ sung xử lý expiry, outbox, RabbitMQ và Worker nghiệp vụ.
-4. Hoàn chỉnh checkout/payment giả lập, ticket QR và check-in.
-5. Chỉ tích hợp AI Booking Assistant sau khi Booking Service đã ổn định.
+1. Xây dựng cơ chế hold bằng transaction + atomic update + idempotency.
+2. Bổ sung xử lý expiry, outbox, RabbitMQ và Worker nghiệp vụ.
+3. Hoàn chỉnh checkout/payment giả lập, ticket QR và check-in.
+4. Chỉ tích hợp AI Booking Assistant sau khi Booking Service đã ổn định.

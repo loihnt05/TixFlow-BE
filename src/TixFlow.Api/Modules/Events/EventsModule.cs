@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using TixFlow.Domain.Booking;
 using TixFlow.Domain.Events;
 using TixFlow.Infrastructure.Persistence;
 
@@ -120,7 +121,7 @@ public static class EventsModule
         TixFlowDbContext dbContext,
         CancellationToken cancellationToken)
     {
-        IQueryable<Event> query = WithPublicGraph(dbContext.Events.AsNoTracking())
+        IQueryable<Event> query = WithPublicSeats(WithPublicGraph(dbContext.Events.AsNoTracking()))
             .Where(item => item.Status == EventStatus.Published);
 
         Event? item = Guid.TryParse(identifier, out Guid id)
@@ -140,6 +141,11 @@ public static class EventsModule
         .Include(item => item.Sessions)
             .ThenInclude(session => session.TicketTypes)
             .ThenInclude(ticketType => ticketType.Inventory);
+
+    private static IQueryable<Event> WithPublicSeats(IQueryable<Event> query) => query
+        .Include(item => item.Sessions)
+            .ThenInclude(session => session.Seats)
+            .ThenInclude(seat => seat.Allocations);
 
     private static bool IsPublicSession(EventSession session) =>
         session.Status is SessionStatus.Scheduled or SessionStatus.OnSale or SessionStatus.SoldOut;
@@ -166,11 +172,26 @@ public static class EventsModule
                         ticket.Description ?? string.Empty,
                         ticket.Price,
                         ticket.Currency,
-                        ticket.Capacity,
-                        ticket.Inventory is null ? 0 : ticket.Inventory.SoldQuantity,
+                         ticket.InventoryMode.ToString(),
+                         ticket.Inventory is null ? ticket.Capacity : ticket.Inventory.TotalQuantity,
+                         ticket.Inventory is null ? 0 : ticket.Inventory.HeldQuantity,
+                         ticket.Inventory is null ? 0 : ticket.Inventory.SoldQuantity,
+                         ticket.Inventory is null ? ticket.Capacity : ticket.Inventory.AvailableQuantity,
+                         ticket.Inventory is null ? 0 : ticket.Inventory.Version,
+                         ticket.Inventory is null ? ticket.UpdatedAtUtc : ticket.Inventory.UpdatedAtUtc,
                         ticket.MaxPerOrder,
                         ticket.SaleStartsAtUtc,
-                        ticket.SaleEndsAtUtc))
+                         ticket.SaleEndsAtUtc,
+                         session.Seats.Where(seat => seat.TicketTypeId == ticket.Id && seat.IsActive)
+                             .OrderBy(seat => seat.Section).ThenBy(seat => seat.RowLabel)
+                             .ThenBy(seat => seat.SeatNumber)
+                             .Select(seat => new PublicSeatResponse(
+                                 seat.Id, seat.Section, seat.RowLabel, seat.SeatNumber, seat.IsAccessible,
+                                 seat.Allocations.Any(allocation => allocation.Status == SeatAllocationStatus.Sold)
+                                     ? "Sold"
+                                     : seat.Allocations.Any(allocation => allocation.Status == SeatAllocationStatus.Held)
+                                         ? "Held" : "Available"))
+                             .ToArray()))
                     .ToArray()))
             .ToArray();
 
@@ -218,6 +239,10 @@ public static class EventsModule
 
     private sealed record PublicTicketTypeResponse(
         Guid Id, string Name, string Description, decimal Price, string Currency,
-        int Quantity, int Sold, int MaxPerOrder,
-        DateTimeOffset? SaleStartsAtUtc, DateTimeOffset? SaleEndsAtUtc);
+        string InventoryMode, int TotalQuantity, int HeldQuantity, int SoldQuantity,
+        int AvailableQuantity, long Version, DateTimeOffset UpdatedAtUtc, int MaxPerOrder,
+        DateTimeOffset? SaleStartsAtUtc, DateTimeOffset? SaleEndsAtUtc, PublicSeatResponse[] Seats);
+
+    private sealed record PublicSeatResponse(Guid Id, string Section, string RowLabel,
+        string SeatNumber, bool IsAccessible, string Status);
 }
