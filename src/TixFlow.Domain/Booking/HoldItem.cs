@@ -9,7 +9,12 @@ public sealed class HoldItem : Entity
     {
     }
 
-    public HoldItem(Guid holdId, Guid ticketTypeId, int quantity, decimal unitPrice)
+    public HoldItem(
+        Guid holdId,
+        Guid ticketTypeId,
+        int quantity,
+        decimal unitPrice,
+        int maxPerOrderSnapshot)
     {
         if (quantity <= 0)
         {
@@ -21,10 +26,16 @@ public sealed class HoldItem : Entity
             throw new ArgumentOutOfRangeException(nameof(unitPrice));
         }
 
+        if (maxPerOrderSnapshot <= 0 || quantity > maxPerOrderSnapshot)
+        {
+            throw new ArgumentOutOfRangeException(nameof(maxPerOrderSnapshot));
+        }
+
         HoldId = holdId;
         TicketTypeId = ticketTypeId;
         Quantity = quantity;
         UnitPrice = unitPrice;
+        MaxPerOrderSnapshot = maxPerOrderSnapshot;
     }
 
     public Guid HoldId { get; private set; }
@@ -34,6 +45,8 @@ public sealed class HoldItem : Entity
     public int Quantity { get; private set; }
 
     public decimal UnitPrice { get; private set; }
+
+    public int MaxPerOrderSnapshot { get; private set; }
 
     public Hold Hold { get; private set; } = null!;
 

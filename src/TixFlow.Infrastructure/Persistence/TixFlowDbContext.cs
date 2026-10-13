@@ -255,10 +255,15 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
 
         modelBuilder.Entity<Hold>(entity =>
         {
-            entity.ToTable("holds");
+            entity.ToTable(
+                "holds",
+                table => table.HasCheckConstraint("ck_holds_total", "total_amount >= 0"));
             entity.HasKey(item => item.Id);
             entity.Property(item => item.IdempotencyKey).HasMaxLength(120).IsRequired();
             entity.Property(item => item.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+            entity.Property(item => item.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
+            entity.Property(item => item.TotalAmount).HasPrecision(14, 2);
+            entity.Property(item => item.Version).IsConcurrencyToken();
             entity.HasIndex(item => new { item.UserId, item.IdempotencyKey }).IsUnique();
             entity.HasIndex(item => new { item.Status, item.ExpiresAtUtc });
             entity.HasOne(item => item.User)

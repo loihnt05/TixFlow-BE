@@ -13,6 +13,15 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddOptions<BookingOptions>()
+    .Bind(builder.Configuration.GetSection(BookingOptions.SectionName))
+    .Validate(options => options.HoldDurationMinutes is >= 1 and <= 60,
+        "Booking hold duration must be between 1 and 60 minutes.")
+    .Validate(options => options.LockTimeoutSeconds is >= 1 and <= 30,
+        "Booking lock timeout must be between 1 and 30 seconds.")
+    .Validate(options => options.IdempotencyRetentionHours is >= 1 and <= 168,
+        "Booking idempotency retention must be between 1 and 168 hours.")
+    .ValidateOnStart();
 builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddIdentityAuthentication(builder.Configuration, builder.Environment);

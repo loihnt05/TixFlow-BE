@@ -193,10 +193,15 @@ CREATE TABLE holds
     event_session_id  uuid         NOT NULL REFERENCES event_sessions (id) ON DELETE RESTRICT,
     idempotency_key   varchar(120) NOT NULL,
     status            varchar(24)  NOT NULL DEFAULT 'Active',
+    currency          char(3)      NOT NULL DEFAULT 'VND',
+    total_amount      numeric(14, 2) NOT NULL DEFAULT 0,
     expires_at_utc    timestamptz  NOT NULL,
     created_at_utc    timestamptz  NOT NULL DEFAULT now(),
     updated_at_utc    timestamptz  NOT NULL DEFAULT now(),
+    version           bigint       NOT NULL DEFAULT 0,
     CONSTRAINT ck_holds_status CHECK (status IN ('Active', 'Confirmed', 'Expired', 'Cancelled')),
+    CONSTRAINT ck_holds_total CHECK (total_amount >= 0),
+    CONSTRAINT ck_holds_version CHECK (version >= 0),
     CONSTRAINT ux_holds_user_idempotency UNIQUE (user_id, idempotency_key)
 );
 
@@ -210,8 +215,11 @@ CREATE TABLE hold_items
     ticket_type_id uuid           NOT NULL REFERENCES ticket_types (id) ON DELETE RESTRICT,
     quantity       integer        NOT NULL,
     unit_price     numeric(14, 2) NOT NULL,
+    max_per_order_snapshot integer NOT NULL,
     CONSTRAINT ck_hold_items_quantity CHECK (quantity > 0),
-    CONSTRAINT ck_hold_items_price CHECK (unit_price >= 0)
+    CONSTRAINT ck_hold_items_price CHECK (unit_price >= 0),
+    CONSTRAINT ck_hold_items_max_per_order CHECK (
+        max_per_order_snapshot > 0 AND quantity <= max_per_order_snapshot)
 );
 
 CREATE INDEX ix_hold_items_hold_id ON hold_items (hold_id);

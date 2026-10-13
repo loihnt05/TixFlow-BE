@@ -18,5 +18,6 @@
     <None Include="../../database/migrations/004_phase3_catalog_seed.sql" Link="004_phase3_catalog_seed.sql" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../database/migrations/005_phase4_inventory.sql" Link="005_phase4_inventory.sql" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../database/migrations/006_phase4_inventory_seed.sql" Link="006_phase4_inventory_seed.sql" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/migrations/007_phase5_hold_concurrency.sql" Link="007_phase5_hold_concurrency.sql" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
