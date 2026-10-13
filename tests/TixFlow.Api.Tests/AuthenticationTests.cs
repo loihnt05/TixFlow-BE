@@ -44,6 +44,7 @@ public sealed class AuthenticationTests(AuthApiFactory factory) : IClassFixture<
     [InlineData("expired")]
     [InlineData("signature")]
     [InlineData("subject")]
+    [InlineData("username")]
     public async Task InvalidTokensAreRejected(string defect)
     {
         var identity = Identity();
@@ -52,6 +53,8 @@ public sealed class AuthenticationTests(AuthApiFactory factory) : IClassFixture<
                 : defect == "internal-issuer" ? "http://keycloak:8080/realms/tixflow" : null,
             audience: defect == "audience" ? "tixflow-web" : "tixflow-api",
             expired: defect == "expired", wrongSignature: defect == "signature", includeSubject: defect != "subject");
+        if (defect == "username")
+            token = factory.Token(identity.Sub, identity.Email, ["Customer"], includeUsername: false);
         using HttpClient client = Client(token);
         Assert.Equal(HttpStatusCode.Unauthorized, (await client.GetAsync("/api/v1/users/me")).StatusCode);
     }
@@ -78,6 +81,40 @@ public sealed class AuthenticationTests(AuthApiFactory factory) : IClassFixture<
         Assert.Equal(HttpStatusCode.Forbidden, (await client.GetAsync("/api/v1/users/access/organizer")).StatusCode);
     }
 
+    public static IEnumerable<object[]> InvalidApplicationRoleSets()
+    {
+        yield return new object[] { Array.Empty<string>() };
+        yield return new object[] { new[] { "Customer", "Organizer" } };
+    }
+
+    [Theory]
+    [MemberData(nameof(InvalidApplicationRoleSets))]
+    public async Task TokenMustHaveExactlyOneApplicationRoleAndDeniedRequestsDoNotCreateUsers(string[] roles)
+    {
+        var identity = Identity();
+        using HttpClient client = Client(factory.Token(identity.Sub, identity.Email, roles));
+        Assert.Equal(HttpStatusCode.Forbidden, (await client.GetAsync("/api/v1/users/me")).StatusCode);
+
+        await using var connection = new NpgsqlConnection(factory.ConnectionString);
+        await connection.OpenAsync();
+        await using var command = new NpgsqlCommand(
+            "SELECT count(*) FROM users WHERE identity_subject = @sub", connection);
+        command.Parameters.AddWithValue("sub", identity.Sub);
+        Assert.Equal(0L, await command.ExecuteScalarAsync());
+    }
+
+    [Fact]
+    public async Task TechnicalRolesAreIgnoredWhenOneApplicationRoleIsPresent()
+    {
+        var identity = Identity();
+        using HttpClient client = Client(factory.Token(identity.Sub, identity.Email,
+            ["offline_access", "Customer", "uma_authorization"]));
+        using HttpResponseMessage response = await client.GetAsync("/api/v1/users/me");
+        response.EnsureSuccessStatusCode();
+        Me user = (await response.Content.ReadFromJsonAsync<Me>())!;
+        Assert.Equal(new[] { "Customer" }, user.Roles);
+    }
+
     [Fact]
     public async Task ConcurrentAndRepeatedRequestsCreateOnlyOnePasswordlessProfile()
     {
@@ -102,6 +139,30 @@ public sealed class AuthenticationTests(AuthApiFactory factory) : IClassFixture<
         await using var command = new NpgsqlCommand("SELECT count(*) FROM users WHERE identity_subject = @sub AND password_hash IS NULL", connection);
         command.Parameters.AddWithValue("sub", identity.Sub);
         Assert.Equal(1L, await command.ExecuteScalarAsync());
+    }
+
+    [Fact]
+    public async Task ConcurrentSubjectsCannotClaimTheSameEmail()
+    {
+        string email = $"shared-{Guid.NewGuid()}@example.test";
+        using HttpClient first = Client(factory.Token(Guid.NewGuid().ToString(), email, ["Customer"]));
+        using HttpClient second = Client(factory.Token(Guid.NewGuid().ToString(), email.ToUpperInvariant(), ["Customer"]));
+
+        HttpResponseMessage[] responses = await Task.WhenAll(
+            first.GetAsync("/api/v1/users/me"),
+            second.GetAsync("/api/v1/users/me"));
+
+        Assert.Single(responses, response => response.StatusCode == HttpStatusCode.OK);
+        Assert.Single(responses, response => response.StatusCode == HttpStatusCode.Conflict);
+
+        await using var connection = new NpgsqlConnection(factory.ConnectionString);
+        await connection.OpenAsync();
+        await using var command = new NpgsqlCommand(
+            "SELECT count(*) FROM users WHERE normalized_email = @email AND password_hash IS NULL", connection);
+        command.Parameters.AddWithValue("email", email.ToUpperInvariant());
+        Assert.Equal(1L, await command.ExecuteScalarAsync());
+
+        foreach (HttpResponseMessage response in responses) response.Dispose();
     }
 
     [Fact]
@@ -156,14 +217,19 @@ public sealed class AuthenticationTests(AuthApiFactory factory) : IClassFixture<
     {
         await using var connection = new NpgsqlConnection(factory.ConnectionString);
         await connection.OpenAsync();
-        string sql = await File.ReadAllTextAsync(Path.Combine(AppContext.BaseDirectory, "002_keycloak_identity.sql"));
-        for (int attempt = 0; attempt < 2; attempt++)
+        foreach (string fileName in new[] { "002_keycloak_identity.sql", "004_phase3_catalog_seed.sql" })
         {
-            await using var migration = new NpgsqlCommand(sql, connection);
-            await migration.ExecuteNonQueryAsync();
+            string sql = await File.ReadAllTextAsync(Path.Combine(AppContext.BaseDirectory, fileName));
+            for (int attempt = 0; attempt < 2; attempt++)
+            {
+                await using var migration = new NpgsqlCommand(sql, connection);
+                await migration.ExecuteNonQueryAsync();
+            }
         }
-        await using var command = new NpgsqlCommand("SELECT count(*) FROM events WHERE status = 'Published'", connection);
+        await using var command = new NpgsqlCommand("SELECT count(*) FROM events WHERE slug = 'tixflow-flash-sale-demo'", connection);
         Assert.Equal(1L, await command.ExecuteScalarAsync());
+        await using var count = new NpgsqlCommand("SELECT count(*) FROM events", connection);
+        Assert.Equal(12L, await count.ExecuteScalarAsync());
     }
 
     [Fact]

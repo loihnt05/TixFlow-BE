@@ -1,4 +1,5 @@
 using TixFlow.Domain.Common;
+using TixFlow.Domain.Events;
 using TixFlow.Domain.Identity;
 
 namespace TixFlow.Domain.Organizers;
@@ -36,4 +37,21 @@ public sealed class Organizer : Entity
     public DateTimeOffset UpdatedAtUtc { get; private set; } = DateTimeOffset.UtcNow;
 
     public User OwnerUser { get; private set; } = null!;
+
+    public ICollection<Event> Events { get; private set; } = new List<Event>();
+
+    public ICollection<Venue> Venues { get; private set; } = new List<Venue>();
+
+    public void Update(string name, string slug, string description, string contactEmail)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(slug);
+        ArgumentException.ThrowIfNullOrWhiteSpace(contactEmail);
+
+        Name = name.Trim();
+        Slug = slug.Trim().ToLowerInvariant();
+        Description = description.Trim();
+        ContactEmail = contactEmail.Trim();
+        UpdatedAtUtc = DateTimeOffset.UtcNow;
+    }
 }

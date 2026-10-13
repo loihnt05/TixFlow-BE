@@ -15,5 +15,6 @@
   <ItemGroup>
     <Using Include="Xunit" />
     <None Include="../../database/migrations/002_keycloak_identity.sql" Link="002_keycloak_identity.sql" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/migrations/004_phase3_catalog_seed.sql" Link="004_phase3_catalog_seed.sql" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
