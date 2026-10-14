@@ -48,4 +48,23 @@ public sealed class IdempotencyRecord : Entity
     public DateTimeOffset UpdatedAtUtc { get; private set; } = DateTimeOffset.UtcNow;
 
     public User User { get; private set; } = null!;
+
+    public void Complete(int responseStatusCode, string responseBody, DateTimeOffset completedAtUtc)
+    {
+        if (IsCompleted)
+        {
+            throw new InvalidOperationException("The idempotency record is already completed.");
+        }
+
+        if (responseStatusCode is < 200 or > 599)
+        {
+            throw new ArgumentOutOfRangeException(nameof(responseStatusCode));
+        }
+
+        ArgumentException.ThrowIfNullOrWhiteSpace(responseBody);
+        ResponseStatusCode = responseStatusCode;
+        ResponseBody = responseBody;
+        IsCompleted = true;
+        UpdatedAtUtc = completedAtUtc;
+    }
 }

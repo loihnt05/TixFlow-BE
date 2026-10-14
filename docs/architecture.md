@@ -25,3 +25,5 @@ Domain không phụ thuộc database, Redis, RabbitMQ hay framework web. Mọi t
 
 PostgreSQL là nguồn sự thật. Redis chỉ dùng cho cache, rate limit hoặc dữ liệu tạm có thể tái tạo. RabbitMQ truyền sự kiện bất đồng bộ; outbox sẽ được bổ sung để tránh mất thông điệp sau khi transaction đã commit.
 
+Các quyết định và phương án đã cân nhắc được ghi trong [5 ADR Giai đoạn 1](adr/README.md). Bộ hợp đồng nghiệp vụ, state/sequence và API nằm tại [bộ thiết kế Giai đoạn 1](phase-1-design-index.md); đây là mục tiêu triển khai, không phải tuyên bố runtime đã hoàn chỉnh.
+

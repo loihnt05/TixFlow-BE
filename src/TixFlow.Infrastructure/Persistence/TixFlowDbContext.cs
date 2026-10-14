@@ -126,6 +126,11 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
             entity.Property(item => item.City).HasMaxLength(120).IsRequired();
             entity.Property(item => item.CountryCode).HasMaxLength(2).IsRequired();
             entity.Property(item => item.TimeZone).HasMaxLength(80).IsRequired();
+            entity.HasIndex(item => new { item.OrganizerId, item.Name });
+            entity.HasOne(item => item.Organizer)
+                .WithMany(item => item.Venues)
+                .HasForeignKey(item => item.OrganizerId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 
@@ -141,14 +146,15 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
             entity.Property(item => item.Category).HasMaxLength(100).IsRequired();
             entity.Property(item => item.ImageUrl).HasMaxLength(1000);
             entity.Property(item => item.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+            entity.Property(item => item.Version).IsConcurrencyToken();
             entity.HasIndex(item => new { item.OrganizerId, item.Slug }).IsUnique();
             entity.HasIndex(item => new { item.Status, item.SaleStartsAtUtc });
             entity.HasOne(item => item.Organizer)
-                .WithMany()
+                .WithMany(item => item.Events)
                 .HasForeignKey(item => item.OrganizerId)
                 .OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(item => item.Venue)
-                .WithMany()
+                .WithMany(item => item.Events)
                 .HasForeignKey(item => item.VenueId)
                 .OnDelete(DeleteBehavior.SetNull);
         });
@@ -163,6 +169,7 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
             entity.HasKey(item => item.Id);
             entity.Property(item => item.Name).HasMaxLength(180).IsRequired();
             entity.Property(item => item.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+            entity.Property(item => item.Version).IsConcurrencyToken();
             entity.HasIndex(item => new { item.EventId, item.StartsAtUtc }).IsUnique();
             entity.HasIndex(item => new { item.Status, item.StartsAtUtc });
             entity.HasOne(item => item.Event)
@@ -188,6 +195,7 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
             entity.Property(item => item.Price).HasPrecision(14, 2);
             entity.Property(item => item.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
             entity.Property(item => item.InventoryMode).HasConversion<string>().HasMaxLength(32).IsRequired();
+            entity.Property(item => item.Version).IsConcurrencyToken();
             entity.HasIndex(item => new { item.EventSessionId, item.Code }).IsUnique();
             entity.HasOne(item => item.EventSession)
                 .WithMany(item => item.TicketTypes)
@@ -247,10 +255,15 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
 
         modelBuilder.Entity<Hold>(entity =>
         {
-            entity.ToTable("holds");
+            entity.ToTable(
+                "holds",
+                table => table.HasCheckConstraint("ck_holds_total", "total_amount >= 0"));
             entity.HasKey(item => item.Id);
             entity.Property(item => item.IdempotencyKey).HasMaxLength(120).IsRequired();
             entity.Property(item => item.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+            entity.Property(item => item.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
+            entity.Property(item => item.TotalAmount).HasPrecision(14, 2);
+            entity.Property(item => item.Version).IsConcurrencyToken();
             entity.HasIndex(item => new { item.UserId, item.IdempotencyKey }).IsUnique();
             entity.HasIndex(item => new { item.Status, item.ExpiresAtUtc });
             entity.HasOne(item => item.User)
@@ -297,7 +310,7 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
                 .HasFilter("status IN ('Held', 'Sold')");
             entity.HasIndex(item => new { item.Status, item.ExpiresAtUtc });
             entity.HasOne(item => item.Seat)
-                .WithMany()
+                .WithMany(item => item.Allocations)
                 .HasForeignKey(item => item.SeatId)
                 .OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(item => item.HoldItem)

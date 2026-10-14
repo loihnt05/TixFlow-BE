@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using TixFlow.Application.Identity;
 using TixFlow.Domain.Identity;
 
@@ -23,8 +26,7 @@ public sealed class LocalUserMiddleware(RequestDelegate next)
             IdentityProfile? profile = TokenClaims.ReadProfile(context.User);
             if (profile is null)
             {
-                await Results.Problem(statusCode: 422, title: "Incomplete identity profile",
-                    detail: "The identity provider must supply sub and email claims.").ExecuteAsync(context);
+                await context.ForbidAsync(JwtBearerDefaults.AuthenticationScheme);
                 return;
             }
             try

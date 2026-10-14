@@ -1,7 +1,25 @@
+using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Options;
+using Npgsql;
+using TixFlow.Api.Authentication;
+using TixFlow.Domain.Booking;
+using TixFlow.Domain.Events;
+using TixFlow.Domain.Identity;
+using TixFlow.Infrastructure.Persistence;
+
 namespace TixFlow.Api.Modules.Booking;
 
 public static class BookingModule
 {
+    private const string CreateHoldScope = "createHold:collection";
+    private static readonly JsonSerializerOptions JsonOptions = CreateJsonOptions();
+
     public static IEndpointRouteBuilder MapBookingModule(this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapGroup("/bookings")
@@ -9,9 +27,18 @@ public static class BookingModule
             .MapGet("/status", () => Results.Ok(new
             {
                 module = "Booking",
-                status = "database-ready",
-                note = "The booking schema is ready; transactional hold APIs are the next implementation step."
+                status = "hold-concurrency-ready",
+                note = "Transactional hold, idempotency, atomic inventory and cancellation APIs are enabled."
             }));
+
+        RouteGroupBuilder holds = endpoints.MapGroup("/holds").WithTags("Booking");
+        holds.MapPost("/", CreateHoldAsync).RequireAuthorization("Customer");
+        holds.MapGet("/", ListHoldsAsync).RequireAuthorization("CustomerOrAdmin");
+        holds.MapGet("/{holdId:guid}", GetHoldAsync).RequireAuthorization("CustomerOrAdmin");
+        holds.MapPost("/{holdId:guid}/cancellations", CancelHoldAsync)
+            .RequireAuthorization("CustomerOrAdmin");
+        holds.MapDelete("/{holdId:guid}", DeleteHoldAsync)
+            .RequireAuthorization("CustomerOrAdmin");
 
         return endpoints;
     }

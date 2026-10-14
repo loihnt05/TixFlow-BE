@@ -64,11 +64,16 @@ public sealed class AuthApiFactory : WebApplicationFactory<Program>
 
     public string Token(string subject, string email, string[] roles, string? issuer = null,
         string audience = "tixflow-api", bool expired = false, bool wrongSignature = false,
-        bool includeSubject = true, bool includeEmail = true, string name = "Auth Test")
+        bool includeSubject = true, bool includeEmail = true, bool includeUsername = true,
+        string name = "Auth Test")
     {
-        var claims = new Dictionary<string, object> { ["name"] = name, ["roles"] = roles };
+        var claims = new Dictionary<string, object>
+        {
+            ["name"] = name, ["roles"] = roles
+        };
         if (includeSubject) claims["sub"] = subject;
         if (includeEmail) claims["email"] = email;
+        if (includeUsername) claims["preferred_username"] = email;
         using RSA otherKey = RSA.Create(2048);
         var key = wrongSignature ? new RsaSecurityKey(otherKey) { KeyId = "test-key" } : SigningKey;
         return new JwtSecurityTokenHandler().CreateEncodedJwt(new SecurityTokenDescriptor

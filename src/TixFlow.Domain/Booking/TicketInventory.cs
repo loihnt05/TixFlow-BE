@@ -33,4 +33,17 @@ public sealed class TicketInventory : Entity
     public DateTimeOffset UpdatedAtUtc { get; private set; } = DateTimeOffset.UtcNow;
 
     public TicketType TicketType { get; private set; } = null!;
+
+    public int AvailableQuantity => TotalQuantity - HeldQuantity - SoldQuantity;
+
+    public void SetTotalQuantity(int totalQuantity)
+    {
+        if (totalQuantity <= 0) throw new ArgumentOutOfRangeException(nameof(totalQuantity));
+        if (totalQuantity < HeldQuantity + SoldQuantity)
+            throw new InvalidOperationException("Capacity cannot be lower than held plus sold quantity.");
+
+        TotalQuantity = totalQuantity;
+        Version++;
+        UpdatedAtUtc = DateTimeOffset.UtcNow;
+    }
 }

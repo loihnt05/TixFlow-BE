@@ -50,6 +50,7 @@ CREATE TABLE organizers
 CREATE TABLE venues
 (
     id             uuid PRIMARY KEY,
+    organizer_id   uuid         NOT NULL,
     name           varchar(180) NOT NULL,
     address_line   varchar(300) NOT NULL,
     ward           varchar(120),
@@ -58,8 +59,12 @@ CREATE TABLE venues
     country_code   char(2)      NOT NULL DEFAULT 'VN',
     time_zone      varchar(80)  NOT NULL DEFAULT 'Asia/Ho_Chi_Minh',
     created_at_utc timestamptz  NOT NULL DEFAULT now(),
-    updated_at_utc timestamptz  NOT NULL DEFAULT now()
+    updated_at_utc timestamptz  NOT NULL DEFAULT now(),
+    CONSTRAINT fk_venues_organizers_organizer_id
+        FOREIGN KEY (organizer_id) REFERENCES organizers (id) ON DELETE RESTRICT
 );
+
+CREATE INDEX ix_venues_organizer_id_name ON venues (organizer_id, name);
 
 CREATE TABLE events
 (
@@ -77,6 +82,7 @@ CREATE TABLE events
     published_at_utc   timestamptz,
     created_at_utc     timestamptz   NOT NULL DEFAULT now(),
     updated_at_utc     timestamptz   NOT NULL DEFAULT now(),
+    version            bigint        NOT NULL DEFAULT 0,
     CONSTRAINT ck_events_status CHECK (status IN ('Draft', 'Published', 'Cancelled', 'Completed')),
     CONSTRAINT ck_events_sale_window CHECK (
         sale_starts_at_utc IS NULL
@@ -100,6 +106,7 @@ CREATE TABLE event_sessions
     status         varchar(24)  NOT NULL DEFAULT 'Scheduled',
     created_at_utc timestamptz  NOT NULL DEFAULT now(),
     updated_at_utc timestamptz  NOT NULL DEFAULT now(),
+    version        bigint       NOT NULL DEFAULT 0,
     CONSTRAINT ck_event_sessions_time CHECK (ends_at_utc > starts_at_utc),
     CONSTRAINT ck_event_sessions_status CHECK (
         status IN ('Scheduled', 'OnSale', 'SoldOut', 'Cancelled', 'Completed')),
@@ -125,6 +132,7 @@ CREATE TABLE ticket_types
     sale_ends_at_utc   timestamptz,
     created_at_utc     timestamptz  NOT NULL DEFAULT now(),
     updated_at_utc     timestamptz  NOT NULL DEFAULT now(),
+    version            bigint       NOT NULL DEFAULT 0,
     CONSTRAINT ck_ticket_types_price CHECK (price >= 0),
     CONSTRAINT ck_ticket_types_capacity CHECK (capacity > 0),
     CONSTRAINT ck_ticket_types_max_per_order CHECK (max_per_order > 0),
@@ -153,6 +161,10 @@ CREATE TABLE seats
 );
 
 CREATE INDEX ix_seats_ticket_type_id ON seats (ticket_type_id);
+CREATE INDEX ix_seats_session_ticket_type_active
+    ON seats (event_session_id, ticket_type_id, is_active);
+CREATE UNIQUE INDEX ux_seats_session_code_ci
+    ON seats (event_session_id, upper(section), upper(row_label), upper(seat_number));
 
 CREATE TABLE ticket_inventories
 (
@@ -171,6 +183,9 @@ CREATE TABLE ticket_inventories
         held_quantity + sold_quantity <= total_quantity)
 );
 
+CREATE INDEX ix_ticket_inventories_availability
+    ON ticket_inventories (ticket_type_id, held_quantity, sold_quantity, total_quantity);
+
 CREATE TABLE holds
 (
     id                uuid PRIMARY KEY,
@@ -178,10 +193,15 @@ CREATE TABLE holds
     event_session_id  uuid         NOT NULL REFERENCES event_sessions (id) ON DELETE RESTRICT,
     idempotency_key   varchar(120) NOT NULL,
     status            varchar(24)  NOT NULL DEFAULT 'Active',
+    currency          char(3)      NOT NULL DEFAULT 'VND',
+    total_amount      numeric(14, 2) NOT NULL DEFAULT 0,
     expires_at_utc    timestamptz  NOT NULL,
     created_at_utc    timestamptz  NOT NULL DEFAULT now(),
     updated_at_utc    timestamptz  NOT NULL DEFAULT now(),
+    version           bigint       NOT NULL DEFAULT 0,
     CONSTRAINT ck_holds_status CHECK (status IN ('Active', 'Confirmed', 'Expired', 'Cancelled')),
+    CONSTRAINT ck_holds_total CHECK (total_amount >= 0),
+    CONSTRAINT ck_holds_version CHECK (version >= 0),
     CONSTRAINT ux_holds_user_idempotency UNIQUE (user_id, idempotency_key)
 );
 
@@ -195,8 +215,11 @@ CREATE TABLE hold_items
     ticket_type_id uuid           NOT NULL REFERENCES ticket_types (id) ON DELETE RESTRICT,
     quantity       integer        NOT NULL,
     unit_price     numeric(14, 2) NOT NULL,
+    max_per_order_snapshot integer NOT NULL,
     CONSTRAINT ck_hold_items_quantity CHECK (quantity > 0),
-    CONSTRAINT ck_hold_items_price CHECK (unit_price >= 0)
+    CONSTRAINT ck_hold_items_price CHECK (unit_price >= 0),
+    CONSTRAINT ck_hold_items_max_per_order CHECK (
+        max_per_order_snapshot > 0 AND quantity <= max_per_order_snapshot)
 );
 
 CREATE INDEX ix_hold_items_hold_id ON hold_items (hold_id);
@@ -406,9 +429,10 @@ VALUES
      'organizer@tixflow.local');
 
 INSERT INTO venues
-    (id, name, address_line, district, city)
+    (id, organizer_id, name, address_line, district, city)
 VALUES
     ('20000000-0000-0000-0000-000000000001',
+     '10000000-0000-0000-0000-000000000001',
      'TixFlow Arena',
      '01 Đường Demo',
      'Quận 1',

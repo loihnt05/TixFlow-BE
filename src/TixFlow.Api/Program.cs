@@ -42,9 +42,12 @@ builder.Services.AddCors(options =>
 
 WebApplication app = builder.Build();
 
+// Match endpoint metadata before CORS, authentication and authorization.
+app.UseRouting();
 app.UseCors("Frontend");
 app.UseAuthentication();
 app.UseAuthorization();
+// Only authorized protected requests reach local profile/status checks, before the handler.
 app.UseMiddleware<LocalUserMiddleware>();
 if (app.Environment.IsDevelopment())
 {
@@ -69,6 +72,8 @@ api.MapGet("/system/info", (IHostEnvironment environment) => Results.Ok(new
 }));
 
 api.MapEventsModule();
+api.MapCatalogManagementModule();
+api.MapInventoryModule();
 api.MapBookingModule();
 api.MapOrdersModule();
 api.MapTicketsModule();

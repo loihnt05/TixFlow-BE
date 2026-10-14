@@ -13,8 +13,13 @@ public static class UsersModule
         {
             User user = (User)context.Items[LocalUserMiddleware.UserKey]!;
             IdentityProfile profile = (IdentityProfile)context.Items[LocalUserMiddleware.ProfileKey]!;
-            return Results.Ok(new { user.Id, sub = profile.Subject, profile.Email, profile.Name, profile.Roles });
-        });
+            return Results.Ok(new CurrentUserResponse(
+                user.Id,
+                profile.Subject,
+                user.Email,
+                user.DisplayName,
+                [user.Role.ToString()]));
+        }).Produces<CurrentUserResponse>();
         // Small access probes used by the role pages and Swagger; no business mutation is exposed.
         foreach (string role in TokenClaims.ApplicationRoles)
         {
@@ -23,4 +28,6 @@ public static class UsersModule
         }
         return endpoints;
     }
+
+    private sealed record CurrentUserResponse(Guid Id, string Sub, string Email, string Name, string[] Roles);
 }
