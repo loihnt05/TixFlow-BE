@@ -10,7 +10,7 @@ public sealed class OrderItem : Entity
     {
     }
 
-    public OrderItem(Guid orderId, Guid ticketTypeId, int quantity, decimal unitPrice)
+    public OrderItem(Guid orderId, Guid ticketTypeId, int quantity, decimal unitPrice, string ticketTypeNameSnapshot, decimal serviceFee = 0)
     {
         if (quantity <= 0)
         {
@@ -26,6 +26,10 @@ public sealed class OrderItem : Entity
         TicketTypeId = ticketTypeId;
         Quantity = quantity;
         UnitPrice = unitPrice;
+        ArgumentException.ThrowIfNullOrWhiteSpace(ticketTypeNameSnapshot);
+        if (serviceFee < 0) throw new ArgumentOutOfRangeException(nameof(serviceFee));
+        TicketTypeNameSnapshot = ticketTypeNameSnapshot.Trim();
+        ServiceFee = serviceFee;
     }
 
     public Guid OrderId { get; private set; }
@@ -35,6 +39,10 @@ public sealed class OrderItem : Entity
     public int Quantity { get; private set; }
 
     public decimal UnitPrice { get; private set; }
+
+    public string TicketTypeNameSnapshot { get; private set; } = string.Empty;
+
+    public decimal ServiceFee { get; private set; }
 
     public Order Order { get; private set; } = null!;
 

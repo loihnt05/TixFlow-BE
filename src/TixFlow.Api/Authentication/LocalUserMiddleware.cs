@@ -10,7 +10,15 @@ public sealed class LocalUserMiddleware(RequestDelegate next)
 
     public async Task InvokeAsync(HttpContext context, ILocalUserSynchronizer synchronizer)
     {
-        if (context.User.Identity?.IsAuthenticated == true)
+        Endpoint? endpoint = context.GetEndpoint();
+        bool requiresUser = (endpoint?.Metadata.GetOrderedMetadata<IAuthorizeData>().Count > 0
+            || endpoint?.Metadata.GetOrderedMetadata<AuthorizationPolicy>().Count > 0)
+            && endpoint.Metadata.GetMetadata<IAllowAnonymous>() is null;
+        bool serviceCallback = endpoint?.Metadata.GetOrderedMetadata<IAuthorizeData>()
+            .Any(data => data.Policy == "MockPaymentService") == true;
+        // Authorization runs first: denied requests never synchronize a profile.
+        // Public routes, including health and Swagger, must not create/update users.
+        if (requiresUser && !serviceCallback && context.User.Identity?.IsAuthenticated == true)
         {
             IdentityProfile? profile = TokenClaims.ReadProfile(context.User);
             if (profile is null)

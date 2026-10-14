@@ -30,4 +30,8 @@ public sealed class PaymentWebhookEvent : Entity
     public DateTimeOffset? ProcessedAtUtc { get; private set; }
 
     public string? ProcessingError { get; private set; }
+
+    public string? Disposition { get; private set; }
+
+    public string? Reason { get; private set; }
 }

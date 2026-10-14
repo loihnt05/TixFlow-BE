@@ -41,6 +41,12 @@ public sealed class Ticket : Entity
 
     public string QrTokenHash { get; private set; } = string.Empty;
 
+    public string? QrNonce { get; private set; }
+
+    public string? QrKeyId { get; private set; }
+
+    public int? Ordinal { get; private set; }
+
     public TicketStatus Status { get; private set; } = TicketStatus.Issued;
 
     public DateTimeOffset IssuedAtUtc { get; private set; } = DateTimeOffset.UtcNow;

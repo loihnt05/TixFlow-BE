@@ -9,7 +9,14 @@ public sealed class HoldItem : Entity
     {
     }
 
-    public HoldItem(Guid holdId, Guid ticketTypeId, int quantity, decimal unitPrice)
+    public HoldItem(
+        Guid holdId,
+        Guid ticketTypeId,
+        int quantity,
+        decimal unitPrice,
+        int maxPerOrderSnapshot,
+        string ticketTypeNameSnapshot,
+        decimal serviceFee = 0)
     {
         if (quantity <= 0)
         {
@@ -21,10 +28,21 @@ public sealed class HoldItem : Entity
             throw new ArgumentOutOfRangeException(nameof(unitPrice));
         }
 
+        if (maxPerOrderSnapshot <= 0 || quantity > maxPerOrderSnapshot)
+        {
+            throw new ArgumentOutOfRangeException(nameof(maxPerOrderSnapshot));
+        }
+
+        ArgumentException.ThrowIfNullOrWhiteSpace(ticketTypeNameSnapshot);
+        if (serviceFee < 0) throw new ArgumentOutOfRangeException(nameof(serviceFee));
+
         HoldId = holdId;
         TicketTypeId = ticketTypeId;
         Quantity = quantity;
         UnitPrice = unitPrice;
+        MaxPerOrderSnapshot = maxPerOrderSnapshot;
+        TicketTypeNameSnapshot = ticketTypeNameSnapshot.Trim();
+        ServiceFee = serviceFee;
     }
 
     public Guid HoldId { get; private set; }
@@ -34,6 +52,12 @@ public sealed class HoldItem : Entity
     public int Quantity { get; private set; }
 
     public decimal UnitPrice { get; private set; }
+
+    public int MaxPerOrderSnapshot { get; private set; }
+
+    public string TicketTypeNameSnapshot { get; private set; } = string.Empty;
+
+    public decimal ServiceFee { get; private set; }
 
     public Hold Hold { get; private set; } = null!;
 

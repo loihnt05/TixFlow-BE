@@ -11,9 +11,15 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <ProjectReference Include="../../src/TixFlow.Api/TixFlow.Api.csproj" />
+    <ProjectReference Include="../../src/TixFlow.Worker/TixFlow.Worker.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />
     <None Include="../../database/migrations/002_keycloak_identity.sql" Link="002_keycloak_identity.sql" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/migrations/004_phase3_catalog_seed.sql" Link="004_phase3_catalog_seed.sql" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/migrations/005_phase4_inventory.sql" Link="005_phase4_inventory.sql" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/migrations/006_phase4_inventory_seed.sql" Link="006_phase4_inventory_seed.sql" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/migrations/007_phase5_hold_concurrency.sql" Link="007_phase5_hold_concurrency.sql" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/migrations/008_phase6_checkout_payments.sql" Link="008_phase6_checkout_payments.sql" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

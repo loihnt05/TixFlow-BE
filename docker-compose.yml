@@ -63,8 +63,11 @@ services:
       Authentication__Authority: http://localhost:8180/realms/tixflow
       Authentication__MetadataAddress: http://keycloak:8080/realms/tixflow/.well-known/openid-configuration
       Authentication__Audience: tixflow-api
+      Authentication__MockCallbackAudience: tixflow-mock-callback
     ports:
       - "8080:8080"
+    volumes:
+      - ticket_keys:/app/ticket-keys
     healthcheck:
       test:
         - CMD-SHELL
@@ -96,6 +99,8 @@ services:
       RabbitMq__Host: rabbitmq
       RabbitMq__Username: ${RABBITMQ_USER:-tixflow}
       RabbitMq__Password: ${RABBITMQ_PASSWORD}
+    volumes:
+      - ticket_keys:/app/ticket-keys
     depends_on:
       api:
         condition: service_healthy
@@ -171,6 +176,7 @@ services:
       retries: 18
 
 volumes:
+  ticket_keys:
   postgres_data:
   redis_data:
   rabbitmq_data:

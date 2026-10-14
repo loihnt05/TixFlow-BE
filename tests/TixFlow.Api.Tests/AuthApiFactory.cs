@@ -38,7 +38,8 @@ public sealed class AuthApiFactory : WebApplicationFactory<Program>
         {
             ["ConnectionStrings:Postgres"] = ConnectionString,
             ["Authentication:Authority"] = Issuer,
-            ["Authentication:Audience"] = "tixflow-api"
+            ["Authentication:Audience"] = "tixflow-api",
+            ["Authentication:MockCallbackAudience"] = "tixflow-mock-callback"
         }));
         builder.ConfigureTestServices(services =>
         {
@@ -48,6 +49,12 @@ public sealed class AuthApiFactory : WebApplicationFactory<Program>
             services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
             {
                 // Replace only discovery transport; the production JwtBearer validation/policies run unchanged.
+                var metadata = new OpenIdConnectConfiguration { Issuer = Issuer };
+                metadata.SigningKeys.Add(SigningKey);
+                options.ConfigurationManager = new StaticConfigurationManager<OpenIdConnectConfiguration>(metadata);
+            });
+            services.PostConfigure<JwtBearerOptions>("MockCallback", options =>
+            {
                 var metadata = new OpenIdConnectConfiguration { Issuer = Issuer };
                 metadata.SigningKeys.Add(SigningKey);
                 options.ConfigurationManager = new StaticConfigurationManager<OpenIdConnectConfiguration>(metadata);
@@ -70,6 +77,19 @@ public sealed class AuthApiFactory : WebApplicationFactory<Program>
             IssuedAt = DateTime.UtcNow.AddMinutes(-10), NotBefore = DateTime.UtcNow.AddMinutes(-10),
             Expires = expired ? DateTime.UtcNow.AddMinutes(-2) : DateTime.UtcNow.AddMinutes(5),
             SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSha256)
+        });
+    }
+
+    public string MockServiceToken(string? scope = "payment:callback", string audience = "tixflow-mock-callback")
+    {
+        var claims = new Dictionary<string, object>();
+        if (scope is not null) claims["scope"] = scope;
+        return new JwtSecurityTokenHandler().CreateEncodedJwt(new SecurityTokenDescriptor
+        {
+            Issuer = Issuer, Audience = audience, Claims = claims,
+            IssuedAt = DateTime.UtcNow.AddMinutes(-1), NotBefore = DateTime.UtcNow.AddMinutes(-1),
+            Expires = DateTime.UtcNow.AddMinutes(5),
+            SigningCredentials = new SigningCredentials(SigningKey, SecurityAlgorithms.RsaSha256)
         });
     }
 
