@@ -41,6 +41,10 @@ public sealed class Payment : Entity
 
     public string? ProviderTransactionId { get; private set; }
 
+    public string? FailureReason { get; private set; }
+
+    public string? MockOutcome { get; private set; }
+
     public DateTimeOffset? PaidAtUtc { get; private set; }
 
     public DateTimeOffset CreatedAtUtc { get; private set; } = DateTimeOffset.UtcNow;

@@ -39,6 +39,8 @@ public sealed class Order : Entity
 
     public decimal TotalAmount { get; private set; }
 
+    public long Version { get; private set; }
+
     public string Currency { get; private set; } = "VND";
 
     public DateTimeOffset CreatedAtUtc { get; private set; } = DateTimeOffset.UtcNow;
@@ -54,4 +56,12 @@ public sealed class Order : Entity
     public ICollection<OrderItem> Items { get; private set; } = new List<OrderItem>();
 
     public ICollection<Payment> Payments { get; private set; } = new List<Payment>();
+
+    public void MarkPaid(DateTimeOffset atUtc)
+    {
+        if (Status != OrderStatus.PendingPayment) throw new InvalidOperationException("Only pending orders can be paid.");
+        Status = OrderStatus.Paid;
+        UpdatedAtUtc = atUtc;
+        Version++;
+    }
 }

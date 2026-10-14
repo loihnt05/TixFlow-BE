@@ -11,6 +11,7 @@ Schema ban đầu có 20 bảng, chia thành các nhóm:
 - Reliability: `payment_webhook_events`, `idempotency_records`, `outbox_messages`, `audit_logs`.
 
 `database/init/001_initial_schema.sql` được PostgreSQL Docker image chạy tự động duy nhất khi volume dữ liệu còn trống.
+Các thay đổi tiếp theo nằm trong `database/migrations/002`–`009`; service `database-migrate` trong Compose áp dụng lần lượt cả với volume đã có dữ liệu. Migration 008 bổ sung snapshot checkout/payment; migration 009 bổ sung outbox lease, inbox, vé QR, check-in và mock notification của Giai đoạn 7.
 
 ## Khởi tạo mới
 

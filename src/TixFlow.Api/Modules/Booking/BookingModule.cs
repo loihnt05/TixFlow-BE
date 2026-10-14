@@ -300,7 +300,8 @@ public static class BookingModule
                 ticketType.Id,
                 selection.Quantity,
                 ticketType.Price,
-                ticketType.MaxPerOrder);
+                ticketType.MaxPerOrder,
+                ticketType.Name);
             db.HoldItems.Add(holdItem);
 
             foreach (Guid seatId in selection.SeatIds.Order())

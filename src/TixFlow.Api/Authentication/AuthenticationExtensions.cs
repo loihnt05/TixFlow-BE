@@ -7,6 +7,7 @@ namespace TixFlow.Api.Authentication;
 
 public static class AuthenticationExtensions
 {
+    public const string MockCallbackScheme = "MockCallback";
     public static IServiceCollection AddIdentityAuthentication(
         this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
@@ -71,6 +72,32 @@ public static class AuthenticationExtensions
                 }
             };
         });
+        services.AddAuthentication().AddJwtBearer(MockCallbackScheme, options =>
+        {
+            string callbackAudience = configuration["Authentication:MockCallbackAudience"]
+                ?? "tixflow-mock-callback";
+            options.Authority = authority;
+            options.MetadataAddress = metadata;
+            options.RequireHttpsMetadata = !environment.IsDevelopment();
+            options.MapInboundClaims = false;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                RequireSignedTokens = true,
+                ValidateIssuer = true,
+                ValidIssuer = authority,
+                IssuerValidator = (issuer, _, _) => string.Equals(issuer, authority, StringComparison.Ordinal)
+                    ? issuer : throw new SecurityTokenInvalidIssuerException("Unexpected token issuer."),
+                ValidateAudience = true,
+                RequireAudience = true,
+                ValidAudience = callbackAudience,
+                IgnoreTrailingSlashWhenValidatingAudience = false,
+                ValidateLifetime = true,
+                RequireExpirationTime = true,
+                ClockSkew = TimeSpan.FromSeconds(30),
+                ValidAlgorithms = [SecurityAlgorithms.RsaSha256]
+            };
+        });
         services.AddAuthorization(options =>
         {
             // RequireAuthorization() and every named business policy share this invariant.
@@ -87,6 +114,13 @@ public static class AuthenticationExtensions
                 policy.Combine(userPolicy).RequireRole("Organizer", "Admin"));
             options.AddPolicy("CustomerOrAdmin", policy =>
                 policy.Combine(userPolicy).RequireRole("Customer", "Admin"));
+            options.AddPolicy("MockPaymentService", policy => policy
+                .AddAuthenticationSchemes(MockCallbackScheme)
+                .RequireAuthenticatedUser()
+                .RequireAssertion(context => context.User.Claims
+                    .Where(claim => claim.Type == "scope")
+                    .SelectMany(claim => claim.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+                    .Contains("payment:callback", StringComparer.Ordinal)));
         });
 
         services.AddEndpointsApiExplorer();

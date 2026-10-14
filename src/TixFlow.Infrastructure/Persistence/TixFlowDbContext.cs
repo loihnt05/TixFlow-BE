@@ -287,6 +287,8 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
                 });
             entity.HasKey(item => item.Id);
             entity.Property(item => item.UnitPrice).HasPrecision(14, 2);
+            entity.Property(item => item.TicketTypeNameSnapshot).HasMaxLength(160).IsRequired();
+            entity.Property(item => item.ServiceFee).HasPrecision(14, 2);
             entity.HasIndex(item => item.HoldId);
             entity.HasOne(item => item.Hold)
                 .WithMany(item => item.Items)
@@ -333,6 +335,7 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
             entity.Property(item => item.OrderNumber).HasMaxLength(40).IsRequired();
             entity.Property(item => item.Status).HasConversion<string>().HasMaxLength(32).IsRequired();
             entity.Property(item => item.TotalAmount).HasPrecision(14, 2);
+            entity.Property(item => item.Version).IsConcurrencyToken();
             entity.Property(item => item.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
             entity.HasIndex(item => item.OrderNumber).IsUnique();
             entity.HasIndex(item => item.HoldId).IsUnique();
@@ -362,6 +365,8 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
                 });
             entity.HasKey(item => item.Id);
             entity.Property(item => item.UnitPrice).HasPrecision(14, 2);
+            entity.Property(item => item.TicketTypeNameSnapshot).HasMaxLength(160).IsRequired();
+            entity.Property(item => item.ServiceFee).HasPrecision(14, 2);
             entity.HasIndex(item => item.OrderId);
             entity.HasOne(item => item.Order)
                 .WithMany(item => item.Items)
@@ -385,6 +390,8 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
             entity.Property(item => item.Amount).HasPrecision(14, 2);
             entity.Property(item => item.Currency).HasMaxLength(3).IsFixedLength().IsRequired();
             entity.Property(item => item.ProviderTransactionId).HasMaxLength(200);
+            entity.Property(item => item.FailureReason).HasMaxLength(80);
+            entity.Property(item => item.MockOutcome).HasMaxLength(24);
             entity.HasIndex(item => item.IdempotencyKey).IsUnique();
             entity.HasIndex(item => item.ProviderTransactionId)
                 .IsUnique()
@@ -434,6 +441,8 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
             entity.Property(item => item.ProviderEventId).HasMaxLength(200).IsRequired();
             entity.Property(item => item.Payload).HasColumnType("jsonb").IsRequired();
             entity.Property(item => item.ProcessingError).HasMaxLength(4000);
+            entity.Property(item => item.Disposition).HasMaxLength(24);
+            entity.Property(item => item.Reason).HasMaxLength(80);
             entity.HasIndex(item => new { item.Provider, item.ProviderEventId }).IsUnique();
             entity.HasIndex(item => item.ProcessedAtUtc);
         });
