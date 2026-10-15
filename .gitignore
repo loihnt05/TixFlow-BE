@@ -11,4 +11,7 @@
 *.suo
 *.log
 .DS_Store
+artifacts/
+**/TestResults/
+**/ticket-keys/
 

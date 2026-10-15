@@ -75,15 +75,15 @@ dotnet run --project src/TixFlow.Api
 
 ## Kiểm thử
 
-Authentication, Hold concurrency, checkout/payment và Worker/QR/check-in được kiểm thử với PostgreSQL cách ly tại loopback `15433`, RabbitMQ test tại `15673` và dữ liệu tạm:
+Testcontainers tự dựng PostgreSQL/RabbitMQ trên cổng ngẫu nhiên, áp dụng schema/seed và dọn tài nguyên sau khi chạy. Chỉ cần Docker đang chạy; không cần `.env` hay stack nghiệp vụ:
 
 ```powershell
-docker compose -f docker-compose.test.yml up -d --wait
-dotnet test TixFlow.sln
-docker compose -f docker-compose.test.yml down
+dotnet test TixFlow.sln -c Release --filter 'Category!=Baseline'
+# Baseline có CPU/RAM, SDK, images, DB pool và dataset cố định:
+.\scripts\Invoke-Phase8Baseline.ps1 -Mode All
 ```
 
-Lệnh `down` ở trên không có `-v`; test database dùng `tmpfs` nên không lưu dữ liệu nghiệp vụ.
+`artifacts/phase8/<timestamp>-all/` chứa TRX, manifest SHA-256 và JSON từng request/lock sample/query plan. `docker-compose.test.yml` vẫn có thể dùng để điều tra thủ công, nhưng automated tests không kết nối các cổng cố định đó.
 
 ## Endpoint khởi tạo
 
@@ -114,5 +114,5 @@ Toàn bộ Giai đoạn 2 được ghi tại [JWT, role policy và middleware](d
 
 Giai đoạn 7 được ghi tại [Expiry, RabbitMQ, vé QR và check-in](docs/phase-7-worker-tickets.md), gồm migration, topology, recovery và các ca kiểm thử. FE giữ nguyên giao diện và lấy vé/QR thật từ API.
 
-1. Đóng băng baseline giai đoạn 8, chạy concurrency/load test quy mô lớn và thu metrics lock wait/deadlock.
+1. Baseline giai đoạn 8 và cách tái tạo nằm tại [kiểm thử tính đúng và thực nghiệm](docs/phase-8-baseline.md). Các lần đổi thuật toán/cấu hình/dataset cần baseline version mới.
 2. Chỉ tích hợp AI Booking Assistant sau khi Booking Service đã ổn định.

@@ -17,11 +17,10 @@ using TixFlow.Infrastructure.Persistence;
 
 namespace TixFlow.Api.Tests;
 
-public sealed class AuthApiFactory : WebApplicationFactory<Program>
+public sealed partial class AuthApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     public const string Issuer = "http://localhost:8180/realms/tixflow";
-    public string ConnectionString { get; } = Environment.GetEnvironmentVariable("TIXFLOW_TEST_POSTGRES")
-        ?? "Host=localhost;Port=15433;Database=tixflow_auth_tests;Username=tixflow_test;Password=isolated_test_only";
+    public string ConnectionString { get; private set; } = string.Empty;
     private readonly RSA rsa = RSA.Create(2048);
     private RsaSecurityKey SigningKey => new(rsa) { KeyId = "test-key" };
 
@@ -45,7 +44,8 @@ public sealed class AuthApiFactory : WebApplicationFactory<Program>
         {
             services.RemoveAll<DbContextOptions<TixFlowDbContext>>();
             services.AddDbContext<TixFlowDbContext>(options => options
-                .UseNpgsql(ConnectionString).UseSnakeCaseNamingConvention());
+                .UseNpgsql(ConnectionString, postgres => postgres.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null))
+                .UseSnakeCaseNamingConvention());
             services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
             {
                 // Replace only discovery transport; the production JwtBearer validation/policies run unchanged.
@@ -65,7 +65,7 @@ public sealed class AuthApiFactory : WebApplicationFactory<Program>
     public string Token(string subject, string email, string[] roles, string? issuer = null,
         string audience = "tixflow-api", bool expired = false, bool wrongSignature = false,
         bool includeSubject = true, bool includeEmail = true, bool includeUsername = true,
-        string name = "Auth Test")
+        string name = "Auth Test", int lifetimeMinutes = 5)
     {
         var claims = new Dictionary<string, object>
         {
@@ -74,13 +74,13 @@ public sealed class AuthApiFactory : WebApplicationFactory<Program>
         if (includeSubject) claims["sub"] = subject;
         if (includeEmail) claims["email"] = email;
         if (includeUsername) claims["preferred_username"] = email;
-        using RSA otherKey = RSA.Create(2048);
-        var key = wrongSignature ? new RsaSecurityKey(otherKey) { KeyId = "test-key" } : SigningKey;
+        using RSA? otherKey = wrongSignature ? RSA.Create(2048) : null;
+        var key = wrongSignature ? new RsaSecurityKey(otherKey!) { KeyId = "test-key" } : SigningKey;
         return new JwtSecurityTokenHandler().CreateEncodedJwt(new SecurityTokenDescriptor
         {
             Issuer = issuer ?? Issuer, Audience = audience, Claims = claims,
             IssuedAt = DateTime.UtcNow.AddMinutes(-10), NotBefore = DateTime.UtcNow.AddMinutes(-10),
-            Expires = expired ? DateTime.UtcNow.AddMinutes(-2) : DateTime.UtcNow.AddMinutes(5),
+            Expires = expired ? DateTime.UtcNow.AddMinutes(-2) : DateTime.UtcNow.AddMinutes(lifetimeMinutes),
             SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSha256)
         });
     }

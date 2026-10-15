@@ -4,6 +4,8 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Testcontainers.PostgreSql" Version="4.8.1" />
+    <PackageReference Include="Testcontainers.RabbitMq" Version="4.8.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.31" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="xunit" Version="2.9.3" />
@@ -12,9 +14,11 @@
     </PackageReference>
     <ProjectReference Include="../../src/TixFlow.Api/TixFlow.Api.csproj" />
     <ProjectReference Include="../../src/TixFlow.Worker/TixFlow.Worker.csproj" />
+    <ProjectReference Include="../TixFlow.FaultProbe/TixFlow.FaultProbe.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />
+    <None Include="../../database/**/*.sql" Link="database/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../database/migrations/002_keycloak_identity.sql" Link="002_keycloak_identity.sql" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../database/migrations/004_phase3_catalog_seed.sql" Link="004_phase3_catalog_seed.sql" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../database/migrations/005_phase4_inventory.sql" Link="005_phase4_inventory.sql" CopyToOutputDirectory="PreserveNewest" />
@@ -22,4 +26,8 @@
     <None Include="../../database/migrations/007_phase5_hold_concurrency.sql" Link="007_phase5_hold_concurrency.sql" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../database/migrations/008_phase6_checkout_payments.sql" Link="008_phase6_checkout_payments.sql" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+  <Target Name="CopyFaultProbe" AfterTargets="Build">
+    <ItemGroup><ProbeFiles Include="../TixFlow.FaultProbe/bin/$(Configuration)/$(TargetFramework)/*" /></ItemGroup>
+    <Copy SourceFiles="@(ProbeFiles)" DestinationFolder="$(OutDir)FaultProbe" SkipUnchangedFiles="true" />
+  </Target>
 </Project>

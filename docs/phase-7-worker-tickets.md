@@ -51,7 +51,14 @@ Test dùng PostgreSQL loopback 15433 và RabbitMQ loopback 15673; tách biệt d
 
 `Phase7Tests` có 14 ca: số lượng vé khi message trùng/song song, QR riêng/ownership/audit, key rotation, cửa sổ check-in/session/manual entry, 10 lượt quét tranh cùng vé, replay/key reuse, expiry nhiều Worker, expiry/payment race, ghế cố định, lease bị bỏ dở, broker unavailable, retry backoff, consumer đóng trước ACK, duplicate RabbitMQ và poison message/DLQ. Hosted Worker được chạy xuyên suốt expiry → outbox → ticket → notification rồi restart. Có test checkout/settlement với EF retry strategy giống runtime. Bộ authentication còn kiểm tra first-login cạnh tranh; unique email chỉ retry khi đúng cùng OIDC subject.
 
-Kết quả kiểm tra ngày 14/10/2026: backend 54/54 test pass; Docker API/Worker build và migration chạy thành công. Build FE đã pass trước khi các thay đổi UI song song xuất hiện; lần kiểm tra mới có lỗi import `Twitter`/`Facebook`/`Linkedin` trong `components/articles/article-detail-view.tsx` và kiểu `inventoryMode` tại `app/checkout/page.tsx`. Các lỗi đó nằm ngoài hai file map vé/QR của giai đoạn này; chưa đánh dấu build toàn FE hiện tại là pass.
+Kết quả nghiệm thu lại ngày 15/10/2026:
+
+- `dotnet test TixFlow.sln --no-restore`: 54/54 test pass, không bỏ qua test; bao gồm 14 ca giai đoạn 7 trên PostgreSQL/RabbitMQ cách ly.
+- `npm run build`: pass, gồm biên dịch production, TypeScript và sinh trang. Các lỗi FE được ghi nhận ở lần kiểm tra trước đã được sửa trong mã nguồn hiện tại.
+- RabbitMQ test khởi động với user `100:101`, tmpfs đúng quyền; healthcheck xác nhận ứng dụng và cổng AMQP sẵn sàng, tránh lỗi quyền cookie do healthcheck chạy khác user.
+- `docker compose up -d --wait api worker`: thành công; migration áp dụng lại an toàn, API/Worker và dịch vụ phụ thuộc chạy ổn định.
+- HTTP `/health` trả 200; Swagger có `/api/v1/tickets`, `/api/v1/tickets/{ticketId}/qr` và `/api/v1/check-ins`.
+- Phần tích hợp FE của giai đoạn 7 chỉ nối dữ liệu vé và tải QR khi mở modal. Không thay đổi thiết kế giao diện trong phần việc này.
 
 Áp dụng cho stack phát triển có dữ liệu:
 

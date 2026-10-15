@@ -6,7 +6,8 @@ using Npgsql;
 
 namespace TixFlow.Api.Tests;
 
-public sealed class InventoryManagementTests(AuthApiFactory factory) : IClassFixture<AuthApiFactory>
+[Collection("Integration")]
+public sealed class InventoryManagementTests(AuthApiFactory factory)
 {
     [Fact]
     public async Task PublicAvailabilityReturnsQuantityAndReservedSeatSnapshots()

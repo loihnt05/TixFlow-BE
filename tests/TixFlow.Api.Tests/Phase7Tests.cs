@@ -15,15 +15,12 @@ using TixFlow.Infrastructure.Persistence;
 
 namespace TixFlow.Api.Tests;
 
-public sealed class Phase7Tests(AuthApiFactory factory) : IClassFixture<AuthApiFactory>
+[Collection("Integration")]
+public sealed class Phase7Tests(AuthApiFactory factory)
 {
     private static readonly Guid Session = Guid.Parse("40000000-0000-0000-0000-000000000001");
     private static readonly Guid Type = Guid.Parse("50000000-0000-0000-0000-000000000012");
-    private static readonly IConfiguration BrokerConfig = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
-    {
-        ["RabbitMq:Host"] = "localhost", ["RabbitMq:Port"] = "15673",
-        ["RabbitMq:Username"] = "tixflow_test", ["RabbitMq:Password"] = "isolated_test_only"
-    }).Build();
+    private IConfiguration BrokerConfig => factory.BrokerConfig;
 
     [Fact]
     public async Task HostedWorkerRunsExpiryOutboxIssuanceAndNotificationAcrossRestart()
@@ -341,8 +338,8 @@ public sealed class Phase7Tests(AuthApiFactory factory) : IClassFixture<AuthApiF
         Assert.Equal(1, retry.BasicProperties.Headers["tixflow-attempt"]);
     }
 
-    private static IConnection TestConnection() => new ConnectionFactory
-    { HostName = "localhost", Port = 15673, UserName = "tixflow_test", Password = "isolated_test_only" }.CreateConnection();
+    private IConnection TestConnection() => new ConnectionFactory
+    { HostName = factory.BrokerHost, Port = factory.BrokerPort, UserName = "tixflow_test", Password = "isolated_test_only" }.CreateConnection();
 
     private static async Task<string> Token(HttpClient client, Guid id) =>
         (await client.GetFromJsonAsync<JsonElement>($"/api/v1/tickets/{id}/qr")).GetProperty("data").GetProperty("qrToken").GetString()!;

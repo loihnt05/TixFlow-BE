@@ -5,4 +5,7 @@
 **/.next
 .env
 *.log
+artifacts
+**/TestResults
+**/ticket-keys
 

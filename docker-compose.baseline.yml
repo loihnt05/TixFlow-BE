@@ -1,0 +1,19 @@
+name: tixflow-baseline
+services:
+  runner:
+    build:
+      context: .
+      dockerfile: infrastructure/baseline/Dockerfile
+    cpus: 2.0
+    mem_limit: 2g
+    environment:
+      DOTNET_PROCESSOR_COUNT: "2"
+      TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
+      TIXFLOW_REPORT_DIR: /reports
+      TIXFLOW_SOURCE_REVISION: ${TIXFLOW_SOURCE_REVISION:-working-tree}
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${TIXFLOW_BASELINE_REPORT_PATH:-./artifacts/phase8}:/reports
+    restart: "no"
