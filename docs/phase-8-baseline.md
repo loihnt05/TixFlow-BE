@@ -62,7 +62,7 @@ Kết quả được ghi vào thư mục timestamp riêng, không ghi đè lần
 - `concurrency.json`: latency từng request, p50/p95/p99, throughput, status/error code, invariants, lock samples, top SQL theo tổng thời gian và `EXPLAIN (ANALYZE, BUFFERS)` inventory lookup.
 - `manifest.json`: nguồn và điều kiện chạy; không thu `.env`, token, thông tin kết nối cá nhân.
 
-Báo cáo nghiệm thu và số đo đầu tiên sẽ được chốt từ lần chạy toàn bộ thành công; không dùng các lần thử lỗi ban đầu làm baseline chính thức.
+Nghiệm thu ngày 18/10/2026: **79/79 test pass**, không skip. Sáu burst (100/500/1.000 × 2) đều oversold=0 và cùng số lượng kết quả sau reset. [Báo cáo baseline v1](reports/baseline-v1/README.md) lưu bảng số đo, phân tích bottleneck và toàn bộ TRX/JSON/manifest. Tag cục bộ `baseline-v1-phase8` bao gồm mã nguồn và bằng chứng; chưa push remote. Các lần thử lỗi hoặc bị ngắt trước đó không được dùng làm baseline chính thức.
 
 ## Nguồn kỹ thuật
 
