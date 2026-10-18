@@ -18,7 +18,9 @@ try {
     $env:TIXFLOW_SOURCE_REVISION = $revision + $(if ($dirty) { '-dirty' } else { '' })
 
     # Hash exactly the build/config/dataset inputs; do not collect credentials, .git, logs or generated files.
-    $inputs = @(rg --files src tests database infrastructure/baseline scripts -g '!bin/**' -g '!obj/**' -g '!**/bin/**' -g '!**/obj/**' -g '*.cs' -g '*.csproj' -g '*.sql' -g '*.json' -g '*.ps1' -g 'Dockerfile')
+    $inputs = @(git ls-files --cached --others --exclude-standard -- src tests database infrastructure/baseline scripts |
+        Where-Object { $_ -match '\.(cs|csproj|sql|json|ps1)$|(^|/)Dockerfile$' })
+    if ($LASTEXITCODE -ne 0) { throw 'Cannot enumerate baseline source inputs.' }
     $inputs += @('TixFlow.sln', 'Directory.Build.props', 'global.json', '.dockerignore', 'docker-compose.baseline.yml')
     $hashes = @($inputs | Sort-Object -Unique | ForEach-Object {
         [ordered]@{ path = $_.Replace('\', '/'); sha256 = (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash.ToLowerInvariant() }

@@ -6,7 +6,7 @@
 
 ## Tái tạo từ repo sạch
 
-Yêu cầu: Docker chạy Linux containers, Docker Compose, PowerShell 7, kết nối registry/NuGet cho lần build đầu. Không cần `.env`, Keycloak, Redis hoặc database nghiệp vụ. Từ tag `baseline-v1-phase8`:
+Yêu cầu: Git, Docker chạy Linux containers, Docker Compose, PowerShell 7, kết nối registry/NuGet cho lần build đầu. Không cần `.env`, Keycloak, Redis hoặc database nghiệp vụ. Từ tag `baseline-v1-phase8`:
 
 ```powershell
 ./scripts/Invoke-Phase8Baseline.ps1 -Mode All

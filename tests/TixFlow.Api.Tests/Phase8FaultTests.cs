@@ -202,6 +202,7 @@ public sealed class Phase8FaultTests(AuthApiFactory factory)
             start.Environment["PROBE_POSTGRES"] = factory.ConnectionString;
             start.Environment["PROBE_BROKER_HOST"] = factory.BrokerHost;
             start.Environment["PROBE_BROKER_PORT"] = factory.BrokerPort.ToString();
+            start.Environment["PROBE_KEY_DIRECTORY"] = Path.Combine(AppContext.BaseDirectory, "ticket-keys");
             using var process = Process.Start(start)!;
             try
             {
@@ -228,6 +229,14 @@ public sealed class Phase8FaultTests(AuthApiFactory factory)
             Assert.True(consumed);
             Assert.Equal(2, await data.Count($"SELECT count(*) FROM tickets t JOIN order_items i ON i.id=t.order_item_id WHERE i.order_id='{order}'"));
             Assert.Equal(1, await data.Count($"SELECT count(*) FROM message_inbox WHERE message_id='{message.Id}'"));
+            using var ticketList = await client.GetAsync($"/api/v1/tickets?orderId={order}");
+            var tickets = await BaselineDataset.Data(ticketList);
+            Assert.Equal(2, tickets.GetArrayLength());
+            foreach (var ticket in tickets.EnumerateArray())
+            {
+                using var qr = await client.GetAsync($"/api/v1/tickets/{ticket.GetProperty("id").GetGuid()}/qr");
+                Assert.Equal(HttpStatusCode.OK, qr.StatusCode);
+            }
             await factory.ExecuteSqlAsync($"DELETE FROM message_inbox WHERE message_id='{message.Id}'");
         }
         finally { await data.ClearAsync(); }

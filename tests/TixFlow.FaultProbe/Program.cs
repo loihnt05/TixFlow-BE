@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using TixFlow.Infrastructure.Processing;
 
@@ -13,7 +14,11 @@ using var connection = new ConnectionFactory
 using var channel = connection.CreateModel();
 var received = channel.BasicGet(RabbitDelivery.Queue, false) ?? throw new InvalidOperationException("Expected delivery");
 var delivery = JsonSerializer.Deserialize<Delivery>(received.Body.Span) ?? throw new InvalidOperationException("Expected envelope");
-await new TicketDelivery(Required("PROBE_POSTGRES")).ProcessAsync(delivery);
+var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
+{
+    ["Tickets:KeyDirectory"] = Required("PROBE_KEY_DIRECTORY")
+}).Build();
+await new TicketDelivery(Required("PROBE_POSTGRES"), new QrTokens(configuration)).ProcessAsync(delivery);
 Console.WriteLine("COMMITTED_WITHOUT_ACK");
 await Console.Out.FlushAsync();
 await Task.Delay(Timeout.InfiniteTimeSpan);
