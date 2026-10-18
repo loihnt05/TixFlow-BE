@@ -111,7 +111,7 @@ public sealed class Phase8FaultTests(AuthApiFactory factory)
             bool waiting = false;
             for (int i = 0; i < 100; i++)
             {
-                waiting = await data.Count("SELECT count(*) FROM pg_stat_activity WHERE wait_event_type='Lock' AND query LIKE '%FROM events%FOR UPDATE%'") > 0;
+                waiting = await data.Count("SELECT count(*) FROM pg_stat_activity WHERE wait_event_type='Lock' AND query LIKE '%FROM events%FOR SHARE%'") > 0;
                 if (waiting) break;
                 await Task.Delay(25);
             }

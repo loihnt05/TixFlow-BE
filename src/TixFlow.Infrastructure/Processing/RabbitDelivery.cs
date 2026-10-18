@@ -61,6 +61,9 @@ public sealed class RabbitDelivery : IDisposable
         ConfirmedPublish(Queue, properties, JsonSerializer.SerializeToUtf8Bytes(message));
     }
 
+    public Dictionary<string, uint> QueueDepths() => new[] { Queue, DeadQueue, Queue + ".retry.1", Queue + ".retry.2", Queue + ".retry.3" }
+        .ToDictionary(name => name, name => channel.QueueDeclarePassive(name).MessageCount);
+
     public async Task<bool> ConsumeOneAsync(TicketDelivery handler, CancellationToken ct = default)
     {
         var delivery = channel.BasicGet(Queue, autoAck: false);

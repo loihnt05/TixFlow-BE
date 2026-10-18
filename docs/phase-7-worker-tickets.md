@@ -18,7 +18,7 @@
 | GET | `/api/v1/tickets/{id}/qr` | Customer owner hoặc Admin có `supportReason`; Admin được audit |
 | POST | `/api/v1/check-ins` | Organizer sở hữu Event hoặc Admin; header `Idempotency-Key`; alias `/tickets/check-ins` |
 
-DTO vé gồm `id`, `ticketCode`, `orderId`, `ownerId`, event/date/venue/type snapshot, `seatLabel`, `status`, `checkedInAtUtc`. Danh sách/chi tiết không trả token. Chỉ GET QR riêng trả `qrToken` và `qrImageDataUrl`. Các route vé dùng `Cache-Control: no-store`.
+DTO vé gồm `id`, `ticketCode`, `orderId`, `ownerId`, thông tin event/date/venue hiện tại, tên loại vé từ snapshot của OrderItem, `seatLabel`, `status`, `checkedInAtUtc`. Danh sách/chi tiết không trả token. Chỉ GET QR riêng trả `qrToken` và `qrImageDataUrl`. Các route vé dùng `Cache-Control: no-store`.
 
 Token QR là HMAC-SHA256 với domain riêng, Ticket ID và nonce ngẫu nhiên 128 bit; không chứa thông tin cá nhân, giá hoặc ID đơn. Database chỉ lưu hash, nonce, key ID; token gốc không được lưu. API tái tạo proof từ metadata và kiểm tra hash constant-time trước khi trả. QRCoder tạo PNG tại API, không gửi token cho dịch vụ ngoài.
 
@@ -43,15 +43,22 @@ DLQ cần người vận hành xem metadata và sửa nguyên nhân trước khi
 ## Chạy và kiểm chứng
 
 ```powershell
-docker compose -f docker-compose.test.yml up -d --wait
-dotnet test TixFlow.sln
+dotnet test tests/TixFlow.Api.Tests -c Release --filter 'FullyQualifiedName~Phase7Tests|FullyQualifiedName~Phase8FaultTests' --logger 'trx;LogFileName=phase7-review.trx' --results-directory artifacts/phase7-review
 ```
 
-Test dùng PostgreSQL loopback 15433 và RabbitMQ loopback 15673; tách biệt dữ liệu/broker của stack phát triển. RabbitMQ test dùng tmpfs đúng UID/GID của image Alpine. Có thể dừng bằng `docker compose -f docker-compose.test.yml down`.
+Từ giai đoạn 8, cần Docker đang chạy: test tự tạo PostgreSQL/RabbitMQ bằng Testcontainers, dùng cổng host ngẫu nhiên và tự dọn container sau khi chạy; không dùng dữ liệu của stack phát triển. Không cần bật `docker-compose.test.yml`; cấu hình cổng cố định trong file đó chỉ còn dành cho kiểm tra thủ công. Chạy toàn bộ suite bằng `dotnet test TixFlow.sln -c Release`.
 
 `Phase7Tests` có 14 ca: số lượng vé khi message trùng/song song, QR riêng/ownership/audit, key rotation, cửa sổ check-in/session/manual entry, 10 lượt quét tranh cùng vé, replay/key reuse, expiry nhiều Worker, expiry/payment race, ghế cố định, lease bị bỏ dở, broker unavailable, retry backoff, consumer đóng trước ACK, duplicate RabbitMQ và poison message/DLQ. Hosted Worker được chạy xuyên suốt expiry → outbox → ticket → notification rồi restart. Có test checkout/settlement với EF retry strategy giống runtime. Bộ authentication còn kiểm tra first-login cạnh tranh; unique email chỉ retry khi đúng cùng OIDC subject.
 
-Kết quả nghiệm thu lại ngày 15/10/2026:
+Kết quả rà soát lại ngày 18/10/2026:
+
+- Đối chiếu các hạng mục giai đoạn 7 trong kế hoạch triển khai: expiry nhiều Worker, giải phóng inventory/seat, transactional outbox, retry/DLQ/correlation, QR, phát hành sau Paid, check-in, mock notification và trang vé đều có triển khai và kiểm thử liên quan.
+- Lệnh kiểm tra chọn lọc ở trên: **23/23 pass**, không thất bại hoặc bỏ qua; gồm 14 ca `Phase7Tests` và 9 ca `Phase8FaultTests`. Báo cáo cục bộ: `artifacts/phase7-review/phase7-review.trx` (không đưa vào Git).
+- Bao gồm kiểm thử kill tiến trình consumer sau commit trước ACK, redelivery không nhân đôi vé, và API đọc được QR với key dùng chung; broker handshake timeout không làm mất outbox.
+- Frontend `npm run build`: pass, gồm TypeScript và sinh trang. Không chỉnh sửa mã nguồn hoặc giao diện FE trong lần rà soát này; chưa chạy kiểm tra tương tác trình duyệt trong lần này.
+- Chưa phát hiện lỗi chức năng trong phạm vi đã rà soát. Chỉ sửa hướng dẫn test đã lỗi thời và mô tả DTO trong tài liệu; không thay thuật toán hoặc tag baseline giai đoạn 8. Không khởi động lại stack phát triển trong lần kiểm tra này.
+
+Kết quả nghiệm thu lịch sử ngày 15/10/2026:
 
 - `dotnet test TixFlow.sln --no-restore`: 54/54 test pass, không bỏ qua test; bao gồm 14 ca giai đoạn 7 trên PostgreSQL/RabbitMQ cách ly.
 - `npm run build`: pass, gồm biên dịch production, TypeScript và sinh trang. Các lỗi FE được ghi nhận ở lần kiểm tra trước đã được sửa trong mã nguồn hiện tại.

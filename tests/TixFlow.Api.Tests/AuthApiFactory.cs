@@ -36,6 +36,8 @@ public sealed partial class AuthApiFactory : WebApplicationFactory<Program>, IAs
         builder.ConfigureAppConfiguration((_, config) => config.AddInMemoryCollection(new Dictionary<string, string?>
         {
             ["ConnectionStrings:Postgres"] = ConnectionString,
+            ["CatalogCache:Enabled"] = "false",
+            ["TrafficLimits:Enabled"] = "false",
             ["Authentication:Authority"] = Issuer,
             ["Authentication:Audience"] = "tixflow-api",
             ["Authentication:MockCallbackAudience"] = "tixflow-mock-callback"

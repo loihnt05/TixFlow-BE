@@ -44,6 +44,7 @@ public sealed class Ticket : Entity
     public string? QrNonce { get; private set; }
 
     public string? QrKeyId { get; private set; }
+    public byte[]? QrImage { get; private set; }
 
     public int? Ordinal { get; private set; }
 

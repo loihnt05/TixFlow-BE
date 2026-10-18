@@ -1,0 +1,67 @@
+# Use with docker-compose.yml. The proxy is the only published HTTP API endpoint.
+services:
+  api:
+    ports: !reset []
+    cpus: 1.0
+    mem_limit: 768m
+    environment: &optimized_environment
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=${POSTGRES_DB:-tixflow};Username=${POSTGRES_USER:-tixflow};Password=${POSTGRES_PASSWORD};Maximum Pool Size=20;Timeout=10;Command Timeout=30
+      CatalogCache__Enabled: "true"
+      TrafficLimits__Enabled: "true"
+      TrafficLimits__User__booking: "30"
+      TrafficLimits__Ip__booking: "300"
+      TrafficLimits__Client__booking: "3000"
+      ReverseProxy__KnownProxy: 172.30.9.10
+      Kestrel__Limits__MaxConcurrentConnections: "512"
+      Kestrel__Limits__MaxRequestBodySize: "1048576"
+      Kestrel__Limits__RequestHeadersTimeout: 00:00:15
+      Kestrel__Limits__KeepAliveTimeout: 00:00:30
+      Logging__LogLevel__Microsoft.AspNetCore.Authentication: Warning
+      Logging__LogLevel__Microsoft.AspNetCore.Authentication.JwtBearer: Warning
+  api-replica:
+    extends:
+      file: docker-compose.yml
+      service: api
+    ports: !reset []
+    cpus: 1.0
+    mem_limit: 768m
+    environment: *optimized_environment
+  nginx:
+    image: nginx:1.28-alpine@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236
+    cpus: 0.25
+    mem_limit: 64m
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      default:
+        ipv4_address: 172.30.9.10
+    depends_on:
+      api:
+        condition: service_healthy
+      api-replica:
+        condition: service_healthy
+  worker:
+    cpus: 0.5
+    mem_limit: 512m
+    environment:
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=${POSTGRES_DB:-tixflow};Username=${POSTGRES_USER:-tixflow};Password=${POSTGRES_PASSWORD};Maximum Pool Size=10;Timeout=10;Command Timeout=30
+  postgres:
+    cpus: 1.0
+    mem_limit: 512m
+    command: ["postgres", "-c", "max_connections=120", "-c", "shared_buffers=128MB"]
+  rabbitmq:
+    cpus: 1.0
+    mem_limit: 512m
+    environment:
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "+S 2:2 +A 4"
+      RABBITMQ_CTL_ERL_ARGS: "+S 1:1 +A 1"
+    healthcheck:
+      timeout: 15s
+      start_period: 60s
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.30.9.0/24

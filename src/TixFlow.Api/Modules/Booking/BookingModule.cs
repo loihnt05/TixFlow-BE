@@ -187,60 +187,39 @@ public static class BookingModule
         }
 
         Event? eventItem = await db.Events
-            .FromSqlInterpolated($"SELECT * FROM events WHERE id = {sessionReference.EventId} FOR UPDATE")
+            .FromSqlInterpolated($"SELECT * FROM events WHERE id = {sessionReference.EventId} FOR SHARE")
             .SingleOrDefaultAsync(cancellationToken);
         EventSession? session = await db.EventSessions
-            .FromSqlInterpolated($"SELECT * FROM event_sessions WHERE id = {request.EventSessionId} FOR UPDATE")
+            .FromSqlInterpolated($"SELECT * FROM event_sessions WHERE id = {request.EventSessionId} FOR SHARE")
             .SingleOrDefaultAsync(cancellationToken);
         if (eventItem is null || session is null)
         {
             throw NotFound();
         }
 
-        var ticketTypes = new Dictionary<Guid, TicketType>();
-        var inventories = new Dictionary<Guid, TicketInventory>();
-        foreach (Guid ticketTypeId in request.Items.Select(item => item.TicketTypeId).Order())
+        // Shared parent locks allow independent holds while still excluding catalog changes.
+        // Inventory is reserved by the conditional UPDATE below, in stable type order.
+        Guid[] typeIds = request.Items.Select(item => item.TicketTypeId).Order().ToArray();
+        var ticketTypes = await db.TicketTypes
+            .FromSqlInterpolated($"SELECT * FROM ticket_types WHERE id = ANY({typeIds}) ORDER BY id FOR SHARE")
+            .ToDictionaryAsync(item => item.Id, cancellationToken);
+        foreach (Guid ticketTypeId in typeIds)
         {
-            TicketType? ticketType = await db.TicketTypes
-                .FromSqlInterpolated($"SELECT * FROM ticket_types WHERE id = {ticketTypeId} FOR UPDATE")
-                .SingleOrDefaultAsync(cancellationToken);
-            if (ticketType is null || ticketType.EventSessionId != session.Id)
+            if (!ticketTypes.TryGetValue(ticketTypeId, out TicketType? ticketType) || ticketType.EventSessionId != session.Id)
             {
                 throw NotFound();
             }
 
-            TicketInventory? inventory = await db.TicketInventories
-                .FromSqlInterpolated($"SELECT * FROM ticket_inventories WHERE ticket_type_id = {ticketTypeId} FOR UPDATE")
-                .SingleOrDefaultAsync(cancellationToken);
-            if (inventory is null)
-            {
-                throw new BookingProblemException(
-                    StatusCodes.Status409Conflict,
-                    "INSUFFICIENT_CAPACITY",
-                    "Ticket inventory is not available.");
-            }
-
-            ticketTypes.Add(ticketTypeId, ticketType);
-            inventories.Add(ticketTypeId, inventory);
         }
 
         Guid[] requestedSeatIds = request.Items
             .SelectMany(item => item.SeatIds)
             .Order()
             .ToArray();
-        var seats = new Dictionary<Guid, Seat>();
-        foreach (Guid seatId in requestedSeatIds)
-        {
-            Seat? seat = await db.Seats
-                .FromSqlInterpolated($"SELECT * FROM seats WHERE id = {seatId} FOR UPDATE")
-                .SingleOrDefaultAsync(cancellationToken);
-            if (seat is null)
-            {
-                throw NotFound();
-            }
-
-            seats.Add(seatId, seat);
-        }
+        var seats = requestedSeatIds.Length == 0 ? new Dictionary<Guid, Seat>() : await db.Seats
+            .FromSqlInterpolated($"SELECT * FROM seats WHERE id = ANY({requestedSeatIds}) ORDER BY id FOR UPDATE")
+            .ToDictionaryAsync(item => item.Id, cancellationToken);
+        if (seats.Count != requestedSeatIds.Length) throw NotFound();
 
         DateTimeOffset decisionTime = await DatabaseTimeAsync(db, cancellationToken);
         ValidateSaleState(eventItem, session, request.Items, ticketTypes, decisionTime);
@@ -276,7 +255,7 @@ public static class BookingModule
             expiresAt);
         db.Holds.Add(hold);
 
-        foreach (CanonicalHoldItem selection in request.Items)
+        foreach (CanonicalHoldItem selection in request.Items.OrderBy(item => item.TicketTypeId))
         {
             TicketType ticketType = ticketTypes[selection.TicketTypeId];
             int affected = await db.Database.ExecuteSqlInterpolatedAsync($"""
@@ -465,11 +444,7 @@ public static class BookingModule
             .Take(limit)
             .Select(item => item.Id)
             .ToArrayAsync(cancellationToken);
-        var data = new List<HoldDto>(ids.Length);
-        foreach (Guid id in ids)
-        {
-            data.Add(await LoadHoldAsync(db, id, cancellationToken));
-        }
+        HoldDto[] data = await LoadHoldsAsync(db, ids, cancellationToken);
 
         context.Response.Headers.CacheControl = "no-store";
         return Results.Ok(new
@@ -857,18 +832,27 @@ public static class BookingModule
         TixFlowDbContext db,
         Guid holdId,
         CancellationToken cancellationToken)
+        => (await LoadHoldsAsync(db, [holdId], cancellationToken)).Single();
+
+    private static async Task<HoldDto[]> LoadHoldsAsync(TixFlowDbContext db, Guid[] ids, CancellationToken cancellationToken)
     {
-        Hold hold = await db.Holds
+        Hold[] holds = await db.Holds
             .AsNoTracking()
             .Include(item => item.Items)
                 .ThenInclude(item => item.TicketType)
             .Include(item => item.Items)
                 .ThenInclude(item => item.SeatAllocations)
-            .SingleAsync(item => item.Id == holdId, cancellationToken);
-        Guid? orderId = await db.Orders.AsNoTracking()
-            .Where(item => item.HoldId == holdId)
-            .Select(item => (Guid?)item.Id)
-            .SingleOrDefaultAsync(cancellationToken);
+            .Where(item => ids.Contains(item.Id))
+            .ToArrayAsync(cancellationToken);
+        var orders = await db.Orders.AsNoTracking()
+            .Where(item => ids.Contains(item.HoldId))
+            .ToDictionaryAsync(item => item.HoldId, item => (Guid?)item.Id, cancellationToken);
+        var byId = holds.ToDictionary(hold => hold.Id);
+        return ids.Select(id => ToHoldDto(byId[id], orders.GetValueOrDefault(id))).ToArray();
+    }
+
+    private static HoldDto ToHoldDto(Hold hold, Guid? orderId)
+    {
 
         HoldItemDto[] items = hold.Items
             .OrderBy(item => item.TicketTypeId)

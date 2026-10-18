@@ -102,7 +102,7 @@ public sealed class BaselineConcurrencyTests(AuthApiFactory factory, ITestOutput
                 await using var command = new NpgsqlCommand("""
                     SELECT count(*) FILTER (WHERE state = 'active'),
                            count(*) FILTER (WHERE wait_event_type = 'Lock'),
-                           count(*) FILTER (WHERE wait_event_type = 'Lock' AND query LIKE '%FROM events%FOR UPDATE%'),
+                           count(*) FILTER (WHERE wait_event_type = 'Lock' AND query LIKE '%FROM events%FOR %'),
                            coalesce(max(extract(epoch from clock_timestamp()-query_start)) FILTER (WHERE wait_event_type='Lock'),0)
                     FROM pg_stat_activity WHERE application_name = 'tixflow-baseline-api'
                     """, connection);
@@ -144,7 +144,7 @@ public sealed class BaselineConcurrencyTests(AuthApiFactory factory, ITestOutput
         Directory.CreateDirectory(directory);
         return File.WriteAllTextAsync(Path.Combine(directory, "concurrency.json"), JsonSerializer.Serialize(new
         {
-            baseline = "baseline-v1", sourceRevision = Environment.GetEnvironmentVariable("TIXFLOW_SOURCE_REVISION") ?? "working-tree",
+            baseline = "optimized-v1-phase9", sourceRevision = Environment.GetEnvironmentVariable("TIXFLOW_SOURCE_REVISION") ?? "working-tree",
             utc = DateTimeOffset.UtcNow, runtime = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription,
             os = System.Runtime.InteropServices.RuntimeInformation.OSDescription, processors = Environment.ProcessorCount,
             transport = "ASP.NET TestServer (in-process HTTP pipeline)", apiInstances = 1, poolMax = 40,

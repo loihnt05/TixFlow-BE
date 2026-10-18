@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TixFlow.Domain.Booking;
 using TixFlow.Domain.Events;
 using TixFlow.Infrastructure.Persistence;
+using TixFlow.Api.Performance;
 
 namespace TixFlow.Api.Modules.Events;
 
@@ -18,6 +19,14 @@ public static class EventsModule
     public static IEndpointRouteBuilder MapEventsModule(this IEndpointRouteBuilder endpoints)
     {
         RouteGroupBuilder group = endpoints.MapGroup("/events").WithTags("Events");
+        group.AddEndpointFilter(async (context, next) =>
+        {
+            var db = context.HttpContext.RequestServices.GetRequiredService<TixFlowDbContext>();
+            var cache = context.HttpContext.RequestServices.GetRequiredService<CatalogCache>();
+            object? result = await cache.GetAsync(context.HttpContext, db, () => next(context));
+            context.HttpContext.Response.Headers.CacheControl = "no-store";
+            return await RefreshInventoryAsync(result, db, context.HttpContext.RequestAborted);
+        });
 
         group.MapGet("/", GetEventsAsync)
             .WithSummary("List published events")
@@ -139,13 +148,46 @@ public static class EventsModule
         .Include(item => item.Organizer)
         .Include(item => item.Venue)
         .Include(item => item.Sessions)
-            .ThenInclude(session => session.TicketTypes)
-            .ThenInclude(ticketType => ticketType.Inventory);
+            .ThenInclude(session => session.TicketTypes);
 
     private static IQueryable<Event> WithPublicSeats(IQueryable<Event> query) => query
         .Include(item => item.Sessions)
-            .ThenInclude(session => session.Seats)
-            .ThenInclude(seat => seat.Allocations);
+            .ThenInclude(session => session.Seats);
+
+    private static async Task<object?> RefreshInventoryAsync(object? result, TixFlowDbContext db, CancellationToken ct)
+    {
+        object? value = (result as IValueHttpResult)?.Value;
+        PublicEventResponse[] events = value switch
+        {
+            PublicEventPage page => page.Events,
+            PublicEventResponse item => [item],
+            _ => []
+        };
+        if (events.Length == 0) return result;
+        Guid[] types = events.SelectMany(e => e.Sessions).SelectMany(s => s.TicketTypes).Select(t => t.Id).ToArray();
+        var inventory = await db.TicketInventories.AsNoTracking().Where(i => types.Contains(i.TicketTypeId))
+            .ToDictionaryAsync(i => i.TicketTypeId, ct);
+        Guid[] seatIds = events.SelectMany(e => e.Sessions).SelectMany(s => s.TicketTypes).SelectMany(t => t.Seats).Select(s => s.Id).ToArray();
+        var allocations = seatIds.Length == 0 ? new Dictionary<Guid, SeatAllocationStatus>() : await db.SeatAllocations.AsNoTracking()
+            .Where(a => seatIds.Contains(a.SeatId) && (a.Status == SeatAllocationStatus.Held || a.Status == SeatAllocationStatus.Sold))
+            .ToDictionaryAsync(a => a.SeatId, a => a.Status, ct);
+        var refreshed = events.Select(e => e with { Sessions = e.Sessions.Select(s => s with
+        {
+            TicketTypes = s.TicketTypes.Select(t =>
+            {
+                var current = inventory.GetValueOrDefault(t.Id);
+                return t with
+                {
+                    TotalQuantity = current?.TotalQuantity ?? t.TotalQuantity,
+                    HeldQuantity = current?.HeldQuantity ?? 0, SoldQuantity = current?.SoldQuantity ?? 0,
+                    AvailableQuantity = current?.AvailableQuantity ?? t.TotalQuantity,
+                    Version = current?.Version ?? 0, UpdatedAtUtc = current?.UpdatedAtUtc ?? t.UpdatedAtUtc,
+                    Seats = t.Seats.Select(seat => seat with { Status = allocations.TryGetValue(seat.Id, out var state) ? state.ToString() : "Available" }).ToArray()
+                };
+            }).ToArray()
+        }).ToArray() }).ToArray();
+        return value is PublicEventPage paged ? Results.Ok(paged with { Events = refreshed }) : Results.Ok(refreshed[0]);
+    }
 
     private static bool IsPublicSession(EventSession session) =>
         session.Status is SessionStatus.Scheduled or SessionStatus.OnSale or SessionStatus.SoldOut;

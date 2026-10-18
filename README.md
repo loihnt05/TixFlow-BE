@@ -105,6 +105,7 @@ dotnet test TixFlow.sln -c Release --filter 'Category!=Baseline'
 | POST | `/api/v1/tickets/check-ins` | Check-in chống quét trùng, Organizer sở hữu Event hoặc Admin |
 | GET | `/api/v1/bookings/status` | Trạng thái module đặt vé |
 | GET | `/api/v1/assistant/status` | Trạng thái module AI Assistant |
+| GET | `/api/v1/operations/metrics` | Admin xem cache hit/miss và snapshot queue/consumer lag của Worker |
 
 ## Bước tiếp theo
 
@@ -116,3 +117,5 @@ Giai đoạn 7 được ghi tại [Expiry, RabbitMQ, vé QR và check-in](docs/p
 
 1. Baseline giai đoạn 8 và cách tái tạo nằm tại [kiểm thử tính đúng và thực nghiệm](docs/phase-8-baseline.md). Các lần đổi thuật toán/cấu hình/dataset cần baseline version mới.
 2. Chỉ tích hợp AI Booking Assistant sau khi Booking Service đã ổn định.
+
+Giai đoạn 9: [tối ưu có kiểm chứng](docs/phase-9-optimization.md), [quyết định kỹ thuật](docs/adr/008-phase9-optimization.md), [đề xuất model AI](docs/ai-provider-proposal.md). Chạy `./scripts/Invoke-Phase9Verification.ps1 -Mode All`; không dùng script giai đoạn 8 để gắn nhãn baseline v1 cho thuật toán mới. Giao diện FE giữ nguyên.

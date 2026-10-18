@@ -8,6 +8,8 @@ Push-Location $repo
 $oldReport = $env:TIXFLOW_BASELINE_REPORT_PATH
 $oldRevision = $env:TIXFLOW_SOURCE_REVISION
 try {
+    git diff --quiet baseline-v1-phase8 -- src tests database infrastructure/baseline
+    if ($LASTEXITCODE -ne 0) { throw 'Runtime differs from baseline-v1-phase8. Use that tag for baseline v1, or Invoke-Phase9Verification.ps1 for optimized code.' }
     $revision = (git rev-parse HEAD).Trim()
     if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve source revision.' }
     $dirty = @(git status --porcelain).Count -gt 0
