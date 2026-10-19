@@ -1,0 +1,12 @@
+{
+  "utc": "20261018T133824957Z",
+  "image": "sha256:b52718d31288f011e4d5bafedbc26c3ebc136ee5cccd89da4928ca94f8627ba0",
+  "baselineRevision": "c07a603e8e925f0471c6a765bd14aeb3d1ab1321",
+  "verifiedInputs": 107,
+  "cpus": 2,
+  "memoryBytes": 2147483648,
+  "poolMax": 40,
+  "cache": "off",
+  "transport": "TestServer",
+  "sourceManifestSha256": "7ABEEBC12F4DC661A855FE624983ACED185E66916FC1CBE7183FA03085DAE905"
+}

@@ -1,0 +1,69 @@
+[
+  {
+    "path": "/api/v1/events?limit=12",
+    "cache": false,
+    "requests": 50,
+    "hits": 0,
+    "responseBytes": 18504,
+    "p50Ms": 36.2116,
+    "p95Ms": 107.0167,
+    "queriesMin": 5,
+    "queriesMax": 5
+  },
+  {
+    "path": "/api/v1/events/80000000-0000-0000-0000-000000000001",
+    "cache": false,
+    "requests": 50,
+    "hits": 0,
+    "responseBytes": 1204,
+    "p50Ms": 27.8907,
+    "p95Ms": 67.1857,
+    "queriesMin": 5,
+    "queriesMax": 5
+  },
+  {
+    "path": "/api/v1/holds",
+    "limits": [
+      1,
+      10
+    ],
+    "queries": [
+      5,
+      5
+    ]
+  },
+  {
+    "path": "/api/v1/events?limit=12",
+    "cache": true,
+    "requests": 50,
+    "hits": 50,
+    "responseBytes": 18504,
+    "p50Ms": 9.546,
+    "p95Ms": 14.2466,
+    "queriesMin": 2,
+    "queriesMax": 2
+  },
+  {
+    "path": "/api/v1/events/80000000-0000-0000-0000-000000000001",
+    "cache": true,
+    "requests": 50,
+    "hits": 50,
+    "responseBytes": 1204,
+    "p50Ms": 8.7581,
+    "p95Ms": 11.1437,
+    "queriesMin": 2,
+    "queriesMax": 2
+  },
+  {
+    "operation": "QR image",
+    "renderedByWorker": false,
+    "iterations": 100,
+    "totalMs": 332.9441
+  },
+  {
+    "operation": "QR image",
+    "renderedByWorker": true,
+    "iterations": 100,
+    "totalMs": 3.9595
+  }
+]

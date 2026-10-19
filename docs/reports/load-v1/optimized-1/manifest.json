@@ -1,0 +1,71 @@
+{
+  "runId": "20261019T124834680Z-optimized-1",
+  "variant": "optimized",
+  "profile": "smoke",
+  "repetition": 1,
+  "utc": "2026-10-19T12:49:46.2676962Z",
+  "revision": "2778c393484419c5ef27da0d52306f44f46b38c8",
+  "image": "sha256:e58c6d92381576f0e7b2bf6ba926314b0719205508be4959dfcf8b357d5b1e70",
+  "verifiedInputs": 120,
+  "dataset": "load-v1",
+  "vus": 10,
+  "iterations": 100,
+  "apiInstances": 1,
+  "apiCpus": 2,
+  "apiMemoryBytes": 1073741824,
+  "poolMax": 40,
+  "rateLimit": false,
+  "cache": true,
+  "loadCpus": 2,
+  "loadMemoryBytes": 1073741824,
+  "transport": "k6 HTTP -> Nginx -> Kestrel",
+  "identity": "isolated RS256 OIDC issuer, no login per iteration",
+  "host": {
+    "ServerVersion": "29.8.0",
+    "OperatingSystem": "Docker Desktop",
+    "NCPU": 12,
+    "MemTotal": 7984533504
+  },
+  "inputs": [
+    {
+      "path": "load/scenarios.js",
+      "sha256": "65b9ec9c3e26f280246e33147417787cb11db8191dceb4d3c5f914c7cec1b14d"
+    },
+    {
+      "path": "infrastructure/load/nginx.conf",
+      "sha256": "bd86f59a6afc859fc3a366bfee6fe4c64cd5ba575e53ede165bb719db7ae3b06"
+    },
+    {
+      "path": "infrastructure/load/Issuer/Dockerfile",
+      "sha256": "ff71bd1c7f34f6e5b8fe454732a573319cf76050bedd7cc990faf0374f8e5a36"
+    },
+    {
+      "path": "infrastructure/load/Issuer/Issuer.csproj",
+      "sha256": "7b50a7a838649eb04b02c395a4be21eaa2882417de1f589a67b260370b25b48d"
+    },
+    {
+      "path": "infrastructure/load/Issuer/Program.cs",
+      "sha256": "b39a26cc5b0f1ca971f71fbdcbd74f7feb4e94df9b5e2925ce1bcc4ed307d29d"
+    },
+    {
+      "path": "database/load/sample.sql",
+      "sha256": "c021c366c3ab832cc63dc67d36476044ca2c8c79bb4b3f30a3fcfd70b2a7f48a"
+    },
+    {
+      "path": "database/load/seed.sql",
+      "sha256": "eac6c3883a83c40252a430656e02c117b70ca0eedb268971967e997ec71e6306"
+    },
+    {
+      "path": "database/load/verify.sql",
+      "sha256": "c4c4cc061439e578d5970bdd895e18ac395302fb74de7770dd89458622a712fc"
+    },
+    {
+      "path": "docker-compose.load.yml",
+      "sha256": "30b2d0b7c912225d7423ad451040f0434ffa5d622ca6902f8e77889c4e6097f7"
+    },
+    {
+      "path": "scripts/Invoke-Phase10Load.ps1",
+      "sha256": "c8470ef46a7012747451714074ac0b11da9f0b602c8db56816120026d7e0d013"
+    }
+  ]
+}

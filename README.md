@@ -119,3 +119,5 @@ Giai đoạn 7 được ghi tại [Expiry, RabbitMQ, vé QR và check-in](docs/p
 2. Chỉ tích hợp AI Booking Assistant sau khi Booking Service đã ổn định.
 
 Giai đoạn 9: [tối ưu có kiểm chứng](docs/phase-9-optimization.md), [quyết định kỹ thuật](docs/adr/008-phase9-optimization.md), [đề xuất model AI](docs/ai-provider-proposal.md). Chạy `./scripts/Invoke-Phase9Verification.ps1 -Mode All`; không dùng script giai đoạn 8 để gắn nhãn baseline v1 cho thuật toán mới. Giao diện FE giữ nguyên.
+
+Giai đoạn 10: [thực nghiệm HTTP bằng k6](docs/phase-10-load-testing.md). Chạy `./scripts/Invoke-Phase10Load.ps1 -Variant both -Repetitions 3` để so sánh hai image đã xác minh trong stack cách ly, rồi dùng `scripts/Summarize-Phase10.py` tổng hợp số liệu. Báo cáo phân biệt smoke với chiến dịch ramp/spike/soak và các tiêu chí nghiệm thu còn mở.

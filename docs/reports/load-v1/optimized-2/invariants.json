@@ -1,0 +1,47 @@
+{
+  "oversold": 0,
+  "inventory_mismatch": 0,
+  "duplicate_active_seats": 0,
+  "seat_inventory_mismatch": 0,
+  "duplicate_holds": 0,
+  "duplicate_orders": 0,
+  "duplicate_payments": 0,
+  "duplicate_provider_references": 0,
+  "duplicate_tickets": 0,
+  "missing_paid_tickets": 0,
+  "overdue_holds": 0,
+  "inventory": [
+    {
+      "id": "80000000-0000-0000-0000-000000000004",
+      "ticket_type_id": "80000000-0000-0000-0000-000000000003",
+      "total_quantity": 50,
+      "held_quantity": 50,
+      "sold_quantity": 0,
+      "version": 50,
+      "updated_at_utc": "2026-10-19T19:51:53.896989+07:00",
+      "inventory_mode": "GeneralAdmission"
+    },
+    {
+      "id": "80000000-0000-0000-0000-000000000009",
+      "ticket_type_id": "80000000-0000-0000-0000-000000000007",
+      "total_quantity": 10000,
+      "held_quantity": 10,
+      "sold_quantity": 10,
+      "version": 50,
+      "updated_at_utc": "2026-10-19T19:51:56.126268+07:00",
+      "inventory_mode": "GeneralAdmission"
+    },
+    {
+      "id": "80000000-0000-0000-0000-000000000008",
+      "ticket_type_id": "80000000-0000-0000-0000-000000000005",
+      "total_quantity": 1,
+      "held_quantity": 1,
+      "sold_quantity": 0,
+      "version": 1,
+      "updated_at_utc": "2026-10-19T19:51:49.398106+07:00",
+      "inventory_mode": "ReservedSeating"
+    }
+  ],
+  "paid_orders": 10,
+  "tickets": 10
+}

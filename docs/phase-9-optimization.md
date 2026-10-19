@@ -38,6 +38,8 @@ API Admin: `GET /api/v1/operations/metrics`. Snapshot Worker có thời điểm 
 
 ## Các quyết định còn lại
 
+Kiểm tra lại ngày 19/10/2026: 120/120 hash nguồn khớp manifest của lần nghiệm thu 90/90; regression mới đạt 88/88 (không chạy lại hai phép đo Category=Baseline). Đã bổ sung file `proxy-smoke.json` bị thiếu trong bộ báo cáo và tạo tag `optimized-v1-phase9` tại commit `2778c393484419c5ef27da0d52306f44f46b38c8`. Phần kỹ thuật phase 9 đủ để chuyển sang [phase 10 k6](phase-10-load-testing.md); quyết định provider AI vẫn mở trước sprint AI, không coi là đã được người dùng chốt.
+
 - Chưa triển khai Virtual Waiting Room: cần spike test và SLO giai đoạn 10 để quyết định.
 - Chưa thay index vì EXPLAIN baseline cho thấy lookup nhỏ; bottleneck có bằng chứng là lock serialization. Query plans và pg_stat_statements nằm trong JSON của cả hai phiên bản.
 - Provider/model AI: [đề xuất OpenAI gpt-5.4-mini](ai-provider-proposal.md), chờ người dùng chốt. Chưa gọi dịch vụ trả phí.
