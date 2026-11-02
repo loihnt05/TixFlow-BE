@@ -2,7 +2,7 @@
 BEGIN;
 DO $$ BEGIN
     IF current_database() <> 'tixflow_load_tests'
-       OR NOT EXISTS (SELECT FROM load_control WHERE dataset = 'load-v1') THEN
+       OR NOT EXISTS (SELECT FROM load_control WHERE dataset = 'load-v2') THEN
         RAISE EXCEPTION 'Baseline seed requires the isolated load database';
     END IF;
 END $$;
@@ -32,10 +32,10 @@ FROM generate_series(1, 10000) i ON CONFLICT (id) DO NOTHING;
 INSERT INTO ticket_types (id,event_session_id,name,code,price,currency,inventory_mode,capacity,max_per_order,sale_starts_at_utc,sale_ends_at_utc)
 VALUES
 ('80000000-0000-0000-0000-000000000005','80000000-0000-0000-0000-000000000002','Load hot seat','LOADSEAT',250000,'VND','ReservedSeating',1,1,'2020-01-01','2099-12-20 11:00Z'),
-('80000000-0000-0000-0000-000000000007','80000000-0000-0000-0000-000000000002','Load checkout','LOADCHECKOUT',250000,'VND','GeneralAdmission',10000,2,'2020-01-01','2099-12-20 11:00Z');
+('80000000-0000-0000-0000-000000000007','80000000-0000-0000-0000-000000000002','Load checkout','LOADCHECKOUT',250000,'VND','GeneralAdmission',100000,2,'2020-01-01','2099-12-20 11:00Z');
 INSERT INTO ticket_inventories(id,ticket_type_id,total_quantity)
 VALUES ('80000000-0000-0000-0000-000000000008','80000000-0000-0000-0000-000000000005',1),
-('80000000-0000-0000-0000-000000000009','80000000-0000-0000-0000-000000000007',10000);
+('80000000-0000-0000-0000-000000000009','80000000-0000-0000-0000-000000000007',100000);
 INSERT INTO seats(id,event_session_id,ticket_type_id,section,row_label,seat_number)
 VALUES ('80000000-0000-0000-0000-000000000006','80000000-0000-0000-0000-000000000002','80000000-0000-0000-0000-000000000005','Load','A','1');
 COMMIT;

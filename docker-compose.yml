@@ -48,6 +48,9 @@ services:
       retries: 10
 
   api:
+    # Keep compatibility with development key volumes created by earlier root images.
+    # The separate production Compose uses the image's non-root app user.
+    user: "0:0"
     build:
       context: .
       dockerfile: src/TixFlow.Api/Dockerfile
@@ -60,6 +63,11 @@ services:
       RabbitMq__Username: ${RABBITMQ_USER:-tixflow}
       RabbitMq__Password: ${RABBITMQ_PASSWORD}
       Frontend__Origin: http://localhost:3000
+      Assistant__Provider: ${ASSISTANT_PROVIDER:-OpenAI}
+      Assistant__Model: ${ASSISTANT_MODEL:-gpt-5.4-mini}
+      Assistant__ApiKey: ${OPENAI_API_KEY:-}
+      Assistant__BookingApiBaseUrl: http://localhost:8080
+      Assistant__KeyDirectory: /app/assistant-keys
       Authentication__Authority: http://localhost:8180/realms/tixflow
       Authentication__MetadataAddress: http://keycloak:8080/realms/tixflow/.well-known/openid-configuration
       Authentication__Audience: tixflow-api
@@ -68,6 +76,7 @@ services:
       - "8080:8080"
     volumes:
       - ticket_keys:/app/ticket-keys
+      - assistant_keys:/app/assistant-keys
     healthcheck:
       test:
         - CMD-SHELL
@@ -89,6 +98,7 @@ services:
         condition: service_healthy
 
   worker:
+    user: "0:0"
     build:
       context: .
       dockerfile: src/TixFlow.Worker/Dockerfile
@@ -177,6 +187,7 @@ services:
       retries: 18
 
 volumes:
+  assistant_keys:
   ticket_keys:
   postgres_data:
   redis_data:

@@ -1,0 +1,4 @@
+deploy/**/*.sh text eol=lf
+deploy/**/*.py text eol=lf
+database/**/*.sql text eol=lf
+*.yml text eol=lf

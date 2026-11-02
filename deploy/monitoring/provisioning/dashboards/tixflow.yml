@@ -1,0 +1,7 @@
+apiVersion: 1
+providers:
+  - name: TixFlow
+    folder: TixFlow
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards

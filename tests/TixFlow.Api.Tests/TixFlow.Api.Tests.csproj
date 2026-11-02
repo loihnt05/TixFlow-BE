@@ -4,6 +4,8 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Override Testcontainers' vulnerable SSH.NET transitive dependency. Test-only. -->
+    <PackageReference Include="SSH.NET" Version="2026.0.0" PrivateAssets="all" />
     <PackageReference Include="Testcontainers.PostgreSql" Version="4.8.1" />
     <PackageReference Include="Testcontainers.RabbitMq" Version="4.8.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.31" />

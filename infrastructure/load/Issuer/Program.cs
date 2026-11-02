@@ -30,4 +30,8 @@ var key = rsa.ExportParameters(false);
 app.MapGet("/.well-known/openid-configuration", () => new { issuer, jwks_uri = issuer + "/keys" });
 app.MapGet("/keys", () => new { keys = new[] { new { kty = "RSA", use = "sig", kid = "load-only", alg = "RS256", n = B64(key.Modulus!), e = B64(key.Exponent!) } } });
 app.MapGet("/health", () => "ready");
+// Host sampler publishes only numeric operational gauges, never tokens.
+app.MapGet("/metrics", () => Results.Text(
+    File.Exists("/reports/live.prom") ? File.ReadAllText("/reports/live.prom") : "",
+    "text/plain; version=0.0.4"));
 app.Run();

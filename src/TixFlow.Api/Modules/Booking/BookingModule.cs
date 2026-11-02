@@ -244,6 +244,12 @@ public static class BookingModule
             throw Validation("The hold total exceeds the supported monetary range.");
         }
 
+        // Compare under the same ticket-type locks as reservation; a preflight check alone races price changes.
+        if (request.Quote is { } quote && (quote.TotalAmount != totalAmount
+            || quote.HoldDurationMinutes != options.HoldDurationMinutes
+            || ticketTypes.Values.Any(t => t.Currency != quote.Currency)))
+            throw new BookingProblemException(409, "QUOTE_CHANGED", "Giá hoặc thời hạn giữ vé đã thay đổi. Vui lòng chuẩn bị và xác nhận lại.");
+
         DateTimeOffset expiresAt = decisionTime.AddMinutes(options.HoldDurationMinutes);
         string holdIdempotencyDigest = Sha256($"{user.Id:N}:{CreateHoldScope}:{idempotencyKey}");
         var hold = new Hold(
@@ -957,7 +963,7 @@ public static class BookingModule
                 item.Quantity,
                 item.SeatIds.Order().ToArray()))
             .ToArray();
-        return new CanonicalHoldRequest(request.EventSessionId, items);
+        return new CanonicalHoldRequest(request.EventSessionId, items, request.Quote);
     }
 
     private static string HashCanonicalRequest(CanonicalHoldRequest request)
@@ -973,7 +979,9 @@ public static class BookingModule
                 seatIds = item.SeatIds.Select(id => id.ToString("D"))
             })
         };
-        return Sha256(JsonSerializer.Serialize(canonical, JsonOptions));
+        string payload = JsonSerializer.Serialize(canonical, JsonOptions);
+        // Preserve pre-phase-11 hashes for callers without a quote.
+        return Sha256(request.Quote is null ? payload : payload + JsonSerializer.Serialize(request.Quote, JsonOptions));
     }
 
     private static bool TryReadIdempotencyKey(
@@ -1081,7 +1089,8 @@ public static class BookingModule
         return options;
     }
 
-    public sealed record CreateHoldRequest(Guid EventSessionId, IReadOnlyList<HoldSelectionRequest> Items);
+    public sealed record CreateHoldRequest(Guid EventSessionId, IReadOnlyList<HoldSelectionRequest> Items, HoldQuote? Quote = null);
+    public sealed record HoldQuote(decimal TotalAmount, string Currency, int HoldDurationMinutes);
 
     public sealed record HoldSelectionRequest(
         Guid TicketTypeId,
@@ -1091,7 +1100,7 @@ public static class BookingModule
 
     public sealed record CancelHoldRequest(string Reason);
 
-    private sealed record CanonicalHoldRequest(Guid EventSessionId, IReadOnlyList<CanonicalHoldItem> Items);
+    private sealed record CanonicalHoldRequest(Guid EventSessionId, IReadOnlyList<CanonicalHoldItem> Items, HoldQuote? Quote);
 
     private sealed record CanonicalHoldItem(
         Guid TicketTypeId,

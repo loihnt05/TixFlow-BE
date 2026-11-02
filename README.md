@@ -121,3 +121,11 @@ Giai đoạn 7 được ghi tại [Expiry, RabbitMQ, vé QR và check-in](docs/p
 Giai đoạn 9: [tối ưu có kiểm chứng](docs/phase-9-optimization.md), [quyết định kỹ thuật](docs/adr/008-phase9-optimization.md), [đề xuất model AI](docs/ai-provider-proposal.md). Chạy `./scripts/Invoke-Phase9Verification.ps1 -Mode All`; không dùng script giai đoạn 8 để gắn nhãn baseline v1 cho thuật toán mới. Giao diện FE giữ nguyên.
 
 Giai đoạn 10: [thực nghiệm HTTP bằng k6](docs/phase-10-load-testing.md). Chạy `./scripts/Invoke-Phase10Load.ps1 -Variant both -Repetitions 3` để so sánh hai image đã xác minh trong stack cách ly, rồi dùng `scripts/Summarize-Phase10.py` tổng hợp số liệu. Báo cáo phân biệt smoke với chiến dịch ramp/spike/soak và các tiêu chí nghiệm thu còn mở.
+
+Tiếp tục phase 10: [trạng thái và báo cáo load-v2](docs/reports/load-v2/README.md), có candidate Checkout riêng, monitoring Prometheus/Grafana và script campaign smoke/ramp/spike/soak. Xem `artifacts/phase10/campaign-*/status.json` để biết tiến trình đo thực tế; chưa coi việc khởi động campaign là hoàn tất.
+
+Giai đoạn 11: [AI Booking Assistant](docs/phase-11-ai-assistant.md). API/UI, typed tools, xác nhận hold, audit và adapter OpenAI đã được triển khai; xem báo cáo để biết kiểm thử và phần đánh giá model thật còn mở.
+
+Giai đoạn 12: [setup VPS, HTTPS, monitoring, backup/restore và CI/CD](docs/phase-12-deployment.md). Bộ triển khai production đã tách riêng; điền `.env.production.example`, chuẩn bị image digest và chạy `bash deploy/scripts/deploy.sh` trên VPS khi sẵn sàng. Hiện chỉ chuẩn bị setup, chưa triển khai VPS thật.
+
+Giai đoạn 13: [bộ bàn giao review](docs/phase-13-handover.md), gồm báo cáo, sơ đồ, OpenAPI hiện tại, số liệu truy vết về raw và kịch bản demo. Regression mới 106/106 đạt; campaign phase 10 vẫn failed ở soak. Chạy `python scripts/Build-Phase13Evidence.py --package` để đóng gói source/evidence có manifest SHA-256. Xem [checklist release](docs/release/release-checklist.md) trước khi chốt commit/image hoặc nghiệm thu VPS.

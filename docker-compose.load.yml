@@ -21,6 +21,7 @@ services:
     cpus: 1
     mem_limit: 512m
     tmpfs: [/var/lib/rabbitmq]
+    ports: ["127.0.0.1::15672"]
     environment:
       RABBITMQ_DEFAULT_USER: load
       RABBITMQ_DEFAULT_PASS: disposable_load_only
@@ -39,7 +40,7 @@ services:
     environment:
       ASPNETCORE_URLS: http://+:8080
       Logging__LogLevel__Default: Warning
-    volumes: ["${TIXFLOW_LOAD_PRIVATE:?required}:/state"]
+    volumes: ["${TIXFLOW_LOAD_PRIVATE:?required}:/state", "${TIXFLOW_LOAD_REPORT:?required}:/reports:ro"]
   api:
     image: ${TIXFLOW_LOAD_IMAGE:?required}
     working_dir: /src/src/TixFlow.Api
@@ -92,4 +93,30 @@ services:
       RUN_ID: ${TIXFLOW_LOAD_RUN_ID:?required}
       VUS: ${TIXFLOW_LOAD_VUS:-10}
       ITERATIONS: ${TIXFLOW_LOAD_ITERATIONS:-100}
-    command: [run, --out, json=/reports/raw.json.gz, /scripts/scenarios.js]
+      K6_PROMETHEUS_RW_SERVER_URL: http://prometheus:9090/api/v1/write
+      K6_PROMETHEUS_RW_TREND_STATS: p(50),p(95),p(99)
+    command: [run, --out, json=/reports/raw.json.gz, --out, experimental-prometheus-rw, /scripts/scenarios.js]
+  prometheus:
+    image: prom/prometheus:v3.7.3@sha256:49214755b6153f90a597adcbff0252cc61069f8ab69ce8411285cd4a560e8038
+    cpus: 0.5
+    mem_limit: 512m
+    ports: ["127.0.0.1::9090"]
+    tmpfs: ["/prometheus:mode=1777"]
+    command: [--config.file=/etc/prometheus/prometheus.yml, --web.enable-remote-write-receiver, --storage.tsdb.path=/prometheus, --storage.tsdb.retention.time=4h]
+    volumes: ["./infrastructure/load/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro"]
+  grafana:
+    image: grafana/grafana:12.2.0@sha256:74144189b38447facf737dfd0f3906e42e0776212bf575dc3334c3609183adf7
+    cpus: 0.5
+    mem_limit: 256m
+    ports: ["127.0.0.1::3000"]
+    tmpfs: ["/var/lib/grafana:mode=1777"]
+    environment:
+      GF_SECURITY_ADMIN_USER: load
+      GF_SECURITY_ADMIN_PASSWORD: disposable_load_only
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_LOG_LEVEL: warn
+    volumes:
+      - ./infrastructure/load/monitoring/provisioning:/etc/grafana/provisioning:ro
+      - ./infrastructure/load/monitoring/dashboard.json:/dashboards/load.json:ro

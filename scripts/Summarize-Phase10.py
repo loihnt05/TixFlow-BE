@@ -6,6 +6,7 @@ Requires only Python's standard library. Raw input stays in the ignored artifact
 import csv
 import gzip
 import json
+import re
 import statistics
 import sys
 from collections import defaultdict
@@ -27,8 +28,10 @@ def percentile(values, p):
 def summarize(root):
     rows = []
     runs = []
+    comparison_config = None
+    variant_sources = {}
     for folder in sorted(root.iterdir()):
-        if not folder.is_dir() or folder.name == "private":
+        if not folder.is_dir() or not re.fullmatch(r"(baseline|optimized)-\d+", folder.name):
             continue
         if not (folder / "result.json").exists():
             raise ValueError(f"Incomplete run: {folder.name}")
@@ -36,6 +39,17 @@ def summarize(root):
         if not result["passed"]:
             raise ValueError(f"Failed run must not enter a passing comparison: {folder.name}")
         manifest = read(folder / "manifest.json")
+        config = {name: manifest.get(name) for name in (
+            "protocol", "profile", "dataset", "vus", "iterations", "apiInstances",
+            "apiCpus", "apiMemoryBytes", "poolMax", "rateLimit", "loadCpus", "loadMemoryBytes", "host")}
+        config["harness"] = sorted((x["path"], x["sha256"]) for x in manifest["inputs"])
+        if comparison_config is not None and config != comparison_config:
+            raise ValueError(f"Incompatible experiment configuration: {folder.name}")
+        comparison_config = config
+        variant = manifest["variant"]
+        if variant in variant_sources and variant_sources[variant] != manifest["image"]:
+            raise ValueError(f"Multiple source images within one variant: {variant}")
+        variant_sources[variant] = manifest["image"]
         groups = defaultdict(list)
         errors = defaultdict(int)
         conflicts = defaultdict(int)
@@ -86,7 +100,7 @@ def summarize(root):
             entry[metric] = dict(median=statistics.median(values), min=min(values), max=max(values),
                 stdev=statistics.stdev(values) if len(values) > 1 else 0)
         aggregate.append(entry)
-    (root / "aggregate.json").write_text(json.dumps(dict(runs=runs, endpoints=aggregate), indent=2), encoding="utf-8")
+    (root / "aggregate.json").write_text(json.dumps(dict(configuration=comparison_config, sources=variant_sources, runs=runs, endpoints=aggregate), indent=2), encoding="utf-8")
     lines = ["# Phase 10 HTTP load results", "", f"Completed runs: {len(runs)}.", "",
         "Each endpoint rate uses the complete measured workload window (first to last custom HTTP sample), excluding setup. Concurrent scenarios share CPU and database locks; this is a mixed-workload experiment, not isolated endpoint capacity.", "",
         "| Variant | Endpoint | Runs | Median p50 ms | Median p95 ms | p95 min–max ms | Median p99 ms | Median req/s |", "|---|---|---:|---:|---:|---:|---:|---:|"]

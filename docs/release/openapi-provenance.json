@@ -1,0 +1,7 @@
+{
+  "assembly": "src/TixFlow.Api/bin/Release/net8.0/TixFlow.Api.dll",
+  "assembly_sha256": "71a4cfa3943b8d73d282c838d520d7d804fe3205e6eb45c14326f3b27944cf5d",
+  "paths": 49,
+  "environment": "Development, unavailable fixture database, no business requests",
+  "source": "Release assembly built by phase13 regression; see TRX and review package source hashes"
+}

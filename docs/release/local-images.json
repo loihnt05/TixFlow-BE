@@ -1,0 +1,11 @@
+{
+  "observedDate": "2026-10-24",
+  "scope": "Local Linux images built and checked in phase 12. These IDs are not published registry digests or a production release.",
+  "images": [
+    {"tag": "tixflow-phase12-api:verify", "imageId": "sha256:3c473b961850400e427705dfc863af0d24da082cc2a620e680fde5eb102d21ef"},
+    {"tag": "tixflow-phase12-worker:verify", "imageId": "sha256:7c9a013aa222eca63aef7619569e3a5144fc37908fc95726b4e5b85494402735"},
+    {"tag": "tixflow-phase12-frontend:verify", "imageId": "sha256:2d15bbdf87cca41468c29e4a6ce0e219302d14280f130d19eba20b5af4b80ba6"}
+  ],
+  "releaseRegistryDigests": null,
+  "releaseReady": false
+}

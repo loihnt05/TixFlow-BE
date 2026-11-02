@@ -1,0 +1,83 @@
+events { worker_connections 2048; }
+http {
+    server_tokens off;
+    # Deliberately excludes query strings, authorization, cookies and request bodies.
+    log_format safe '$remote_addr $request_method $uri $status $request_time';
+    access_log /var/log/nginx/access.log safe;
+    error_log /var/log/nginx/error.log warn;
+    resolver 127.0.0.11 valid=10s ipv6=off;
+    limit_req_zone $binary_remote_addr zone=api_ip:10m rate=20r/s;
+    limit_req_zone $binary_remote_addr zone=auth_ip:10m rate=10r/s;
+    limit_req_status 429;
+    client_max_body_size 1m;
+    client_body_timeout 15s;
+    keepalive_timeout 30s;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_session_cache shared:TLS:10m;
+    ssl_session_tickets off;
+    ssl_certificate /etc/letsencrypt/live/tixflow/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/tixflow/privkey.pem;
+    add_header Strict-Transport-Security 'max-age=31536000' always;
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+    add_header Permissions-Policy 'camera=(), microphone=(), geolocation=()' always;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Port $server_port;
+    proxy_set_header Connection '';
+    proxy_connect_timeout 5s;
+    proxy_read_timeout 45s;
+    proxy_send_timeout 30s;
+    proxy_next_upstream off;
+    server { listen 8081; location = /health { access_log off; return 200 'ok'; } }
+    server { listen 80 default_server; server_name _; return 444; }
+    server {
+        listen 80;
+        server_name @@APP_DOMAIN@@ @@API_DOMAIN@@ @@AUTH_DOMAIN@@ @@MONITORING_DOMAIN@@;
+        location /.well-known/acme-challenge/ { root /var/www/acme; }
+        location / { return 308 https://$host$request_uri; }
+    }
+    server { listen 443 ssl default_server; ssl_reject_handshake on; }
+    server {
+        listen 443 ssl;
+        server_name @@APP_DOMAIN@@;
+        set $frontend http://frontend:3000;
+        location / { proxy_pass $frontend; }
+    }
+    server {
+        listen 443 ssl;
+        server_name @@API_DOMAIN@@;
+        set $api http://api:8080;
+        location /internal { return 404; }
+        location /swagger { return 404; }
+        location = /health { proxy_pass $api; }
+        location /api/ { limit_req zone=api_ip burst=40 nodelay; proxy_pass $api; }
+        location / { return 404; }
+    }
+    server {
+        listen 443 ssl;
+        server_name @@AUTH_DOMAIN@@;
+        set $keycloak http://keycloak:8080;
+        location /realms/tixflow/ { limit_req zone=auth_ip burst=30 nodelay; proxy_pass $keycloak; }
+        location /resources/ { proxy_pass $keycloak; }
+        location /robots.txt { proxy_pass $keycloak; }
+        # Admin/master realm and management endpoints are accessible only through SSH.
+        location / { return 404; }
+    }
+    server {
+        listen 443 ssl;
+        server_name @@MONITORING_DOMAIN@@;
+        set $grafana http://grafana:3000;
+        location / { proxy_pass $grafana; }
+        location /api/live/ {
+            proxy_pass $grafana;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection upgrade;
+        }
+    }
+}

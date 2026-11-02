@@ -22,7 +22,12 @@ public sealed class Worker(IConfiguration configuration, ILogger<Worker> logger)
             }
             catch (OperationCanceledException) when (ct.IsCancellationRequested) { break; }
             catch (Exception ex) { logger.LogWarning("Projection retry: {FailureType}", ex.GetType().Name); }
-            try { await ProcessingMetrics.SampleAsync(connection, configuration, ct); }
+            try
+            {
+                await ProcessingMetrics.SampleAsync(connection, configuration, ct);
+                if (configuration["Worker:HeartbeatPath"] is { Length: > 0 } path)
+                    await File.WriteAllTextAsync(path, DateTimeOffset.UtcNow.ToString("O"), ct);
+            }
             catch (OperationCanceledException) when (ct.IsCancellationRequested) { break; }
             catch (Exception ex) { logger.LogWarning("Metrics retry: {FailureType}", ex.GetType().Name); }
             await Task.Delay(5000, ct);

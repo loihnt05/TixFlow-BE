@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="8b8f486a-d796-4ad2-a15e-6543c1148129" name="@5a65e6d2219e 2026-10-20 12:29:17" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-20T12:29:17.5606102+00:00" queuing="2026-10-20T12:29:17.5606102+00:00" start="2026-10-20T12:28:53.0489709+00:00" finish="2026-10-20T12:29:18.6654774+00:00" />
+  <TestSettings name="default" id="38496427-3acb-4c3b-a938-fa983b45c1d8">
+    <Deployment runDeploymentRoot="_5a65e6d2219e_2026-10-20_12_29_17" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="ea82fa61-c4b6-4778-8b0d-01ebce7341c9" testId="47b66a19-8cd3-e920-ce62-31eb1cfd66f1" testName="TixFlow.Api.Tests.Phase10Tests.CheckoutWaitsForLifecycleWriterAndRejectsCancelledEvent" computerName="5a65e6d2219e" duration="00:00:00.2470791" startTime="2026-10-20T12:29:17.5494142+00:00" endTime="2026-10-20T12:29:17.7769436+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ea82fa61-c4b6-4778-8b0d-01ebce7341c9" />
+    <UnitTestResult executionId="385a5f6b-2281-4f62-b8d3-ea2c035780a4" testId="65101e22-0df8-3b67-1206-82c8ded3a8c7" testName="TixFlow.Api.Tests.Phase10Tests.CheckoutCanProceedWhileCatalogRowsHaveSharedReaders" computerName="5a65e6d2219e" duration="00:00:12.4554243" startTime="2026-10-20T12:29:05.0756182+00:00" endTime="2026-10-20T12:29:17.5268769+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="385a5f6b-2281-4f62-b8d3-ea2c035780a4">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Threading.Tasks.TaskCanceledException : The operation was canceled.
+---- System.Net.Http.HttpRequestException : Error while copying content to a stream.
+-------- System.IO.IOException : 
+------------ System.IO.IOException : The client aborted the request.</Message>
+          <StackTrace>   at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+   at System.Net.Http.HttpClient.&lt;SendAsync&gt;g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at TixFlow.Api.Tests.BaselineDataset.Post(HttpClient client, String path, Object body, String key, CancellationToken ct, String token) in /src/tests/TixFlow.Api.Tests/BaselineDataset.cs:line 48
+   at TixFlow.Api.Tests.Phase10Tests.CheckoutCanProceedWhileCatalogRowsHaveSharedReaders() in /src/tests/TixFlow.Api.Tests/Phase10Tests.cs:line 28
+   at TixFlow.Api.Tests.Phase10Tests.CheckoutCanProceedWhileCatalogRowsHaveSharedReaders() in /src/tests/TixFlow.Api.Tests/Phase10Tests.cs:line 30
+   at TixFlow.Api.Tests.Phase10Tests.CheckoutCanProceedWhileCatalogRowsHaveSharedReaders() in /src/tests/TixFlow.Api.Tests/Phase10Tests.cs:line 30
+   at TixFlow.Api.Tests.Phase10Tests.CheckoutCanProceedWhileCatalogRowsHaveSharedReaders() in /src/tests/TixFlow.Api.Tests/Phase10Tests.cs:line 30
+   at TixFlow.Api.Tests.Phase10Tests.CheckoutCanProceedWhileCatalogRowsHaveSharedReaders() in /src/tests/TixFlow.Api.Tests/Phase10Tests.cs:line 32
+--- End of stack trace from previous location ---
+----- Inner Stack Trace -----
+   at System.Net.Http.HttpContent.LoadIntoBufferAsyncCore(Task serializeToStreamTask, MemoryStream tempBuffer)
+   at System.Net.Http.HttpClient.&lt;SendAsync&gt;g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+----- Inner Stack Trace -----
+   at Microsoft.AspNetCore.TestHost.ResponseBodyReaderStream.CheckAborted()
+   at Microsoft.AspNetCore.TestHost.ResponseBodyReaderStream.ReadAsync(Memory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Stream.&lt;CopyToAsync&gt;g__Core|27_0(Stream source, Stream destination, Int32 bufferSize, CancellationToken cancellationToken)
+   at System.Net.Http.HttpContent.LoadIntoBufferAsyncCore(Task serializeToStreamTask, MemoryStream tempBuffer)
+----- Inner Stack Trace -----
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TixFlow.Api.Tests.Phase10Tests.CheckoutCanProceedWhileCatalogRowsHaveSharedReaders" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="65101e22-0df8-3b67-1206-82c8ded3a8c7">
+      <Execution id="385a5f6b-2281-4f62-b8d3-ea2c035780a4" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase10Tests" name="CheckoutCanProceedWhileCatalogRowsHaveSharedReaders" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase10Tests.CheckoutWaitsForLifecycleWriterAndRejectsCancelledEvent" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="47b66a19-8cd3-e920-ce62-31eb1cfd66f1">
+      <Execution id="ea82fa61-c4b6-4778-8b0d-01ebce7341c9" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase10Tests" name="CheckoutWaitsForLifecycleWriterAndRejectsCancelledEvent" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="47b66a19-8cd3-e920-ce62-31eb1cfd66f1" executionId="ea82fa61-c4b6-4778-8b0d-01ebce7341c9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="65101e22-0df8-3b67-1206-82c8ded3a8c7" executionId="385a5f6b-2281-4f62-b8d3-ea2c035780a4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="2" executed="2" passed="1" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 8.0.30)
+[xUnit.net 00:00:00.09]   Discovering: TixFlow.Api.Tests
+[xUnit.net 00:00:00.17]   Discovered:  TixFlow.Api.Tests
+[xUnit.net 00:00:00.19]   Starting:    TixFlow.Api.Tests
+[testcontainers.org 00:00:00.12] Connected to Docker:
+  Host: unix:///var/run/docker.sock
+  Server Version: 29.8.0
+  Kernel Version: 6.18.33.2-microsoft-standard-WSL2
+  API Version: 1.56
+  Operating System: Docker Desktop
+  Total Memory: 7.44 GB
+  Labels: 
+    com.docker.desktop.address=npipe://\\.\pipe\docker_cli
+[testcontainers.org 00:00:00.84] Docker container 635e2433b9a0 created
+[testcontainers.org 00:00:00.88] Start Docker container 635e2433b9a0
+[testcontainers.org 00:00:01.15] Wait for Docker container 635e2433b9a0 to complete readiness checks
+[testcontainers.org 00:00:01.16] Docker container 635e2433b9a0 ready
+[testcontainers.org 00:00:03.32] Docker container b85f0b47a016 created
+[testcontainers.org 00:00:03.34] Start Docker container b85f0b47a016
+[testcontainers.org 00:00:03.35] Docker container 5592a1c00e94 created
+[testcontainers.org 00:00:03.37] Start Docker container 5592a1c00e94
+[testcontainers.org 00:00:03.60] Wait for Docker container b85f0b47a016 to complete readiness checks
+[testcontainers.org 00:00:03.63] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container b85f0b47a016
+[testcontainers.org 00:00:03.66] Wait for Docker container 5592a1c00e94 to complete readiness checks
+[testcontainers.org 00:00:04.78] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container b85f0b47a016
+[testcontainers.org 00:00:05.85] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container b85f0b47a016
+[testcontainers.org 00:00:06.95] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container b85f0b47a016
+[testcontainers.org 00:00:07.02] Docker container b85f0b47a016 ready
+[testcontainers.org 00:00:10.85] Docker container 5592a1c00e94 ready
+[xUnit.net 00:00:23.98]       System.Threading.Tasks.TaskCanceledException : The operation was canceled.
+[xUnit.net 00:00:23.98]       ---- System.Net.Http.HttpRequestException : Error while copying content to a stream.
+[xUnit.net 00:00:23.99]       -------- System.IO.IOException : 
+[xUnit.net 00:00:23.99]       ------------ System.IO.IOException : The client aborted the request.
+[xUnit.net 00:00:23.99]       Stack Trace:
+[xUnit.net 00:00:23.99]            at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+[xUnit.net 00:00:23.99]            at System.Net.Http.HttpClient.&lt;SendAsync&gt;g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+[xUnit.net 00:00:23.99]         /src/tests/TixFlow.Api.Tests/BaselineDataset.cs(48,0): at TixFlow.Api.Tests.BaselineDataset.Post(HttpClient client, String path, Object body, String key, CancellationToken ct, String token)
+[xUnit.net 00:00:23.99]         /src/tests/TixFlow.Api.Tests/Phase10Tests.cs(28,0): at TixFlow.Api.Tests.Phase10Tests.CheckoutCanProceedWhileCatalogRowsHaveSharedReaders()
+[xUnit.net 00:00:23.99]         /src/tests/TixFlow.Api.Tests/Phase10Tests.cs(30,0): at TixFlow.Api.Tests.Phase10Tests.CheckoutCanProceedWhileCatalogRowsHaveSharedReaders()
+[xUnit.net 00:00:23.99]         /src/tests/TixFlow.Api.Tests/Phase10Tests.cs(30,0): at TixFlow.Api.Tests.Phase10Tests.CheckoutCanProceedWhileCatalogRowsHaveSharedReaders()
+[xUnit.net 00:00:23.99]         /src/tests/TixFlow.Api.Tests/Phase10Tests.cs(30,0): at TixFlow.Api.Tests.Phase10Tests.CheckoutCanProceedWhileCatalogRowsHaveSharedReaders()
+[xUnit.net 00:00:23.99]         /src/tests/TixFlow.Api.Tests/Phase10Tests.cs(32,0): at TixFlow.Api.Tests.Phase10Tests.CheckoutCanProceedWhileCatalogRowsHaveSharedReaders()
+[xUnit.net 00:00:23.99]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:23.99]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:23.99]            at System.Net.Http.HttpContent.LoadIntoBufferAsyncCore(Task serializeToStreamTask, MemoryStream tempBuffer)
+[xUnit.net 00:00:23.99]            at System.Net.Http.HttpClient.&lt;SendAsync&gt;g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+[xUnit.net 00:00:23.99]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:23.99]            at Microsoft.AspNetCore.TestHost.ResponseBodyReaderStream.CheckAborted()
+[xUnit.net 00:00:23.99]            at Microsoft.AspNetCore.TestHost.ResponseBodyReaderStream.ReadAsync(Memory`1 buffer, CancellationToken cancellationToken)
+[xUnit.net 00:00:23.99]            at System.IO.Stream.&lt;CopyToAsync&gt;g__Core|27_0(Stream source, Stream destination, Int32 bufferSize, CancellationToken cancellationToken)
+[xUnit.net 00:00:23.99]            at System.Net.Http.HttpContent.LoadIntoBufferAsyncCore(Task serializeToStreamTask, MemoryStream tempBuffer)
+[xUnit.net 00:00:23.99]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:23.99]         
+[testcontainers.org 00:00:23.95] Delete Docker container 5592a1c00e94
+[testcontainers.org 00:00:24.35] Delete Docker container b85f0b47a016
+[xUnit.net 00:00:24.99]   Finished:    TixFlow.Api.Tests
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="5a65e6d2219e" outcome="Error" timestamp="2026-10-20T12:29:17.5301309+00:00">
+        <Text>[xUnit.net 00:00:23.98]     TixFlow.Api.Tests.Phase10Tests.CheckoutCanProceedWhileCatalogRowsHaveSharedReaders [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

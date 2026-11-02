@@ -1,0 +1,11 @@
+[Unit]
+Description=TixFlow database and signing key backup
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+User=deploy
+WorkingDirectory=/opt/tixflow/backend
+ExecStart=/bin/bash /opt/tixflow/backend/deploy/scripts/backup.sh
+UMask=0077

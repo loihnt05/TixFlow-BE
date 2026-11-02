@@ -1,0 +1,5 @@
+# Reviewed 2026-11-02: generic-api-key matches the port/database suffix of
+# KC_DB_URL: jdbc:postgresql://keycloak-postgres:5432/keycloak (no credentials).
+# Exact historical fingerprints only; all other findings remain blocking.
+d657a0d787f070ade39f1e9a1f4646d50bf11668:docker-compose.yml:generic-api-key:131
+ff7039d6870b184772f710da930be23e1016e5eb:docker-compose.yml:generic-api-key:131

@@ -1,0 +1,2065 @@
+[
+  {
+    "runId": "20261021T122259373Z-baseline-1",
+    "variant": "baseline",
+    "profile": "smoke",
+    "result": {
+      "monitoringError": null,
+      "invariantViolations": 0,
+      "passed": true,
+      "finishedUtc": "2026-10-21T12:25:35.0743488Z",
+      "k6Exit": 0
+    },
+    "database": {
+      "connections": {
+        "samples": 6,
+        "min": 4,
+        "median": 24.0,
+        "max": 43,
+        "first": 4,
+        "last": 43
+      },
+      "active": {
+        "samples": 6,
+        "min": 1,
+        "median": 1.0,
+        "max": 34,
+        "first": 1,
+        "last": 1
+      },
+      "lock_waiters": {
+        "samples": 6,
+        "min": 0,
+        "median": 0.0,
+        "max": 27,
+        "first": 0,
+        "last": 0
+      },
+      "oldest_transaction_seconds": {
+        "samples": 6,
+        "min": 0.022043,
+        "median": 0.080638,
+        "max": 5.202847,
+        "first": 0.090641,
+        "last": 0.022043
+      },
+      "pending_outbox": {
+        "samples": 6,
+        "min": 0,
+        "median": 2.0,
+        "max": 10,
+        "first": 0,
+        "last": 6
+      },
+      "oldest_outbox_seconds": {
+        "samples": 6,
+        "min": 0,
+        "median": 0.556911,
+        "max": 3.631304,
+        "first": 0,
+        "last": 3.631304
+      },
+      "consumer_lag_seconds": {
+        "samples": 6,
+        "min": 0,
+        "median": 1.159275,
+        "max": 3.814328,
+        "first": 0,
+        "last": 3.814328
+      }
+    },
+    "resources": {
+      "k6": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 1.31,
+          "median": 3.04,
+          "max": 20.04,
+          "first": 1.38,
+          "last": 20.04
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 70495764.48,
+          "median": 71659683.84,
+          "max": 73872179.2,
+          "first": 70495764.48,
+          "last": 73872179.2
+        }
+      },
+      "nginx": {
+        "cpu_percent": {
+          "samples": 6,
+          "min": 0.0,
+          "median": 0.305,
+          "max": 3.46,
+          "first": 0.09,
+          "last": 0.0
+        },
+        "memory_bytes": {
+          "samples": 6,
+          "min": 5459935.232,
+          "median": 6538919.936,
+          "max": 8388608.0,
+          "first": 6197084.16,
+          "last": 5459935.232
+        }
+      },
+      "prometheus": {
+        "cpu_percent": {
+          "samples": 6,
+          "min": 0.0,
+          "median": 0.035,
+          "max": 0.4,
+          "first": 0.03,
+          "last": 0.07
+        },
+        "memory_bytes": {
+          "samples": 6,
+          "min": 16389242.88,
+          "median": 17469276.159999996,
+          "max": 18863882.24,
+          "first": 16389242.88,
+          "last": 18821939.2
+        }
+      },
+      "grafana": {
+        "cpu_percent": {
+          "samples": 6,
+          "min": 0.59,
+          "median": 27.74,
+          "max": 53.32,
+          "first": 53.32,
+          "last": 0.6
+        },
+        "memory_bytes": {
+          "samples": 6,
+          "min": 139355750.4,
+          "median": 168348876.8,
+          "max": 188324249.6,
+          "first": 177523916.8,
+          "last": 158649548.8
+        }
+      },
+      "api": {
+        "cpu_percent": {
+          "samples": 6,
+          "min": 1.79,
+          "median": 97.295,
+          "max": 182.62,
+          "first": 109.4,
+          "last": 1.79
+        },
+        "memory_bytes": {
+          "samples": 6,
+          "min": 100254351.36,
+          "median": 214643507.2,
+          "max": 282276659.2,
+          "first": 100254351.36,
+          "last": 282276659.2
+        }
+      },
+      "issuer": {
+        "cpu_percent": {
+          "samples": 6,
+          "min": 0.01,
+          "median": 0.89,
+          "max": 4.49,
+          "first": 1.46,
+          "last": 0.32
+        },
+        "memory_bytes": {
+          "samples": 6,
+          "min": 84074823.68,
+          "median": 84620083.19999999,
+          "max": 85427486.72,
+          "first": 84609597.44,
+          "last": 85427486.72
+        }
+      },
+      "worker": {
+        "cpu_percent": {
+          "samples": 6,
+          "min": 0.24,
+          "median": 1.8450000000000002,
+          "max": 29.49,
+          "first": 0.24,
+          "last": 1.82
+        },
+        "memory_bytes": {
+          "samples": 6,
+          "min": 29213327.36,
+          "median": 33161216.0,
+          "max": 39258685.44,
+          "first": 29339156.48,
+          "last": 39258685.44
+        }
+      },
+      "postgres": {
+        "cpu_percent": {
+          "samples": 6,
+          "min": 5.26,
+          "median": 59.895,
+          "max": 102.73,
+          "first": 5.26,
+          "last": 10.95
+        },
+        "memory_bytes": {
+          "samples": 6,
+          "min": 133378867.2,
+          "median": 230529433.6,
+          "max": 255537971.2,
+          "first": 133378867.2,
+          "last": 254594252.8
+        }
+      },
+      "rabbitmq": {
+        "cpu_percent": {
+          "samples": 6,
+          "min": 0.51,
+          "median": 7.790000000000001,
+          "max": 98.5,
+          "first": 0.51,
+          "last": 35.64
+        },
+        "memory_bytes": {
+          "samples": 6,
+          "min": 128555417.6,
+          "median": 130757427.2,
+          "max": 206254899.2,
+          "first": 128555417.6,
+          "last": 176999628.8
+        }
+      }
+    },
+    "queues": {
+      "tixflow.post-payment.v1": {
+        "messages_ready": {
+          "samples": 6,
+          "min": 0,
+          "median": 0.0,
+          "max": 4,
+          "first": 0,
+          "last": 4
+        },
+        "messages_unacknowledged": {
+          "samples": 6,
+          "min": 0,
+          "median": 0.5,
+          "max": 1,
+          "first": 0,
+          "last": 1
+        }
+      },
+      "tixflow.post-payment.v1.dead": {
+        "messages_ready": {
+          "samples": 6,
+          "min": 0,
+          "median": 0.0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 6,
+          "min": 0,
+          "median": 0.0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.1": {
+        "messages_ready": {
+          "samples": 6,
+          "min": 0,
+          "median": 0.0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 6,
+          "min": 0,
+          "median": 0.0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.2": {
+        "messages_ready": {
+          "samples": 6,
+          "min": 0,
+          "median": 0.0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 6,
+          "min": 0,
+          "median": 0.0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.3": {
+        "messages_ready": {
+          "samples": 6,
+          "min": 0,
+          "median": 0.0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 6,
+          "min": 0,
+          "median": 0.0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      }
+    },
+    "sample_gap_seconds": {
+      "samples": 5,
+      "min": 4.968361854553223,
+      "median": 6.083240032196045,
+      "max": 7.4800238609313965,
+      "first": 7.4800238609313965,
+      "last": 4.968361854553223
+    },
+    "blocked_query_samples": {
+      "SELECT t.id, t.category, t.created_at_utc, t.description, t.image_url, t.name, t.organizer_id, t.published_at_utc, t.sale_ends_at_utc, t.sale_starts_at_utc, t.slug, t.status, t.updated_at_utc, t.venue_id, t.version\nFROM (\n    SELECT * FROM events WHERE id = $1 FOR UPDATE\n) AS t\nLIMIT 2": 44,
+      "INSERT INTO users\n    (id, identity_subject, email, normalized_email, display_name, password_hash, role, status)\nVALUES\n    ($1, $2, $3, $4, $5, NULL, $6, 'Active')\nON CONFLICT (identity_subject) DO UPDATE\nSET email = EXCLUDED.email,\n    normalized_email = EXCLUDED.normalized_email,\n    display_name = EXCLUDED.display_name,\n    role = EXCLUDED.role,\n    updated_at_utc = now()\nWHERE (users.email, users.normalized_email, users.display_name, users.role)\n    IS DISTINCT FROM\n    (EXCLUDED.email, EXC": 8,
+      "SELECT id FROM events WHERE id = $1 FOR UPDATE": 1
+    },
+    "otherContainers": [
+      "lumora-postgres-1"
+    ]
+  },
+  {
+    "runId": "20261021T122259373Z-baseline-2",
+    "variant": "baseline",
+    "profile": "smoke",
+    "result": {
+      "monitoringError": null,
+      "invariantViolations": 0,
+      "passed": true,
+      "finishedUtc": "2026-10-21T12:32:53.6154581Z",
+      "k6Exit": 0
+    },
+    "database": {
+      "connections": {
+        "samples": 5,
+        "min": 4,
+        "median": 43,
+        "max": 43,
+        "first": 4,
+        "last": 43
+      },
+      "active": {
+        "samples": 5,
+        "min": 1,
+        "median": 1,
+        "max": 38,
+        "first": 1,
+        "last": 1
+      },
+      "lock_waiters": {
+        "samples": 5,
+        "min": 0,
+        "median": 0,
+        "max": 29,
+        "first": 0,
+        "last": 0
+      },
+      "oldest_transaction_seconds": {
+        "samples": 5,
+        "min": 0.013319,
+        "median": 0.024194,
+        "max": 7.507756,
+        "first": 0.013638,
+        "last": 0.013319
+      },
+      "pending_outbox": {
+        "samples": 5,
+        "min": 0,
+        "median": 1,
+        "max": 8,
+        "first": 0,
+        "last": 8
+      },
+      "oldest_outbox_seconds": {
+        "samples": 5,
+        "min": 0,
+        "median": 1.407737,
+        "max": 3.98355,
+        "first": 0,
+        "last": 2.715289
+      },
+      "consumer_lag_seconds": {
+        "samples": 5,
+        "min": 0,
+        "median": 0.891438,
+        "max": 1.968312,
+        "first": 0,
+        "last": 1.968312
+      }
+    },
+    "resources": {
+      "worker": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 1.42,
+          "median": 2.41,
+          "max": 21.59,
+          "first": 1.95,
+          "last": 1.42
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 30440161.28,
+          "median": 33785118.72,
+          "max": 41418752.0,
+          "first": 30440161.28,
+          "last": 41418752.0
+        }
+      },
+      "nginx": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.0,
+          "median": 1.5,
+          "max": 3.36,
+          "first": 0.0,
+          "last": 0.0
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 3117416.448,
+          "median": 4681891.84,
+          "max": 6811549.696,
+          "first": 3117416.448,
+          "last": 3431989.248
+        }
+      },
+      "issuer": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.02,
+          "median": 0.05,
+          "max": 4.53,
+          "first": 0.05,
+          "last": 0.03
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 84221624.32,
+          "median": 84473282.56,
+          "max": 85008056.32,
+          "first": 84326481.92,
+          "last": 85008056.32
+        }
+      },
+      "api": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 1.44,
+          "median": 109.22,
+          "max": 201.96,
+          "first": 1.44,
+          "last": 2.68
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 89401589.76,
+          "median": 233098444.8,
+          "max": 280389222.4,
+          "first": 89401589.76,
+          "last": 280389222.4
+        }
+      },
+      "grafana": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.55,
+          "median": 0.57,
+          "max": 0.63,
+          "first": 0.57,
+          "last": 0.6
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 157286400.0,
+          "median": 157600972.8,
+          "max": 157915545.6,
+          "first": 157286400.0,
+          "last": 157600972.8
+        }
+      },
+      "prometheus": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.0,
+          "median": 0.0,
+          "max": 0.16,
+          "first": 0.0,
+          "last": 0.0
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 16273899.52,
+          "median": 18045992.96,
+          "max": 18528337.92,
+          "first": 16273899.52,
+          "last": 18528337.92
+        }
+      },
+      "rabbitmq": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.52,
+          "median": 2.63,
+          "max": 66.24,
+          "first": 0.52,
+          "last": 66.24
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 92064972.8,
+          "median": 93700751.36,
+          "max": 157600972.8,
+          "first": 92064972.8,
+          "last": 157600972.8
+        }
+      },
+      "postgres": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 1.82,
+          "median": 31.84,
+          "max": 117.49,
+          "first": 11.26,
+          "last": 1.82
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 113351065.6,
+          "median": 217264947.2,
+          "max": 234776166.4,
+          "first": 113351065.6,
+          "last": 233098444.8
+        }
+      },
+      "k6": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 5.16,
+          "median": 11.02,
+          "max": 13.31,
+          "first": 5.16,
+          "last": 13.31
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 72204943.36,
+          "median": 73641492.48,
+          "max": 75057070.08,
+          "first": 72204943.36,
+          "last": 75057070.08
+        }
+      }
+    },
+    "queues": {
+      "tixflow.post-payment.v1": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 4,
+          "first": 0,
+          "last": 4
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 1,
+          "first": 0,
+          "last": 1
+        }
+      },
+      "tixflow.post-payment.v1.dead": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.1": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.2": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.3": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      }
+    },
+    "sample_gap_seconds": {
+      "samples": 4,
+      "min": 5.454588890075684,
+      "median": 6.63642954826355,
+      "max": 10.811028957366943,
+      "first": 10.811028957366943,
+      "last": 5.454588890075684
+    },
+    "blocked_query_samples": {
+      "SELECT t.id, t.category, t.created_at_utc, t.description, t.image_url, t.name, t.organizer_id, t.published_at_utc, t.sale_ends_at_utc, t.sale_starts_at_utc, t.slug, t.status, t.updated_at_utc, t.venue_id, t.version\nFROM (\n    SELECT * FROM events WHERE id = $1 FOR UPDATE\n) AS t\nLIMIT 2": 40,
+      "INSERT INTO users\n    (id, identity_subject, email, normalized_email, display_name, password_hash, role, status)\nVALUES\n    ($1, $2, $3, $4, $5, NULL, $6, 'Active')\nON CONFLICT (identity_subject) DO UPDATE\nSET email = EXCLUDED.email,\n    normalized_email = EXCLUDED.normalized_email,\n    display_name = EXCLUDED.display_name,\n    role = EXCLUDED.role,\n    updated_at_utc = now()\nWHERE (users.email, users.normalized_email, users.display_name, users.role)\n    IS DISTINCT FROM\n    (EXCLUDED.email, EXC": 14,
+      "SELECT e.id, e.event_id\nFROM event_sessions AS e\nWHERE e.id = $1\nLIMIT 2": 1,
+      "INSERT INTO payment_webhook_events (id, provider, provider_event_id, payload, received_at_utc)\nVALUES ($1, 'mock', $2, CAST($3 AS jsonb), clock_timestamp())\nON CONFLICT (provider, provider_event_id) DO NOTHING": 1
+    },
+    "otherContainers": [
+      "lumora-postgres-1"
+    ]
+  },
+  {
+    "runId": "20261021T122259373Z-baseline-3",
+    "variant": "baseline",
+    "profile": "smoke",
+    "result": {
+      "monitoringError": null,
+      "invariantViolations": 0,
+      "passed": true,
+      "finishedUtc": "2026-10-21T12:34:43.3087818Z",
+      "k6Exit": 0
+    },
+    "database": {
+      "connections": {
+        "samples": 4,
+        "min": 4,
+        "median": 43.0,
+        "max": 43,
+        "first": 4,
+        "last": 43
+      },
+      "active": {
+        "samples": 4,
+        "min": 1,
+        "median": 15.0,
+        "max": 33,
+        "first": 1,
+        "last": 1
+      },
+      "lock_waiters": {
+        "samples": 4,
+        "min": 0,
+        "median": 14.0,
+        "max": 28,
+        "first": 0,
+        "last": 0
+      },
+      "oldest_transaction_seconds": {
+        "samples": 4,
+        "min": 0.011793,
+        "median": 0.267316,
+        "max": 1.701138,
+        "first": 0.015795,
+        "last": 0.011793
+      },
+      "pending_outbox": {
+        "samples": 4,
+        "min": 0,
+        "median": 3.5,
+        "max": 10,
+        "first": 0,
+        "last": 1
+      },
+      "oldest_outbox_seconds": {
+        "samples": 4,
+        "min": 0,
+        "median": 1.8556245,
+        "max": 5.96904,
+        "first": 0,
+        "last": 5.96904
+      },
+      "consumer_lag_seconds": {
+        "samples": 4,
+        "min": 0,
+        "median": 0.969367,
+        "max": 1.589845,
+        "first": 0,
+        "last": 1.589845
+      }
+    },
+    "resources": {
+      "k6": {
+        "cpu_percent": {
+          "samples": 2,
+          "min": 2.43,
+          "median": 5.71,
+          "max": 8.99,
+          "first": 2.43,
+          "last": 8.99
+        },
+        "memory_bytes": {
+          "samples": 2,
+          "min": 71020052.48,
+          "median": 72891760.64,
+          "max": 74763468.8,
+          "first": 71020052.48,
+          "last": 74763468.8
+        }
+      },
+      "worker": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 0.65,
+          "median": 0.81,
+          "max": 11.95,
+          "first": 11.95,
+          "last": 0.81
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 29108469.76,
+          "median": 33910947.84,
+          "max": 41534095.36,
+          "first": 29108469.76,
+          "last": 41534095.36
+        }
+      },
+      "nginx": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 0.0,
+          "median": 0.55,
+          "max": 2.89,
+          "first": 0.55,
+          "last": 0.0
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 3477078.016,
+          "median": 4710203.392,
+          "max": 6594494.464,
+          "first": 4710203.392,
+          "last": 3477078.016
+        }
+      },
+      "grafana": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 0.3,
+          "median": 0.34,
+          "max": 0.57,
+          "first": 0.34,
+          "last": 0.3
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 154664960.0,
+          "median": 154664960.0,
+          "max": 154769817.6,
+          "first": 154769817.6,
+          "last": 154664960.0
+        }
+      },
+      "prometheus": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 0.0,
+          "median": 0.0,
+          "max": 0.02,
+          "first": 0.0,
+          "last": 0.02
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 16158556.16,
+          "median": 17133731.84,
+          "max": 17962106.88,
+          "first": 16158556.16,
+          "last": 17962106.88
+        }
+      },
+      "api": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 1.95,
+          "median": 72.53,
+          "max": 112.07,
+          "first": 112.07,
+          "last": 1.95
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 122788249.6,
+          "median": 216635801.6,
+          "max": 281332940.8,
+          "first": 122788249.6,
+          "last": 281332940.8
+        }
+      },
+      "issuer": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 0.03,
+          "median": 0.17,
+          "max": 0.65,
+          "first": 0.65,
+          "last": 0.17
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 83928023.04,
+          "median": 84253081.6,
+          "max": 84357939.2,
+          "first": 84357939.2,
+          "last": 84253081.6
+        }
+      },
+      "rabbitmq": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 0.33,
+          "median": 41.58,
+          "max": 53.55,
+          "first": 41.58,
+          "last": 53.55
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 93312778.24,
+          "median": 133903155.2,
+          "max": 162738995.2,
+          "first": 133903155.2,
+          "last": 162738995.2
+        }
+      },
+      "postgres": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 4.55,
+          "median": 26.19,
+          "max": 99.93,
+          "first": 26.19,
+          "last": 4.55
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 117545369.6,
+          "median": 217579520.0,
+          "max": 234566451.2,
+          "first": 117545369.6,
+          "last": 234566451.2
+        }
+      }
+    },
+    "queues": {
+      "tixflow.post-payment.v1": {
+        "messages_ready": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 1,
+          "first": 0,
+          "last": 1
+        }
+      },
+      "tixflow.post-payment.v1.dead": {
+        "messages_ready": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.1": {
+        "messages_ready": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.2": {
+        "messages_ready": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.3": {
+        "messages_ready": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      }
+    },
+    "sample_gap_seconds": {
+      "samples": 3,
+      "min": 4.605568885803223,
+      "median": 7.114161014556885,
+      "max": 7.655110120773315,
+      "first": 7.655110120773315,
+      "last": 7.114161014556885
+    },
+    "blocked_query_samples": {
+      "SELECT t.id, t.category, t.created_at_utc, t.description, t.image_url, t.name, t.organizer_id, t.published_at_utc, t.sale_ends_at_utc, t.sale_starts_at_utc, t.slug, t.status, t.updated_at_utc, t.venue_id, t.version\nFROM (\n    SELECT * FROM events WHERE id = $1 FOR UPDATE\n) AS t\nLIMIT 2": 45,
+      "INSERT INTO users\n    (id, identity_subject, email, normalized_email, display_name, password_hash, role, status)\nVALUES\n    ($1, $2, $3, $4, $5, NULL, $6, 'Active')\nON CONFLICT (identity_subject) DO UPDATE\nSET email = EXCLUDED.email,\n    normalized_email = EXCLUDED.normalized_email,\n    display_name = EXCLUDED.display_name,\n    role = EXCLUDED.role,\n    updated_at_utc = now()\nWHERE (users.email, users.normalized_email, users.display_name, users.role)\n    IS DISTINCT FROM\n    (EXCLUDED.email, EXC": 9,
+      "SELECT id FROM events WHERE id = $1 FOR UPDATE": 1,
+      "SELECT e.id, e.event_id\nFROM event_sessions AS e\nWHERE e.id = $1\nLIMIT 2": 1
+    },
+    "otherContainers": [
+      "lumora-postgres-1"
+    ]
+  },
+  {
+    "runId": "20261021T122259373Z-optimized-1",
+    "variant": "optimized",
+    "profile": "smoke",
+    "result": {
+      "monitoringError": null,
+      "invariantViolations": 0,
+      "passed": true,
+      "finishedUtc": "2026-10-21T12:27:38.6530327Z",
+      "k6Exit": 0
+    },
+    "database": {
+      "connections": {
+        "samples": 6,
+        "min": 4,
+        "median": 43.0,
+        "max": 43,
+        "first": 4,
+        "last": 43
+      },
+      "active": {
+        "samples": 6,
+        "min": 1,
+        "median": 1.5,
+        "max": 29,
+        "first": 1,
+        "last": 1
+      },
+      "lock_waiters": {
+        "samples": 6,
+        "min": 0,
+        "median": 0.0,
+        "max": 21,
+        "first": 0,
+        "last": 0
+      },
+      "oldest_transaction_seconds": {
+        "samples": 6,
+        "min": 0.025277,
+        "median": 0.072244,
+        "max": 3.092576,
+        "first": 0.025277,
+        "last": 0.037676
+      },
+      "pending_outbox": {
+        "samples": 6,
+        "min": 0,
+        "median": 1.0,
+        "max": 16,
+        "first": 0,
+        "last": 0
+      },
+      "oldest_outbox_seconds": {
+        "samples": 6,
+        "min": 0,
+        "median": 1.4902965,
+        "max": 4.089309,
+        "first": 0,
+        "last": 0
+      },
+      "consumer_lag_seconds": {
+        "samples": 6,
+        "min": 0,
+        "median": 0.660867,
+        "max": 2.8817,
+        "first": 0,
+        "last": 2.8817
+      }
+    },
+    "resources": {
+      "k6": {
+        "cpu_percent": {
+          "samples": 4,
+          "min": 2.34,
+          "median": 12.005,
+          "max": 24.38,
+          "first": 2.34,
+          "last": 24.38
+        },
+        "memory_bytes": {
+          "samples": 4,
+          "min": 71764541.44,
+          "median": 72252129.28,
+          "max": 76745277.44,
+          "first": 71764541.44,
+          "last": 76745277.44
+        }
+      },
+      "nginx": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.0,
+          "median": 2.59,
+          "max": 4.13,
+          "first": 0.76,
+          "last": 0.0
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 3424649.216,
+          "median": 5107613.696,
+          "max": 6545211.392,
+          "first": 3801088.0,
+          "last": 3424649.216
+        }
+      },
+      "issuer": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.01,
+          "median": 0.04,
+          "max": 0.41,
+          "first": 0.04,
+          "last": 0.03
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 83907051.52,
+          "median": 83980451.84,
+          "max": 84609597.44,
+          "first": 83907051.52,
+          "last": 84609597.44
+        }
+      },
+      "prometheus": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.0,
+          "median": 0.0,
+          "max": 0.03,
+          "first": 0.02,
+          "last": 0.0
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 16714301.44,
+          "median": 17437818.88,
+          "max": 18161336.32,
+          "first": 16714301.44,
+          "last": 18161336.32
+        }
+      },
+      "worker": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.54,
+          "median": 11.27,
+          "max": 26.81,
+          "first": 0.54,
+          "last": 26.81
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 33481031.68,
+          "median": 40779120.64,
+          "max": 45413826.56,
+          "first": 33481031.68,
+          "last": 45413826.56
+        }
+      },
+      "api": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 4.9,
+          "median": 127.42,
+          "max": 193.72,
+          "first": 102.06,
+          "last": 4.9
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 106115891.2,
+          "median": 232154726.4,
+          "max": 263087718.4,
+          "first": 106115891.2,
+          "last": 263087718.4
+        }
+      },
+      "grafana": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.44,
+          "median": 0.88,
+          "max": 10.84,
+          "first": 0.6,
+          "last": 0.44
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 185073664.0,
+          "median": 185807667.2,
+          "max": 192937984.0,
+          "first": 185073664.0,
+          "last": 192937984.0
+        }
+      },
+      "postgres": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 7.77,
+          "median": 46.03,
+          "max": 100.66,
+          "first": 7.77,
+          "last": 12.28
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 115657932.8,
+          "median": 218732953.6,
+          "max": 232783872.0,
+          "first": 115657932.8,
+          "last": 232783872.0
+        }
+      },
+      "rabbitmq": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.52,
+          "median": 6.81,
+          "max": 98.54,
+          "first": 0.52,
+          "last": 0.8
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 93050634.24,
+          "median": 94969528.32,
+          "max": 163368140.8,
+          "first": 93050634.24,
+          "last": 95693045.76
+        }
+      }
+    },
+    "queues": {
+      "tixflow.post-payment.v1": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 2,
+          "first": 0,
+          "last": 2
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 1,
+          "first": 0,
+          "last": 1
+        }
+      },
+      "tixflow.post-payment.v1.dead": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.1": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.2": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.3": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      }
+    },
+    "sample_gap_seconds": {
+      "samples": 5,
+      "min": 5.403345108032227,
+      "median": 6.39040207862854,
+      "max": 6.672476768493652,
+      "first": 6.152814865112305,
+      "last": 5.403345108032227
+    },
+    "blocked_query_samples": {
+      "UPDATE ticket_inventories\nSET held_quantity = held_quantity + $1,\n    version = version + 1,\n    updated_at_utc = $2\nWHERE ticket_type_id = $3\n  AND total_quantity - held_quantity - sold_quantity >= $4": 17,
+      "SELECT t.id, t.category, t.created_at_utc, t.description, t.image_url, t.name, t.organizer_id, t.published_at_utc, t.sale_ends_at_utc, t.sale_starts_at_utc, t.slug, t.status, t.updated_at_utc, t.venue_id, t.version\nFROM (\n    SELECT * FROM events WHERE id = $1 FOR UPDATE\n) AS t\nLIMIT 2": 10,
+      "INSERT INTO users\n    (id, identity_subject, email, normalized_email, display_name, password_hash, role, status)\nVALUES\n    ($1, $2, $3, $4, $5, NULL, $6, 'Active')\nON CONFLICT (identity_subject) DO UPDATE\nSET email = EXCLUDED.email,\n    normalized_email = EXCLUDED.normalized_email,\n    display_name = EXCLUDED.display_name,\n    role = EXCLUDED.role,\n    updated_at_utc = now()\nWHERE (users.email, users.normalized_email, users.display_name, users.role)\n    IS DISTINCT FROM\n    (EXCLUDED.email, EXC": 7,
+      "SELECT * FROM seats WHERE id = ANY($1) ORDER BY id FOR UPDATE\n": 4,
+      "SELECT t.\"Value\"\nFROM (\n    SELECT version AS \"Value\" FROM catalog_generation WHERE id=1\n) AS t\nLIMIT 2": 1,
+      "INSERT INTO payment_webhook_events (id, provider, provider_event_id, payload, received_at_utc)\nVALUES ($1, 'mock', $2, CAST($3 AS jsonb), clock_timestamp())\nON CONFLICT (provider, provider_event_id) DO NOTHING": 1
+    },
+    "otherContainers": [
+      "lumora-postgres-1"
+    ]
+  },
+  {
+    "runId": "20261021T122259373Z-optimized-2",
+    "variant": "optimized",
+    "profile": "smoke",
+    "result": {
+      "monitoringError": null,
+      "invariantViolations": 0,
+      "passed": true,
+      "finishedUtc": "2026-10-21T12:30:12.2637444Z",
+      "k6Exit": 0
+    },
+    "database": {
+      "connections": {
+        "samples": 6,
+        "min": 5,
+        "median": 44.0,
+        "max": 44,
+        "first": 5,
+        "last": 44
+      },
+      "active": {
+        "samples": 6,
+        "min": 1,
+        "median": 1.0,
+        "max": 26,
+        "first": 1,
+        "last": 1
+      },
+      "lock_waiters": {
+        "samples": 6,
+        "min": 0,
+        "median": 0.0,
+        "max": 25,
+        "first": 0,
+        "last": 0
+      },
+      "oldest_transaction_seconds": {
+        "samples": 6,
+        "min": 0.032167,
+        "median": 0.19276,
+        "max": 10.322068,
+        "first": 0.045709,
+        "last": 0.032167
+      },
+      "pending_outbox": {
+        "samples": 6,
+        "min": 0,
+        "median": 0.5,
+        "max": 16,
+        "first": 0,
+        "last": 0
+      },
+      "oldest_outbox_seconds": {
+        "samples": 6,
+        "min": 0,
+        "median": 1.4039265,
+        "max": 6.745058,
+        "first": 0,
+        "last": 0
+      },
+      "consumer_lag_seconds": {
+        "samples": 6,
+        "min": 0,
+        "median": 0.625523,
+        "max": 4.180727,
+        "first": 0,
+        "last": 4.180727
+      }
+    },
+    "resources": {
+      "k6": {
+        "cpu_percent": {
+          "samples": 4,
+          "min": 2.08,
+          "median": 8.66,
+          "max": 19.78,
+          "first": 2.08,
+          "last": 19.78
+        },
+        "memory_bytes": {
+          "samples": 4,
+          "min": 72278343.68,
+          "median": 73258762.24000001,
+          "max": 73610035.2,
+          "first": 72928460.8,
+          "last": 73589063.68
+        }
+      },
+      "api": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 10.74,
+          "median": 117.3,
+          "max": 202.27,
+          "first": 103.1,
+          "last": 10.74
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 109576192.0,
+          "median": 216216371.2,
+          "max": 274412339.2,
+          "first": 109576192.0,
+          "last": 274412339.2
+        }
+      },
+      "nginx": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.0,
+          "median": 1.56,
+          "max": 3.84,
+          "first": 0.76,
+          "last": 0.0
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 3420454.912,
+          "median": 4980736.0,
+          "max": 6607077.376,
+          "first": 3867148.288,
+          "last": 3420454.912
+        }
+      },
+      "prometheus": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.0,
+          "median": 0.0,
+          "max": 0.01,
+          "first": 0.0,
+          "last": 0.0
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 16074670.08,
+          "median": 17741905.92,
+          "max": 18350080.0,
+          "first": 16074670.08,
+          "last": 18350080.0
+        }
+      },
+      "issuer": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.02,
+          "median": 0.22,
+          "max": 7.19,
+          "first": 1.56,
+          "last": 0.22
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 83928023.04,
+          "median": 84011909.12,
+          "max": 84808826.88,
+          "first": 84808826.88,
+          "last": 84011909.12
+        }
+      },
+      "worker": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.22,
+          "median": 12.51,
+          "max": 31.2,
+          "first": 0.22,
+          "last": 12.51
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 34519121.92,
+          "median": 38902169.6,
+          "max": 47982837.76,
+          "first": 34519121.92,
+          "last": 47982837.76
+        }
+      },
+      "grafana": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.51,
+          "median": 0.7,
+          "max": 2.13,
+          "first": 0.51,
+          "last": 0.72
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 157076684.8,
+          "median": 157391257.6,
+          "max": 157600972.8,
+          "first": 157076684.8,
+          "last": 157391257.6
+        }
+      },
+      "rabbitmq": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 0.36,
+          "median": 70.26,
+          "max": 101.57,
+          "first": 0.36,
+          "last": 5.77
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 92778004.48,
+          "median": 126772838.4,
+          "max": 166723584.0,
+          "first": 92778004.48,
+          "last": 94350868.48
+        }
+      },
+      "postgres": {
+        "cpu_percent": {
+          "samples": 5,
+          "min": 9.67,
+          "median": 35.02,
+          "max": 107.74,
+          "first": 14.25,
+          "last": 9.67
+        },
+        "memory_bytes": {
+          "samples": 5,
+          "min": 115867648.0,
+          "median": 218523238.4,
+          "max": 234985881.6,
+          "first": 115867648.0,
+          "last": 234985881.6
+        }
+      }
+    },
+    "queues": {
+      "tixflow.post-payment.v1": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 3,
+          "first": 0,
+          "last": 3
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 1,
+          "first": 0,
+          "last": 1
+        }
+      },
+      "tixflow.post-payment.v1.dead": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.1": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.2": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.3": {
+        "messages_ready": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 5,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      }
+    },
+    "sample_gap_seconds": {
+      "samples": 5,
+      "min": 5.720380067825317,
+      "median": 6.423137903213501,
+      "max": 8.58188509941101,
+      "first": 6.373307943344116,
+      "last": 5.720380067825317
+    },
+    "blocked_query_samples": {
+      "UPDATE ticket_inventories\nSET held_quantity = held_quantity + $1,\n    version = version + 1,\n    updated_at_utc = $2\nWHERE ticket_type_id = $3\n  AND total_quantity - held_quantity - sold_quantity >= $4": 18,
+      "SELECT t.id, t.category, t.created_at_utc, t.description, t.image_url, t.name, t.organizer_id, t.published_at_utc, t.sale_ends_at_utc, t.sale_starts_at_utc, t.slug, t.status, t.updated_at_utc, t.venue_id, t.version\nFROM (\n    SELECT * FROM events WHERE id = $1 FOR UPDATE\n) AS t\nLIMIT 2": 10,
+      "SELECT * FROM seats WHERE id = ANY($1) ORDER BY id FOR UPDATE\n": 9,
+      "INSERT INTO users\n    (id, identity_subject, email, normalized_email, display_name, password_hash, role, status)\nVALUES\n    ($1, $2, $3, $4, $5, NULL, $6, 'Active')\nON CONFLICT (identity_subject) DO UPDATE\nSET email = EXCLUDED.email,\n    normalized_email = EXCLUDED.normalized_email,\n    display_name = EXCLUDED.display_name,\n    role = EXCLUDED.role,\n    updated_at_utc = now()\nWHERE (users.email, users.normalized_email, users.display_name, users.role)\n    IS DISTINCT FROM\n    (EXCLUDED.email, EXC": 8,
+      "SELECT id FROM events WHERE id = $1 FOR UPDATE": 2,
+      "SELECT s0.id, s0.created_at_utc, s0.expires_at_utc, s0.hold_item_id, s0.order_item_id, s0.seat_id, s0.status, s0.updated_at_utc, t.id, t.id0, t1.id, t1.id0, s.id\nFROM (\n    SELECT e.id, e0.id AS id0\n    FROM event_sessions AS e\n    INNER JOIN events AS e0 ON e.event_id = e0.id\n    WHERE e0.status = 'Published' AND e.status <> 'Cancelled' AND e.status <> 'Completed' AND e.id = $1\n    LIMIT 1\n) AS t\nINNER JOIN (\n    SELECT t0.id, t0.event_session_id, t2.id AS id0\n    FROM ticket_types AS t0\n    LE": 1,
+      "INSERT INTO payment_webhook_events (id, provider, provider_event_id, payload, received_at_utc)\nVALUES ($1, 'mock', $2, CAST($3 AS jsonb), clock_timestamp())\nON CONFLICT (provider, provider_event_id) DO NOTHING": 1
+    },
+    "otherContainers": [
+      "lumora-postgres-1"
+    ]
+  },
+  {
+    "runId": "20261021T122259373Z-optimized-3",
+    "variant": "optimized",
+    "profile": "smoke",
+    "result": {
+      "monitoringError": null,
+      "invariantViolations": 0,
+      "passed": true,
+      "finishedUtc": "2026-10-21T12:35:48.5444589Z",
+      "k6Exit": 0
+    },
+    "database": {
+      "connections": {
+        "samples": 4,
+        "min": 4,
+        "median": 43.5,
+        "max": 44,
+        "first": 4,
+        "last": 44
+      },
+      "active": {
+        "samples": 4,
+        "min": 1,
+        "median": 1.0,
+        "max": 31,
+        "first": 1,
+        "last": 1
+      },
+      "lock_waiters": {
+        "samples": 4,
+        "min": 0,
+        "median": 0.0,
+        "max": 24,
+        "first": 0,
+        "last": 0
+      },
+      "oldest_transaction_seconds": {
+        "samples": 4,
+        "min": 0.012992,
+        "median": 0.013284500000000001,
+        "max": 1.300496,
+        "first": 0.013273,
+        "last": 0.013296
+      },
+      "pending_outbox": {
+        "samples": 4,
+        "min": 0,
+        "median": 4.5,
+        "max": 23,
+        "first": 0,
+        "last": 3
+      },
+      "oldest_outbox_seconds": {
+        "samples": 4,
+        "min": 0,
+        "median": 2.807843,
+        "max": 5.821691,
+        "first": 0,
+        "last": 5.821691
+      },
+      "consumer_lag_seconds": {
+        "samples": 4,
+        "min": 0,
+        "median": 2.7708345,
+        "max": 4.984023,
+        "first": 0,
+        "last": 4.984023
+      }
+    },
+    "resources": {
+      "k6": {
+        "cpu_percent": {
+          "samples": 2,
+          "min": 1.94,
+          "median": 9.315000000000001,
+          "max": 16.69,
+          "first": 1.94,
+          "last": 16.69
+        },
+        "memory_bytes": {
+          "samples": 2,
+          "min": 70925680.64,
+          "median": 72246886.4,
+          "max": 73568092.16,
+          "first": 70925680.64,
+          "last": 73568092.16
+        }
+      },
+      "issuer": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 0.02,
+          "median": 0.2,
+          "max": 0.22,
+          "first": 0.02,
+          "last": 0.2
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 83550535.68,
+          "median": 83865108.48,
+          "max": 83886080.0,
+          "first": 83886080.0,
+          "last": 83865108.48
+        }
+      },
+      "nginx": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 0.0,
+          "median": 0.55,
+          "max": 2.97,
+          "first": 0.55,
+          "last": 0.0
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 3465543.68,
+          "median": 4013948.928,
+          "max": 6172966.912,
+          "first": 4013948.928,
+          "last": 3465543.68
+        }
+      },
+      "grafana": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 0.29,
+          "median": 0.31,
+          "max": 0.79,
+          "first": 0.31,
+          "last": 0.29
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 158439833.6,
+          "median": 158544691.2,
+          "max": 159173836.8,
+          "first": 158544691.2,
+          "last": 158439833.6
+        }
+      },
+      "api": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 2.64,
+          "median": 96.2,
+          "max": 133.6,
+          "first": 96.2,
+          "last": 2.64
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 122263961.6,
+          "median": 215272652.8,
+          "max": 264450867.2,
+          "first": 122263961.6,
+          "last": 264450867.2
+        }
+      },
+      "worker": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 0.44,
+          "median": 0.86,
+          "max": 20.84,
+          "first": 0.86,
+          "last": 20.84
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 30723276.8,
+          "median": 35462840.32,
+          "max": 40149975.04,
+          "first": 30723276.8,
+          "last": 40149975.04
+        }
+      },
+      "prometheus": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 0.0,
+          "median": 0.07,
+          "max": 0.07,
+          "first": 0.0,
+          "last": 0.07
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 16494100.48,
+          "median": 17060331.52,
+          "max": 18004049.92,
+          "first": 16494100.48,
+          "last": 18004049.92
+        }
+      },
+      "rabbitmq": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 0.55,
+          "median": 0.86,
+          "max": 0.89,
+          "first": 0.86,
+          "last": 0.89
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 91750400.0,
+          "median": 93920952.32,
+          "max": 93941923.84,
+          "first": 93941923.84,
+          "last": 93920952.32
+        }
+      },
+      "postgres": {
+        "cpu_percent": {
+          "samples": 3,
+          "min": 4.36,
+          "median": 5.67,
+          "max": 96.83,
+          "first": 5.67,
+          "last": 4.36
+        },
+        "memory_bytes": {
+          "samples": 3,
+          "min": 94843699.2,
+          "median": 223661260.8,
+          "max": 233622732.8,
+          "first": 94843699.2,
+          "last": 233622732.8
+        }
+      }
+    },
+    "queues": {
+      "tixflow.post-payment.v1": {
+        "messages_ready": {
+          "samples": 3,
+          "min": 0,
+          "median": 2,
+          "max": 2,
+          "first": 0,
+          "last": 2
+        },
+        "messages_unacknowledged": {
+          "samples": 3,
+          "min": 0,
+          "median": 1,
+          "max": 1,
+          "first": 0,
+          "last": 1
+        }
+      },
+      "tixflow.post-payment.v1.dead": {
+        "messages_ready": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.1": {
+        "messages_ready": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.2": {
+        "messages_ready": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      },
+      "tixflow.post-payment.v1.retry.3": {
+        "messages_ready": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        },
+        "messages_unacknowledged": {
+          "samples": 3,
+          "min": 0,
+          "median": 0,
+          "max": 0,
+          "first": 0,
+          "last": 0
+        }
+      }
+    },
+    "sample_gap_seconds": {
+      "samples": 3,
+      "min": 4.9499781131744385,
+      "median": 5.083921909332275,
+      "max": 5.98052716255188,
+      "first": 5.98052716255188,
+      "last": 4.9499781131744385
+    },
+    "blocked_query_samples": {
+      "UPDATE ticket_inventories\nSET held_quantity = held_quantity + $1,\n    version = version + 1,\n    updated_at_utc = $2\nWHERE ticket_type_id = $3\n  AND total_quantity - held_quantity - sold_quantity >= $4": 10,
+      "INSERT INTO users\n    (id, identity_subject, email, normalized_email, display_name, password_hash, role, status)\nVALUES\n    ($1, $2, $3, $4, $5, NULL, $6, 'Active')\nON CONFLICT (identity_subject) DO UPDATE\nSET email = EXCLUDED.email,\n    normalized_email = EXCLUDED.normalized_email,\n    display_name = EXCLUDED.display_name,\n    role = EXCLUDED.role,\n    updated_at_utc = now()\nWHERE (users.email, users.normalized_email, users.display_name, users.role)\n    IS DISTINCT FROM\n    (EXCLUDED.email, EXC": 9,
+      "SELECT * FROM seats WHERE id = ANY($1) ORDER BY id FOR UPDATE\n": 4,
+      "SELECT id FROM events WHERE id = $1 FOR UPDATE": 1,
+      "SELECT s.id, s.created_at_utc, s.event_session_id, s.is_accessible, s.is_active, s.row_label, s.seat_number, s.section, s.ticket_type_id, t.id, t.id0, t1.id, t1.id0\nFROM (\n    SELECT e.id, e0.id AS id0\n    FROM event_sessions AS e\n    INNER JOIN events AS e0 ON e.event_id = e0.id\n    WHERE e0.status = 'Published' AND e.status <> 'Cancelled' AND e.status <> 'Completed' AND e.id = $1\n    LIMIT 1\n) AS t\nINNER JOIN (\n    SELECT t0.id, t0.event_session_id, t2.id AS id0\n    FROM ticket_types AS t0\n   ": 1
+    },
+    "otherContainers": [
+      "lumora-postgres-1"
+    ]
+  }
+]

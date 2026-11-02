@@ -1,0 +1,88 @@
+{
+  "checked_utc": "2026-10-25T05:56:35.017222+00:00",
+  "review_checks_passed": true,
+  "release_ready": false,
+  "checks": [
+    {
+      "check": "evidence_hashes",
+      "passed": true,
+      "files": 602
+    },
+    {
+      "check": "regression_trx",
+      "passed": true,
+      "counts": {
+        "total": 106,
+        "executed": 106,
+        "passed": 106,
+        "failed": 0,
+        "notExecuted": 0
+      }
+    },
+    {
+      "check": "campaign_reporting",
+      "passed": true,
+      "profiles": [
+        {
+          "profile": "spike",
+          "complete": true,
+          "passed_runs": 6,
+          "observed_runs": 6
+        },
+        {
+          "profile": "smoke",
+          "complete": true,
+          "passed_runs": 6,
+          "observed_runs": 6
+        },
+        {
+          "profile": "ramp",
+          "complete": true,
+          "passed_runs": 6,
+          "observed_runs": 6
+        },
+        {
+          "profile": "soak",
+          "complete": false,
+          "passed_runs": 0,
+          "observed_runs": 1
+        }
+      ]
+    },
+    {
+      "check": "openapi",
+      "passed": true,
+      "paths": 49
+    },
+    {
+      "check": "document_links",
+      "passed": true,
+      "local_links": 48
+    },
+    {
+      "check": "slide_numeric_provenance",
+      "passed": true,
+      "slides": 11,
+      "native_charts": 2
+    },
+    {
+      "check": "offline_browser_evidence",
+      "passed": true,
+      "recorded_at": "2026-10-25T05:51:18.641Z",
+      "scope": "Evidence walkthrough only; not authenticated TixFlow UI or VPS acceptance."
+    },
+    {
+      "check": "fallback_video_evidence",
+      "passed": true,
+      "scope": "Silent 42-second evidence walkthrough from offline pages. Not authenticated application UI, not VPS acceptance, not the planned 8–12 minute live demo."
+    }
+  ],
+  "open_gates": [
+    "phase10 soak failed; complete comparable campaign and review latency tails",
+    "real-provider AI evaluation and authenticated browser acceptance",
+    "VPS DNS/TLS/backup/restore/redeploy acceptance deferred by user",
+    "clean commit pair and published immutable application image digests",
+    "independent clean-machine reproduction and actual demo recording"
+  ],
+  "scope": "File integrity and consistency; not fresh application tests, browser/VPS acceptance, real AI quality or independent reproduction."
+}

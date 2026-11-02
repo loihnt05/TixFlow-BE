@@ -1,0 +1,28 @@
+groups:
+  - name: tixflow
+    rules:
+      - alert: TargetDown
+        expr: up == 0
+        for: 2m
+        labels: {severity: critical}
+        annotations: {summary: 'Scrape target unavailable for 2 minutes'}
+      - alert: ApiTechnicalErrors
+        expr: sum(rate(http_requests_received_total{job="api",code=~"5.."}[5m])) / clamp_min(sum(rate(http_requests_received_total{job="api"}[5m])), 0.01) > 0.01
+        for: 5m
+        labels: {severity: warning}
+        annotations: {summary: 'API technical errors exceed 1 percent'}
+      - alert: DiskSpaceLow
+        expr: node_filesystem_avail_bytes{fstype!~"tmpfs|overlay|squashfs"} / node_filesystem_size_bytes < 0.15
+        for: 5m
+        labels: {severity: warning}
+        annotations: {summary: 'Host filesystem has less than 15 percent free space'}
+      - alert: MemoryPressure
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < 0.1
+        for: 5m
+        labels: {severity: warning}
+        annotations: {summary: 'Host available memory below 10 percent'}
+      - alert: QueueBacklog
+        expr: sum(rabbitmq_queue_messages_ready) > 100
+        for: 5m
+        labels: {severity: warning}
+        annotations: {summary: 'RabbitMQ backlog persists for 5 minutes'}
