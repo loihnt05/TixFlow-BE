@@ -1,0 +1,968 @@
+{
+  "runs": [
+    {
+      "run_id": "20261019T124834680Z-baseline-1",
+      "variant": "baseline",
+      "profile": "smoke",
+      "measured_seconds": 8.654401063919067,
+      "requests": 731,
+      "invariants": {
+        "oversold": 0,
+        "inventory_mismatch": 0,
+        "duplicate_active_seats": 0,
+        "seat_inventory_mismatch": 0,
+        "duplicate_holds": 0,
+        "duplicate_orders": 0,
+        "duplicate_payments": 0,
+        "duplicate_provider_references": 0,
+        "duplicate_tickets": 0,
+        "missing_paid_tickets": 0,
+        "overdue_holds": 0,
+        "inventory": [
+          {
+            "id": "80000000-0000-0000-0000-000000000004",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000003",
+            "total_quantity": 50,
+            "held_quantity": 50,
+            "sold_quantity": 0,
+            "version": 50,
+            "updated_at_utc": "2026-10-19T19:49:37.562456+07:00",
+            "inventory_mode": "GeneralAdmission"
+          },
+          {
+            "id": "80000000-0000-0000-0000-000000000009",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000007",
+            "total_quantity": 10000,
+            "held_quantity": 10,
+            "sold_quantity": 10,
+            "version": 50,
+            "updated_at_utc": "2026-10-19T19:49:37.767076+07:00",
+            "inventory_mode": "GeneralAdmission"
+          },
+          {
+            "id": "80000000-0000-0000-0000-000000000008",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000005",
+            "total_quantity": 1,
+            "held_quantity": 1,
+            "sold_quantity": 0,
+            "version": 1,
+            "updated_at_utc": "2026-10-19T19:49:31.778879+07:00",
+            "inventory_mode": "ReservedSeating"
+          }
+        ],
+        "paid_orders": 10,
+        "tickets": 10
+      }
+    },
+    {
+      "run_id": "20261019T124834680Z-baseline-2",
+      "variant": "baseline",
+      "profile": "smoke",
+      "measured_seconds": 7.645437002182007,
+      "requests": 731,
+      "invariants": {
+        "oversold": 0,
+        "inventory_mismatch": 0,
+        "duplicate_active_seats": 0,
+        "seat_inventory_mismatch": 0,
+        "duplicate_holds": 0,
+        "duplicate_orders": 0,
+        "duplicate_payments": 0,
+        "duplicate_provider_references": 0,
+        "duplicate_tickets": 0,
+        "missing_paid_tickets": 0,
+        "overdue_holds": 0,
+        "inventory": [
+          {
+            "id": "80000000-0000-0000-0000-000000000004",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000003",
+            "total_quantity": 50,
+            "held_quantity": 50,
+            "sold_quantity": 0,
+            "version": 50,
+            "updated_at_utc": "2026-10-19T19:53:11.218841+07:00",
+            "inventory_mode": "GeneralAdmission"
+          },
+          {
+            "id": "80000000-0000-0000-0000-000000000009",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000007",
+            "total_quantity": 10000,
+            "held_quantity": 10,
+            "sold_quantity": 10,
+            "version": 50,
+            "updated_at_utc": "2026-10-19T19:53:11.24519+07:00",
+            "inventory_mode": "GeneralAdmission"
+          },
+          {
+            "id": "80000000-0000-0000-0000-000000000008",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000005",
+            "total_quantity": 1,
+            "held_quantity": 1,
+            "sold_quantity": 0,
+            "version": 1,
+            "updated_at_utc": "2026-10-19T19:53:05.664337+07:00",
+            "inventory_mode": "ReservedSeating"
+          }
+        ],
+        "paid_orders": 10,
+        "tickets": 10
+      }
+    },
+    {
+      "run_id": "20261019T124834680Z-baseline-3",
+      "variant": "baseline",
+      "profile": "smoke",
+      "measured_seconds": 10.47553014755249,
+      "requests": 731,
+      "invariants": {
+        "oversold": 0,
+        "inventory_mismatch": 0,
+        "duplicate_active_seats": 0,
+        "seat_inventory_mismatch": 0,
+        "duplicate_holds": 0,
+        "duplicate_orders": 0,
+        "duplicate_payments": 0,
+        "duplicate_provider_references": 0,
+        "duplicate_tickets": 0,
+        "missing_paid_tickets": 0,
+        "overdue_holds": 0,
+        "inventory": [
+          {
+            "id": "80000000-0000-0000-0000-000000000004",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000003",
+            "total_quantity": 50,
+            "held_quantity": 50,
+            "sold_quantity": 0,
+            "version": 50,
+            "updated_at_utc": "2026-10-19T19:54:32.579152+07:00",
+            "inventory_mode": "GeneralAdmission"
+          },
+          {
+            "id": "80000000-0000-0000-0000-000000000009",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000007",
+            "total_quantity": 10000,
+            "held_quantity": 10,
+            "sold_quantity": 10,
+            "version": 50,
+            "updated_at_utc": "2026-10-19T19:54:32.829592+07:00",
+            "inventory_mode": "GeneralAdmission"
+          },
+          {
+            "id": "80000000-0000-0000-0000-000000000008",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000005",
+            "total_quantity": 1,
+            "held_quantity": 1,
+            "sold_quantity": 0,
+            "version": 1,
+            "updated_at_utc": "2026-10-19T19:54:24.544939+07:00",
+            "inventory_mode": "ReservedSeating"
+          }
+        ],
+        "paid_orders": 10,
+        "tickets": 10
+      }
+    },
+    {
+      "run_id": "20261019T124834680Z-optimized-1",
+      "variant": "optimized",
+      "profile": "smoke",
+      "measured_seconds": 7.6223978996276855,
+      "requests": 731,
+      "invariants": {
+        "oversold": 0,
+        "inventory_mismatch": 0,
+        "duplicate_active_seats": 0,
+        "seat_inventory_mismatch": 0,
+        "duplicate_holds": 0,
+        "duplicate_orders": 0,
+        "duplicate_payments": 0,
+        "duplicate_provider_references": 0,
+        "duplicate_tickets": 0,
+        "missing_paid_tickets": 0,
+        "overdue_holds": 0,
+        "inventory": [
+          {
+            "id": "80000000-0000-0000-0000-000000000004",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000003",
+            "total_quantity": 50,
+            "held_quantity": 50,
+            "sold_quantity": 0,
+            "version": 50,
+            "updated_at_utc": "2026-10-19T19:50:43.599374+07:00",
+            "inventory_mode": "GeneralAdmission"
+          },
+          {
+            "id": "80000000-0000-0000-0000-000000000009",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000007",
+            "total_quantity": 10000,
+            "held_quantity": 10,
+            "sold_quantity": 10,
+            "version": 50,
+            "updated_at_utc": "2026-10-19T19:50:45.73588+07:00",
+            "inventory_mode": "GeneralAdmission"
+          },
+          {
+            "id": "80000000-0000-0000-0000-000000000008",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000005",
+            "total_quantity": 1,
+            "held_quantity": 1,
+            "sold_quantity": 0,
+            "version": 1,
+            "updated_at_utc": "2026-10-19T19:50:38.909933+07:00",
+            "inventory_mode": "ReservedSeating"
+          }
+        ],
+        "paid_orders": 10,
+        "tickets": 10
+      }
+    },
+    {
+      "run_id": "20261019T124834680Z-optimized-2",
+      "variant": "optimized",
+      "profile": "smoke",
+      "measured_seconds": 7.837710857391357,
+      "requests": 731,
+      "invariants": {
+        "oversold": 0,
+        "inventory_mismatch": 0,
+        "duplicate_active_seats": 0,
+        "seat_inventory_mismatch": 0,
+        "duplicate_holds": 0,
+        "duplicate_orders": 0,
+        "duplicate_payments": 0,
+        "duplicate_provider_references": 0,
+        "duplicate_tickets": 0,
+        "missing_paid_tickets": 0,
+        "overdue_holds": 0,
+        "inventory": [
+          {
+            "id": "80000000-0000-0000-0000-000000000004",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000003",
+            "total_quantity": 50,
+            "held_quantity": 50,
+            "sold_quantity": 0,
+            "version": 50,
+            "updated_at_utc": "2026-10-19T19:51:53.896989+07:00",
+            "inventory_mode": "GeneralAdmission"
+          },
+          {
+            "id": "80000000-0000-0000-0000-000000000009",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000007",
+            "total_quantity": 10000,
+            "held_quantity": 10,
+            "sold_quantity": 10,
+            "version": 50,
+            "updated_at_utc": "2026-10-19T19:51:56.126268+07:00",
+            "inventory_mode": "GeneralAdmission"
+          },
+          {
+            "id": "80000000-0000-0000-0000-000000000008",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000005",
+            "total_quantity": 1,
+            "held_quantity": 1,
+            "sold_quantity": 0,
+            "version": 1,
+            "updated_at_utc": "2026-10-19T19:51:49.398106+07:00",
+            "inventory_mode": "ReservedSeating"
+          }
+        ],
+        "paid_orders": 10,
+        "tickets": 10
+      }
+    },
+    {
+      "run_id": "20261019T124834680Z-optimized-3",
+      "variant": "optimized",
+      "profile": "smoke",
+      "measured_seconds": 20.864949941635132,
+      "requests": 731,
+      "invariants": {
+        "oversold": 0,
+        "inventory_mismatch": 0,
+        "duplicate_active_seats": 0,
+        "seat_inventory_mismatch": 0,
+        "duplicate_holds": 0,
+        "duplicate_orders": 0,
+        "duplicate_payments": 0,
+        "duplicate_provider_references": 0,
+        "duplicate_tickets": 0,
+        "missing_paid_tickets": 0,
+        "overdue_holds": 0,
+        "inventory": [
+          {
+            "id": "80000000-0000-0000-0000-000000000004",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000003",
+            "total_quantity": 50,
+            "held_quantity": 50,
+            "sold_quantity": 0,
+            "version": 50,
+            "updated_at_utc": "2026-10-19T19:56:54.744733+07:00",
+            "inventory_mode": "GeneralAdmission"
+          },
+          {
+            "id": "80000000-0000-0000-0000-000000000009",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000007",
+            "total_quantity": 10000,
+            "held_quantity": 10,
+            "sold_quantity": 10,
+            "version": 50,
+            "updated_at_utc": "2026-10-19T19:56:59.498465+07:00",
+            "inventory_mode": "GeneralAdmission"
+          },
+          {
+            "id": "80000000-0000-0000-0000-000000000008",
+            "ticket_type_id": "80000000-0000-0000-0000-000000000005",
+            "total_quantity": 1,
+            "held_quantity": 1,
+            "sold_quantity": 0,
+            "version": 1,
+            "updated_at_utc": "2026-10-19T19:56:40.51546+07:00",
+            "inventory_mode": "ReservedSeating"
+          }
+        ],
+        "paid_orders": 10,
+        "tickets": 10
+      }
+    }
+  ],
+  "endpoints": [
+    {
+      "variant": "baseline",
+      "endpoint": "availability",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 197.999,
+        "min": 195.568,
+        "max": 295.531,
+        "stdev": 57.02485153276012
+      },
+      "p95_ms": {
+        "median": 958.976,
+        "min": 842.195,
+        "max": 1292.426,
+        "stdev": 233.64312452327798
+      },
+      "p99_ms": {
+        "median": 1228.793,
+        "min": 1156.946,
+        "max": 1597.663,
+        "stdev": 236.4524414471827
+      },
+      "requests_per_second": {
+        "median": 11.555,
+        "min": 9.546,
+        "max": 13.08,
+        "stdev": 1.7725152561637754
+      }
+    },
+    {
+      "variant": "baseline",
+      "endpoint": "browse",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 148.297,
+        "min": 111.687,
+        "max": 200.324,
+        "stdev": 44.541401336284885
+      },
+      "p95_ms": {
+        "median": 1260.193,
+        "min": 1236.214,
+        "max": 1297.955,
+        "stdev": 31.125852507735956
+      },
+      "p99_ms": {
+        "median": 1454.812,
+        "min": 1344.195,
+        "max": 1495.895,
+        "stdev": 78.46105570918608
+      },
+      "requests_per_second": {
+        "median": 11.555,
+        "min": 9.546,
+        "max": 13.08,
+        "stdev": 1.7725152561637754
+      }
+    },
+    {
+      "variant": "baseline",
+      "endpoint": "callback",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 167.619,
+        "min": 155.446,
+        "max": 201.677,
+        "stdev": 23.963286690268507
+      },
+      "p95_ms": {
+        "median": 578.708,
+        "min": 453.895,
+        "max": 1173.873,
+        "stdev": 384.74406702768016
+      },
+      "p99_ms": {
+        "median": 612.345,
+        "min": 463.094,
+        "max": 1175.345,
+        "stdev": 375.6208966502441
+      },
+      "requests_per_second": {
+        "median": 4.622,
+        "min": 3.818,
+        "max": 5.232,
+        "stdev": 0.709214589058441
+      }
+    },
+    {
+      "variant": "baseline",
+      "endpoint": "checkout",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 672.836,
+        "min": 667.665,
+        "max": 692.366,
+        "stdev": 13.027532012370317
+      },
+      "p95_ms": {
+        "median": 870.832,
+        "min": 752.124,
+        "max": 3479.761,
+        "stdev": 1541.6768857358968
+      },
+      "p99_ms": {
+        "median": 2170.111,
+        "min": 1084.398,
+        "max": 3498.664,
+        "stdev": 1209.1668006616515
+      },
+      "requests_per_second": {
+        "median": 2.311,
+        "min": 1.909,
+        "max": 2.616,
+        "stdev": 0.3546072945292205
+      }
+    },
+    {
+      "variant": "baseline",
+      "endpoint": "checkout_replay",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 6.523,
+        "min": 6.495,
+        "max": 7.33,
+        "stdev": 0.4742112749960016
+      },
+      "p95_ms": {
+        "median": 10.834,
+        "min": 9.84,
+        "max": 49.094,
+        "stdev": 22.381883120059403
+      },
+      "p99_ms": {
+        "median": 19.236,
+        "min": 14.453,
+        "max": 54.344,
+        "stdev": 21.782028655139847
+      },
+      "requests_per_second": {
+        "median": 2.311,
+        "min": 1.909,
+        "max": 2.616,
+        "stdev": 0.3546072945292205
+      }
+    },
+    {
+      "variant": "baseline",
+      "endpoint": "detail",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 109.443,
+        "min": 107.392,
+        "max": 200.077,
+        "stdev": 52.92957236114168
+      },
+      "p95_ms": {
+        "median": 299.832,
+        "min": 287.828,
+        "max": 492.497,
+        "stdev": 114.85737373078551
+      },
+      "p99_ms": {
+        "median": 406.928,
+        "min": 312.559,
+        "max": 670.463,
+        "stdev": 185.49549752038004
+      },
+      "requests_per_second": {
+        "median": 11.555,
+        "min": 9.546,
+        "max": 13.08,
+        "stdev": 1.7725152561637754
+      }
+    },
+    {
+      "variant": "baseline",
+      "endpoint": "hold",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 456.55,
+        "min": 451.814,
+        "max": 643.038,
+        "stdev": 109.06177302794963
+      },
+      "p95_ms": {
+        "median": 4437.475,
+        "min": 4427.46,
+        "max": 6185.008,
+        "stdev": 1011.8421203114312
+      },
+      "p99_ms": {
+        "median": 4690.937,
+        "min": 4615.569,
+        "max": 6345.612,
+        "stdev": 977.8103491047399
+      },
+      "requests_per_second": {
+        "median": 25.421,
+        "min": 21.001,
+        "max": 28.775,
+        "stdev": 3.8991621322193466
+      }
+    },
+    {
+      "variant": "baseline",
+      "endpoint": "hold_replay",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 9.198,
+        "min": 9.14,
+        "max": 18.459,
+        "stdev": 5.363662399269116
+      },
+      "p95_ms": {
+        "median": 1407.386,
+        "min": 825.216,
+        "max": 1440.294,
+        "stdev": 346.00717512984227
+      },
+      "p99_ms": {
+        "median": 2674.153,
+        "min": 1986.122,
+        "max": 2808.367,
+        "stdev": 441.1135331525585
+      },
+      "requests_per_second": {
+        "median": 8.204,
+        "min": 6.778,
+        "max": 9.287,
+        "stdev": 1.258401499257425
+      }
+    },
+    {
+      "variant": "baseline",
+      "endpoint": "payment",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 24.908,
+        "min": 17.476,
+        "max": 25.051,
+        "stdev": 4.332737741120888
+      },
+      "p95_ms": {
+        "median": 107.587,
+        "min": 80.609,
+        "max": 133.412,
+        "stdev": 26.403597980830824
+      },
+      "p99_ms": {
+        "median": 137.218,
+        "min": 97.741,
+        "max": 175.307,
+        "stdev": 38.78506973480044
+      },
+      "requests_per_second": {
+        "median": 2.311,
+        "min": 1.909,
+        "max": 2.616,
+        "stdev": 0.3546072945292205
+      }
+    },
+    {
+      "variant": "baseline",
+      "endpoint": "payment_replay",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 8.63,
+        "min": 6.207,
+        "max": 9.925,
+        "stdev": 1.8873031023129279
+      },
+      "p95_ms": {
+        "median": 27.195,
+        "min": 19.653,
+        "max": 31.066,
+        "stdev": 5.804064294383147
+      },
+      "p99_ms": {
+        "median": 33.3,
+        "min": 24.858,
+        "max": 84.694,
+        "stdev": 32.38558706173679
+      },
+      "requests_per_second": {
+        "median": 2.311,
+        "min": 1.909,
+        "max": 2.616,
+        "stdev": 0.3546072945292205
+      }
+    },
+    {
+      "variant": "baseline",
+      "endpoint": "payment_state",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 8.306,
+        "min": 5.843,
+        "max": 11.865,
+        "stdev": 3.027576973973302
+      },
+      "p95_ms": {
+        "median": 23.396,
+        "min": 12.704,
+        "max": 36.871,
+        "stdev": 12.110177386534573
+      },
+      "p99_ms": {
+        "median": 28.529,
+        "min": 12.715,
+        "max": 41.099,
+        "stdev": 14.222862768561514
+      },
+      "requests_per_second": {
+        "median": 2.311,
+        "min": 1.909,
+        "max": 2.616,
+        "stdev": 0.3546072945292205
+      }
+    },
+    {
+      "variant": "optimized",
+      "endpoint": "availability",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 280.571,
+        "min": 207.425,
+        "max": 543.933,
+        "stdev": 176.9875298921744
+      },
+      "p95_ms": {
+        "median": 1080.537,
+        "min": 1010.326,
+        "max": 4118.683,
+        "stdev": 1774.6898292981602
+      },
+      "p99_ms": {
+        "median": 1486.336,
+        "min": 1291.369,
+        "max": 6103.512,
+        "stdev": 2723.7549632359246
+      },
+      "requests_per_second": {
+        "median": 12.759,
+        "min": 4.793,
+        "max": 13.119,
+        "stdev": 4.70653857238346
+      }
+    },
+    {
+      "variant": "optimized",
+      "endpoint": "browse",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 101.985,
+        "min": 101.145,
+        "max": 281.853,
+        "stdev": 104.09017267734741
+      },
+      "p95_ms": {
+        "median": 1776.681,
+        "min": 1291.5,
+        "max": 3464.197,
+        "stdev": 1140.4475076935078
+      },
+      "p99_ms": {
+        "median": 1780.188,
+        "min": 1300.4,
+        "max": 3571.093,
+        "stdev": 1196.7723219990507
+      },
+      "requests_per_second": {
+        "median": 12.759,
+        "min": 4.793,
+        "max": 13.119,
+        "stdev": 4.70653857238346
+      }
+    },
+    {
+      "variant": "optimized",
+      "endpoint": "callback",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 118.694,
+        "min": 113.294,
+        "max": 185.963,
+        "stdev": 40.48675075873587
+      },
+      "p95_ms": {
+        "median": 473.464,
+        "min": 346.155,
+        "max": 1014.425,
+        "stdev": 354.8312222973057
+      },
+      "p99_ms": {
+        "median": 527.837,
+        "min": 454.931,
+        "max": 1099.729,
+        "stdev": 353.11476069025116
+      },
+      "requests_per_second": {
+        "median": 5.104,
+        "min": 1.917,
+        "max": 5.248,
+        "stdev": 1.882961585729601
+      }
+    },
+    {
+      "variant": "optimized",
+      "endpoint": "checkout",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 1424.433,
+        "min": 1344.152,
+        "max": 1805.117,
+        "stdev": 246.2566676058403
+      },
+      "p95_ms": {
+        "median": 3714.845,
+        "min": 3338.447,
+        "max": 9117.234,
+        "stdev": 3233.209487828207
+      },
+      "p99_ms": {
+        "median": 4176.788,
+        "min": 3539.043,
+        "max": 10536.965,
+        "stdev": 3869.31265374179
+      },
+      "requests_per_second": {
+        "median": 2.552,
+        "min": 0.959,
+        "max": 2.624,
+        "stdev": 0.9411923289105155
+      }
+    },
+    {
+      "variant": "optimized",
+      "endpoint": "checkout_replay",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 8.305,
+        "min": 7.377,
+        "max": 10.119,
+        "stdev": 1.3946531229425234
+      },
+      "p95_ms": {
+        "median": 33.524,
+        "min": 18.777,
+        "max": 53.68,
+        "stdev": 17.521214541235434
+      },
+      "p99_ms": {
+        "median": 40.978,
+        "min": 37.857,
+        "max": 87.484,
+        "stdev": 27.795046938858246
+      },
+      "requests_per_second": {
+        "median": 2.552,
+        "min": 0.959,
+        "max": 2.624,
+        "stdev": 0.9411923289105155
+      }
+    },
+    {
+      "variant": "optimized",
+      "endpoint": "detail",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 106.874,
+        "min": 101.345,
+        "max": 273.849,
+        "stdev": 98.03813074683407
+      },
+      "p95_ms": {
+        "median": 495.491,
+        "min": 485.305,
+        "max": 3212.415,
+        "stdev": 1571.5655001978123
+      },
+      "p99_ms": {
+        "median": 682.655,
+        "min": 506.917,
+        "max": 3383.864,
+        "stdev": 1612.6705567233296
+      },
+      "requests_per_second": {
+        "median": 12.759,
+        "min": 4.793,
+        "max": 13.119,
+        "stdev": 4.70653857238346
+      }
+    },
+    {
+      "variant": "optimized",
+      "endpoint": "hold",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 292.881,
+        "min": 264.685,
+        "max": 767.655,
+        "stdev": 282.60224886814564
+      },
+      "p95_ms": {
+        "median": 3092.892,
+        "min": 2806.886,
+        "max": 10537.82,
+        "stdev": 4383.227366328301
+      },
+      "p99_ms": {
+        "median": 4270.743,
+        "min": 3977.564,
+        "max": 14193.346,
+        "stdev": 5815.298875855737
+      },
+      "requests_per_second": {
+        "median": 28.069,
+        "min": 10.544,
+        "max": 28.862,
+        "stdev": 10.354577071678655
+      }
+    },
+    {
+      "variant": "optimized",
+      "endpoint": "hold_replay",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 50.788,
+        "min": 32.289,
+        "max": 63.883,
+        "stdev": 15.873840440590719
+      },
+      "p95_ms": {
+        "median": 1746.726,
+        "min": 1067.343,
+        "max": 2744.762,
+        "stdev": 843.7388635853711
+      },
+      "p99_ms": {
+        "median": 2205.869,
+        "min": 1161.455,
+        "max": 6747.154,
+        "stdev": 2969.6830182479634
+      },
+      "requests_per_second": {
+        "median": 9.059,
+        "min": 3.403,
+        "max": 9.315,
+        "stdev": 3.341846196341178
+      }
+    },
+    {
+      "variant": "optimized",
+      "endpoint": "payment",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 36.302,
+        "min": 28.694,
+        "max": 66.054,
+        "stdev": 19.743491619602988
+      },
+      "p95_ms": {
+        "median": 98.445,
+        "min": 72.645,
+        "max": 161.346,
+        "stdev": 45.625364294436054
+      },
+      "p99_ms": {
+        "median": 102.932,
+        "min": 96.386,
+        "max": 194.594,
+        "stdev": 54.90838373144851
+      },
+      "requests_per_second": {
+        "median": 2.552,
+        "min": 0.959,
+        "max": 2.624,
+        "stdev": 0.9411923289105155
+      }
+    },
+    {
+      "variant": "optimized",
+      "endpoint": "payment_replay",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 8.558,
+        "min": 8.014,
+        "max": 14.527,
+        "stdev": 3.6134947534669717
+      },
+      "p95_ms": {
+        "median": 35.646,
+        "min": 18.986,
+        "max": 66.926,
+        "stdev": 24.338712647412834
+      },
+      "p99_ms": {
+        "median": 40.351,
+        "min": 38.681,
+        "max": 87.19,
+        "stdev": 27.537259310493
+      },
+      "requests_per_second": {
+        "median": 2.552,
+        "min": 0.959,
+        "max": 2.624,
+        "stdev": 0.9411923289105155
+      }
+    },
+    {
+      "variant": "optimized",
+      "endpoint": "payment_state",
+      "repetitions": 3,
+      "p50_ms": {
+        "median": 8.42,
+        "min": 7.536,
+        "max": 16.239,
+        "stdev": 4.789927382887275
+      },
+      "p95_ms": {
+        "median": 35.346,
+        "min": 15.693,
+        "max": 130.564,
+        "stdev": 61.43838997185174
+      },
+      "p99_ms": {
+        "median": 38.25,
+        "min": 15.93,
+        "max": 248.387,
+        "stdev": 128.25235411614608
+      },
+      "requests_per_second": {
+        "median": 2.552,
+        "min": 0.959,
+        "max": 2.624,
+        "stdev": 0.9411923289105155
+      }
+    }
+  ]
+}

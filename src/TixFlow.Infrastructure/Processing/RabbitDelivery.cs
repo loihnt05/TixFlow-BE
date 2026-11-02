@@ -24,6 +24,12 @@ public sealed class RabbitDelivery : IDisposable
             Password = configuration["RabbitMq:Password"] ?? throw new InvalidOperationException("RabbitMQ password is required."),
             AutomaticRecoveryEnabled = false,
             RequestedConnectionTimeout = TimeSpan.FromSeconds(5),
+            // The reader starts before AMQP negotiation. Bound its initial socket read too:
+            // in client 6.x the handshake setting alone can leave that first read at the heartbeat timeout.
+            RequestedHeartbeat = TimeSpan.FromSeconds(10),
+            SocketReadTimeout = TimeSpan.FromSeconds(5),
+            SocketWriteTimeout = TimeSpan.FromSeconds(5),
+            HandshakeContinuationTimeout = TimeSpan.FromSeconds(5),
             ContinuationTimeout = TimeSpan.FromSeconds(5)
         };
         connection = factory.CreateConnection("tixflow-phase7");
@@ -54,6 +60,9 @@ public sealed class RabbitDelivery : IDisposable
         properties.Type = message.Type;
         ConfirmedPublish(Queue, properties, JsonSerializer.SerializeToUtf8Bytes(message));
     }
+
+    public Dictionary<string, uint> QueueDepths() => new[] { Queue, DeadQueue, Queue + ".retry.1", Queue + ".retry.2", Queue + ".retry.3" }
+        .ToDictionary(name => name, name => channel.QueueDeclarePassive(name).MessageCount);
 
     public async Task<bool> ConsumeOneAsync(TicketDelivery handler, CancellationToken ct = default)
     {

@@ -1,0 +1,3 @@
+{"utc" : "2026-10-19T12:49:27.149724+00:00", "connections" : 4, "active" : 1, "lock_waiters" : 0, "oldest_transaction_seconds" : 0.020194, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T12:49:32.85502+00:00", "connections" : 43, "active" : 39, "lock_waiters" : 29, "oldest_transaction_seconds" : 2.305614, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T12:49:38.264027+00:00", "connections" : 43, "active" : 21, "lock_waiters" : 20, "oldest_transaction_seconds" : 0.385428, "pending_outbox" : 13, "oldest_outbox_seconds" : 2.866017}

@@ -1,0 +1,462 @@
+{
+  "baseline": "baseline-v1",
+  "revision": "c07a603e8e925f0471c6a765bd14aeb3d1ab1321",
+  "dirty": false,
+  "mode": "All",
+  "utc": "20261018T060921468Z",
+  "docker": {
+    "memoryBytes": 7984533504,
+    "os": "Docker Desktop",
+    "cpus": 12,
+    "version": "29.8.0"
+  },
+  "runner": {
+    "redis": "absent",
+    "retryCount": 5,
+    "transport": "TestServer",
+    "poolMax": 40,
+    "apiInstances": 1,
+    "cpus": 2,
+    "memoryBytes": 2147483648
+  },
+  "dependencies": {
+    "rabbitmq": {
+      "cpus": 1,
+      "memoryBytes": 536870912
+    },
+    "postgres": {
+      "cpus": 1,
+      "memoryBytes": 536870912
+    }
+  },
+  "inputs": [
+    {
+      "path": ".dockerignore",
+      "sha256": "7d61742a675d1d37eaab577690ecb5bb1d1f2762f3ccb283f5730b717b500b46"
+    },
+    {
+      "path": "database/baseline/reset.sql",
+      "sha256": "45f486af1391da32d0dfbeced1c3992b7de590ffa61734b79e2b73f5b4b1748e"
+    },
+    {
+      "path": "database/baseline/seed.sql",
+      "sha256": "09110e30a4d6998a188bf232dce5719d84784d5e08ac1e0300e5a06f6a8b55b5"
+    },
+    {
+      "path": "database/init/001_initial_schema.sql",
+      "sha256": "202f1fcc632e137654a144157ae3666b606ebcd2f675f37ba2571ede07a80f5d"
+    },
+    {
+      "path": "database/migrations/002_keycloak_identity.sql",
+      "sha256": "302657734187a8d506aa225becfd4cbefd9b3142be2f017bb69cdbcd94276a44"
+    },
+    {
+      "path": "database/migrations/003_catalog_management.sql",
+      "sha256": "1095281035e395e2ae4821528a6808c87acc28e8ed29ecc3a0f239a827bf55a3"
+    },
+    {
+      "path": "database/migrations/004_phase3_catalog_seed.sql",
+      "sha256": "765f02d4167dac13c38fad765f2f90f7e409473930b9ccac894875ffdc4965dd"
+    },
+    {
+      "path": "database/migrations/005_phase4_inventory.sql",
+      "sha256": "75902e319f2b81228bd87ffb8f0bdaba3c0aae457e81f18b96a1b1fdf8055550"
+    },
+    {
+      "path": "database/migrations/006_phase4_inventory_seed.sql",
+      "sha256": "4f522e3263b3a1a286fbd507b95607d3a51a4754cad438c7a25613dd2e8c7f0d"
+    },
+    {
+      "path": "database/migrations/007_phase5_hold_concurrency.sql",
+      "sha256": "7e90da05b67d8aec0d09f03fcfe9984c0ea9e3de5986e016dac3394158890fab"
+    },
+    {
+      "path": "database/migrations/008_phase6_checkout_payments.sql",
+      "sha256": "9f90dc7db8cf579e481a371b099b08bf44d4c18e9f33bb25197cbc9293aa097b"
+    },
+    {
+      "path": "database/migrations/009_phase7_worker_tickets.sql",
+      "sha256": "9cc8f92e0d4e614f028a8e848d5f5a16bd7a2f12e4f5ba44724f5a37cf9875a9"
+    },
+    {
+      "path": "database/phase0-smoke.sql",
+      "sha256": "348bebd0cb91ce8a7b14554a6bb7e734d56ed6d8ae77c04194162ff134edf122"
+    },
+    {
+      "path": "database/verify.sql",
+      "sha256": "fc2f0336f0db04858d9bc3ebed450188994d86e6fd83f1e7e02577908ebd8508"
+    },
+    {
+      "path": "Directory.Build.props",
+      "sha256": "a943503add888b89763f54dc5c92a92901ea0f5d642ad4192edf5ba3a84f682b"
+    },
+    {
+      "path": "docker-compose.baseline.yml",
+      "sha256": "92031eba88d7e5049103bbb5f3bff8a819c5f1e26901a696188a66814eff4c43"
+    },
+    {
+      "path": "global.json",
+      "sha256": "722f3524bebc0247ffc70a72291e6ee5c071b07f71e77e73c43bf04399c10a67"
+    },
+    {
+      "path": "infrastructure/baseline/Dockerfile",
+      "sha256": "2cf172f4329b345a579c37861f1d021fd77bd8a2a3b40e0c22187d0e61b54618"
+    },
+    {
+      "path": "scripts/Invoke-Phase0Smoke.ps1",
+      "sha256": "9951cca422457da8c695f6a82efb5b8474afb0292db85eb30815a202b5173bf1"
+    },
+    {
+      "path": "scripts/Invoke-Phase8Baseline.ps1",
+      "sha256": "ddcb7b37f867a564a7a426d4d0b22736ee2a14c9d9657d545eb4aeecd30ac5ea"
+    },
+    {
+      "path": "scripts/Invoke-Phase8Dataset.ps1",
+      "sha256": "f83afe8d802e205b62af121547b63723dc9797cf06bf04ee8de529a471dc0de4"
+    },
+    {
+      "path": "src/TixFlow.Api/appsettings.json",
+      "sha256": "e85886922d23940f3acca519141ab5cd75b4889129a0e2f300795e1a87963db8"
+    },
+    {
+      "path": "src/TixFlow.Api/Authentication/AuthenticationExtensions.cs",
+      "sha256": "7f74d284fa64d290230f103e3afa701d4e6da7298f0044adf7546df2839c8abc"
+    },
+    {
+      "path": "src/TixFlow.Api/Authentication/AuthorizationOperationFilter.cs",
+      "sha256": "22008a85a85ad3463cfe14018c1aad39f8e665535382a1dde0ab6607d470e0a4"
+    },
+    {
+      "path": "src/TixFlow.Api/Authentication/LocalUserMiddleware.cs",
+      "sha256": "32c5aaf6e6fb00620de4a7200435dd5c5ada3235897d42a7d7ab3dee706582a9"
+    },
+    {
+      "path": "src/TixFlow.Api/Authentication/TokenClaims.cs",
+      "sha256": "fc084665ff2cbf2c5d336a5f926ef5cb0aea6b8cc2ca4928d6e6804546eb9db7"
+    },
+    {
+      "path": "src/TixFlow.Api/Dockerfile",
+      "sha256": "e54ab73526e847c95f826745cec8a777c32a66f0dcad2c79aaa9a1914a917f54"
+    },
+    {
+      "path": "src/TixFlow.Api/Modules/Assistant/AssistantModule.cs",
+      "sha256": "c52b2d0bb9883c19da6d8c0b3e5d2be6975a9b7ead5a5c27ab6f4c695731064f"
+    },
+    {
+      "path": "src/TixFlow.Api/Modules/Booking/BookingModule.cs",
+      "sha256": "4393df2d603e84ed5481ce2cb07b603f18f5f54582136c676f0981c609bc88bb"
+    },
+    {
+      "path": "src/TixFlow.Api/Modules/Booking/BookingOptions.cs",
+      "sha256": "448a3121ef261f127a0e2a3a1e0d57bf11129f9d19ff238527c092b84cb92c4a"
+    },
+    {
+      "path": "src/TixFlow.Api/Modules/Events/CatalogManagementModule.cs",
+      "sha256": "59e7405cab6b9fdaa0661348ddc438156e83344fe082ed2f4ea33eab162ea2a9"
+    },
+    {
+      "path": "src/TixFlow.Api/Modules/Events/EventsModule.cs",
+      "sha256": "d946d8c33197198bf0163da49a32e47367c0de8ec5d8bf6cabc7130ad4a7441b"
+    },
+    {
+      "path": "src/TixFlow.Api/Modules/Events/InventoryModule.cs",
+      "sha256": "a88f733aafe8af4252e3d3a72db467f4622643e2abce0fcba68f308781d18268"
+    },
+    {
+      "path": "src/TixFlow.Api/Modules/Orders/OrdersModule.cs",
+      "sha256": "7867e2ae378522397aaeb0d24f0cdeb79f381cbba10c1548fc36b015dd9cdd10"
+    },
+    {
+      "path": "src/TixFlow.Api/Modules/Tickets/TicketsModule.cs",
+      "sha256": "41c2e642adbe976fce1762617e61a4ef178d551ba0152a892c3b1693a0d5ac43"
+    },
+    {
+      "path": "src/TixFlow.Api/Modules/Users/UsersModule.cs",
+      "sha256": "af3325e82277ddaf86193cb16218c1dd551db390876e401f01e1b3e732cf021a"
+    },
+    {
+      "path": "src/TixFlow.Api/packages.lock.json",
+      "sha256": "c88faab6e61813932a7c14c6a4b4c77d1e8405a65fec567bfdfb389601384763"
+    },
+    {
+      "path": "src/TixFlow.Api/Program.cs",
+      "sha256": "6764693d1f26c3034926f0b424aabdf5c046ee1ef2f4ddb4381db96d7de89f54"
+    },
+    {
+      "path": "src/TixFlow.Api/Properties/launchSettings.json",
+      "sha256": "8e82dda2240845639faafcf30c7affda8150d6a41b9ed2ee4f4a3395e2579995"
+    },
+    {
+      "path": "src/TixFlow.Api/TixFlow.Api.csproj",
+      "sha256": "d6e610227b50c101f0a748fe920b27c45b09faaeebddfa5128bbe6627072bcc2"
+    },
+    {
+      "path": "src/TixFlow.Application/DependencyInjection.cs",
+      "sha256": "cdd87d5a0cde432c947d4997f990add7a945737a8c156f5bdf72c42415fb2a55"
+    },
+    {
+      "path": "src/TixFlow.Application/Identity/IdentityProfile.cs",
+      "sha256": "9f6ce5f714dccd2170374872ec3af7e3aa3f108e67e93946b822d39d1a889b94"
+    },
+    {
+      "path": "src/TixFlow.Application/packages.lock.json",
+      "sha256": "8a4cfabdeef6fdeb0c730464ceaf172f8126e7d89cbe4ee74fb3d19d4ab3be1f"
+    },
+    {
+      "path": "src/TixFlow.Application/TixFlow.Application.csproj",
+      "sha256": "e21c6ae3960593fae330c2d4a93f1796562c828a19e1c6be0f214674008891a4"
+    },
+    {
+      "path": "src/TixFlow.Domain/Booking/BookingStatus.cs",
+      "sha256": "1bcac87da811f7bd65e339416995afd58f553b6297fecec2f83b067795980351"
+    },
+    {
+      "path": "src/TixFlow.Domain/Booking/Hold.cs",
+      "sha256": "457c1a4a66714c608c3d93cf83f4acb8b86e52302326728881c46a5b7b551ab7"
+    },
+    {
+      "path": "src/TixFlow.Domain/Booking/HoldItem.cs",
+      "sha256": "9273ea399d9bdc0b140a5ab322231f1fb0640e0cec8450c67ffced86387145e9"
+    },
+    {
+      "path": "src/TixFlow.Domain/Booking/IdempotencyRecord.cs",
+      "sha256": "134746486c6573c4ed0da3d2f64ce7862ce24060053ce159dafe9c9f052f42ee"
+    },
+    {
+      "path": "src/TixFlow.Domain/Booking/SeatAllocation.cs",
+      "sha256": "420d8c6e9810a70fc655da5b4df2a24c04c0ed6f5fac949d841b1013c22460df"
+    },
+    {
+      "path": "src/TixFlow.Domain/Booking/TicketInventory.cs",
+      "sha256": "f124bf0f047325dd89f6db2fcd1a1effa4042282abe5a7f070c89e72b07a2d30"
+    },
+    {
+      "path": "src/TixFlow.Domain/Common/AuditLog.cs",
+      "sha256": "9e66d68740eb8abdc8a1fcdb8aedf920737c53688279bd128b4247d857318957"
+    },
+    {
+      "path": "src/TixFlow.Domain/Common/Entity.cs",
+      "sha256": "80af49e51d68eac4fa1edc2868802facf21d4c5fa496323d3017456603d58d8a"
+    },
+    {
+      "path": "src/TixFlow.Domain/Events/Event.cs",
+      "sha256": "4f5ce3c6d5688b9d66892e232d0230f360996a316c031c1f1183e8533fe57fab"
+    },
+    {
+      "path": "src/TixFlow.Domain/Events/EventSession.cs",
+      "sha256": "1e4e6455991e2c8c07a49c593b866e3186e6a1b69c26b76eb02fd9dc541954ef"
+    },
+    {
+      "path": "src/TixFlow.Domain/Events/EventStatus.cs",
+      "sha256": "8a40f14ca437abf0f9dcd7d6d8dfe5ea5ca16c53489c3e12e97e892b26dca90a"
+    },
+    {
+      "path": "src/TixFlow.Domain/Events/Seat.cs",
+      "sha256": "39503b84c35c1938aa8ba7d6b14907644da190992ee64a7e0c53bfefb67ff523"
+    },
+    {
+      "path": "src/TixFlow.Domain/Events/TicketType.cs",
+      "sha256": "dfffef6de903d9e5a482dc88b3d7bcf4d0a26f4f0ed6ce779c2cbcca85901113"
+    },
+    {
+      "path": "src/TixFlow.Domain/Events/Venue.cs",
+      "sha256": "9d018dca6d1621f2789355d0194b04d67a56b8e5c3739e5e0d8c4a9949ff4504"
+    },
+    {
+      "path": "src/TixFlow.Domain/Identity/RefreshToken.cs",
+      "sha256": "20757f879bdd7e95ad4c0b1a89420309695d7e29a03155425950b51e284cbc6b"
+    },
+    {
+      "path": "src/TixFlow.Domain/Identity/User.cs",
+      "sha256": "657738fe8007befd13af0ecb1789526a1145acf27df361a7bda539fe2a6f8da7"
+    },
+    {
+      "path": "src/TixFlow.Domain/Messaging/OutboxMessage.cs",
+      "sha256": "b92b6b30fca452e62a3267cb8d552d593c8ee61cefdd372060ca602030a196bf"
+    },
+    {
+      "path": "src/TixFlow.Domain/Orders/Order.cs",
+      "sha256": "1fcdf4b458ee5890461562035c011b3c886ee960a1d7a49de9df751242fb4d47"
+    },
+    {
+      "path": "src/TixFlow.Domain/Orders/OrderItem.cs",
+      "sha256": "81ade4bbe80978a1a11b9005096467b3ea87a080a583bbf5fdc214d0244d43be"
+    },
+    {
+      "path": "src/TixFlow.Domain/Orders/OrderStatus.cs",
+      "sha256": "d2d5b484816ac8b9303422540669f7b488794f1e1c1946385fbe94d4fed933cc"
+    },
+    {
+      "path": "src/TixFlow.Domain/Orders/Payment.cs",
+      "sha256": "119b9d7b27fed3994011fcb327e52790a76f95e450aaeeda97a5df4ee58de5a7"
+    },
+    {
+      "path": "src/TixFlow.Domain/Orders/PaymentWebhookEvent.cs",
+      "sha256": "1cdf8cb798701149c32ae583e3f5af7a048cf815ef4ac0e0a8cc92a506341670"
+    },
+    {
+      "path": "src/TixFlow.Domain/Orders/Ticket.cs",
+      "sha256": "31c38930a0f433525c5fadf6d129c9b1ba95be6e4a4aa705f9dd2a2b3f183efd"
+    },
+    {
+      "path": "src/TixFlow.Domain/Organizers/Organizer.cs",
+      "sha256": "613b9697030f6d17a1c1d79036e854c86d6938af441885a76ef312e76c67c62f"
+    },
+    {
+      "path": "src/TixFlow.Domain/packages.lock.json",
+      "sha256": "3cc7952787be7d43489891ec4a98f0d089ab0cedb68a61da0244c43df6a02398"
+    },
+    {
+      "path": "src/TixFlow.Domain/TixFlow.Domain.csproj",
+      "sha256": "c2e0e45d843b759bc20a3ef9874328e21a786b31183d6ea405058dabefdfb17c"
+    },
+    {
+      "path": "src/TixFlow.Infrastructure/DependencyInjection.cs",
+      "sha256": "ce61532dd171216c56fad084005b6110c77e8980dc1aedbe307726eb91a9afd9"
+    },
+    {
+      "path": "src/TixFlow.Infrastructure/Health/PostgresHealthCheck.cs",
+      "sha256": "e816add1ca5680d2f59eeae699d9db71f4aad835ab8f9a361bf1d391ba2dc36b"
+    },
+    {
+      "path": "src/TixFlow.Infrastructure/Identity/LocalUserSynchronizer.cs",
+      "sha256": "5d1f614c785e7d1a0644d9c0640d21223f1ed237378a376cdea329249a923038"
+    },
+    {
+      "path": "src/TixFlow.Infrastructure/packages.lock.json",
+      "sha256": "0a341232664294cae314ba47317d77e60425e2b89b7de4c86206a4d1fb899239"
+    },
+    {
+      "path": "src/TixFlow.Infrastructure/Persistence/TixFlowDbContext.cs",
+      "sha256": "07e699f7f6d73c4007d371316064708b0dd3a8d20bebb27f936c265f909b4048"
+    },
+    {
+      "path": "src/TixFlow.Infrastructure/Processing/HoldExpiry.cs",
+      "sha256": "0399b523670689fc17397f859d14a00a845c47e8973874c7779f324a69777ccf"
+    },
+    {
+      "path": "src/TixFlow.Infrastructure/Processing/OutboxStore.cs",
+      "sha256": "a5587e8503f66f1c85ac8a87d7bff709438d1184cd0cb29070045390e6b928df"
+    },
+    {
+      "path": "src/TixFlow.Infrastructure/Processing/QrTokens.cs",
+      "sha256": "dcb6b68735b48182900672e2dc36a289a1bf58d645f809fcc9b75043354a0989"
+    },
+    {
+      "path": "src/TixFlow.Infrastructure/Processing/RabbitDelivery.cs",
+      "sha256": "bcf45eeba34606512db389c6b5b0bcaa9ee4fc5ee78b4c5901808005c8e690dc"
+    },
+    {
+      "path": "src/TixFlow.Infrastructure/Processing/TicketDelivery.cs",
+      "sha256": "00a08c99e9e5d1bd7887030c1b278157560ba10b7da35ccd79f646bfa1c714bb"
+    },
+    {
+      "path": "src/TixFlow.Infrastructure/TixFlow.Infrastructure.csproj",
+      "sha256": "5455501f49859f291bca8fdc1ec278cdd02ade79d12038677beb82b59da63537"
+    },
+    {
+      "path": "src/TixFlow.Worker/appsettings.json",
+      "sha256": "4993447c1f8d1f7c18a56fbe95dd7fe57a0df5cad38deb928ad8c5a7f2c0fc38"
+    },
+    {
+      "path": "src/TixFlow.Worker/Dockerfile",
+      "sha256": "9dedf92dc17429dcd1912e1cb3138ee8100aebb8a2502cca40797c5ae470422d"
+    },
+    {
+      "path": "src/TixFlow.Worker/packages.lock.json",
+      "sha256": "e4e67e558b21b2edf0ff01f4289aa8303ed7cbb76eb2c2cf955290301c3f9f1d"
+    },
+    {
+      "path": "src/TixFlow.Worker/Program.cs",
+      "sha256": "2f24608b5cc8646cddf4676005b3c6a43c8f2cd2f8692bb3d0d880005f318943"
+    },
+    {
+      "path": "src/TixFlow.Worker/TixFlow.Worker.csproj",
+      "sha256": "312360acffbaa86c438889cc3681894dba38548cdf99d2c7c0ca04729704d4e7"
+    },
+    {
+      "path": "src/TixFlow.Worker/Worker.cs",
+      "sha256": "4ac08d298956bd994ab3d2b38ca8765697c1cf527b6f4a7e93629eb540b60572"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/AuthApiFactory.cs",
+      "sha256": "6f36a460415c5ae95a88dde2a2967f1ff80687752f5d1aaf868fa195a6f896a8"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/AuthenticationTests.cs",
+      "sha256": "cb459a32287a924bb3881ceb22d4bcf1a81c17e4a603f15c0e57428094b8f603"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/BaselineConcurrencyTests.cs",
+      "sha256": "2517bf8ce5e2c41422e5433fff0652d7454072505b0a2a9d66992a89d4b08518"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/BaselineDataset.cs",
+      "sha256": "b90ecb4ce4844835e0a850608c86094bfb88a545949251f68cb55b85faf7d943"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/CatalogManagementTests.cs",
+      "sha256": "2a96f16e4c371d809e138f6bb64f8e08b5e023d732ebefff9da500bf69d7c04b"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/CheckoutPaymentTests.cs",
+      "sha256": "73bac694d897643ec643717c00749fe7fe83eea11bc07cf34d5a6ed3a2290c21"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/ConfigurationTests.cs",
+      "sha256": "1bbb196726057f8fdaddf1bece1e90934e82b4c95924fdb9881e085a67d28677"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/DomainRulesTests.cs",
+      "sha256": "caeef594bc6ab0d5e85c221b836dd4df5c4bd99e734f62d6a0d5f814e8239a31"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/HoldConcurrencyTests.cs",
+      "sha256": "9938d4049a375451b4141b8524bcd0af443910a40fd57e2fb14c87654cc1d137"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/InventoryManagementTests.cs",
+      "sha256": "ea2bab99e96712e88303efcd8026c5c90e5b2a60e973e555d1d34b71451597bd"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/packages.lock.json",
+      "sha256": "f2ceac84ccad94de734d018d08862de1bf3138ebeb2c8a1e3d34e7a08a134dd6"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/Phase7Tests.cs",
+      "sha256": "763290a99a3511208e8c51fb6bc11b713a0eeae627b37919a787199e15895f13"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/Phase8FaultTests.cs",
+      "sha256": "12162081b2c73774bd6082ded08c35f6f3534119ecaaa61966daa2e4b6a21362"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/TestAssembly.cs",
+      "sha256": "3f7edd72eac91614fcf49f709dd4e560c74ebef8da68a53a02947e5611cd1869"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/TestInfrastructure.cs",
+      "sha256": "e52b6668af0fbcf50cdf4fca7ddc2c0534c27c881e3f0b4cfd8510c08787246c"
+    },
+    {
+      "path": "tests/TixFlow.Api.Tests/TixFlow.Api.Tests.csproj",
+      "sha256": "061b1af3754a2334ba45d2c5afe246f8783df1bb2c418b64a7f2e700854abe4c"
+    },
+    {
+      "path": "tests/TixFlow.FaultProbe/packages.lock.json",
+      "sha256": "9fcbe64ab3f82b948b18adea0079cd366023ccbd6f245fade854e151e49aa45f"
+    },
+    {
+      "path": "tests/TixFlow.FaultProbe/Program.cs",
+      "sha256": "6828d8a23149fa913b1639967377ba928399346da119845f5598512249c8299c"
+    },
+    {
+      "path": "tests/TixFlow.FaultProbe/TixFlow.FaultProbe.csproj",
+      "sha256": "4a531255fe6c16f360dc87ae0498abc79fbafacb40f701dc78ec60c96250704f"
+    },
+    {
+      "path": "TixFlow.sln",
+      "sha256": "6564899063114b54002db6d76bf4c9754dae0171c9a45cd814359d8272fc5364"
+    }
+  ]
+}

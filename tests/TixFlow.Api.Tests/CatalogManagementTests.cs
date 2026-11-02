@@ -6,7 +6,8 @@ using Npgsql;
 
 namespace TixFlow.Api.Tests;
 
-public sealed class CatalogManagementTests(AuthApiFactory factory) : IClassFixture<AuthApiFactory>
+[Collection("Integration")]
+public sealed class CatalogManagementTests(AuthApiFactory factory)
 {
     [Fact]
     public async Task PublicCatalogIsPagedFilteredStableAndHidesNonPublishedEvents()

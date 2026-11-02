@@ -1,0 +1,620 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="e9966822-588d-408c-9f4d-02bf728ecc7d" name="@c2306aed20e8 2026-10-18 13:42:55" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-18T13:42:55.9281254+00:00" queuing="2026-10-18T13:42:55.9281255+00:00" start="2026-10-18T13:42:54.1285138+00:00" finish="2026-10-18T13:45:11.1054937+00:00" />
+  <TestSettings name="default" id="b40c81d6-bd60-4466-bd5c-a60cc80004c1">
+    <Deployment runDeploymentRoot="_c2306aed20e8_2026-10-18_13_42_55" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="62eb8e8e-4c48-4e4d-b922-d5252461a4e7" testId="e3c3c2a5-baa4-bd66-83af-08e132c48926" testName="TixFlow.Api.Tests.Phase7Tests.BrokerConsumerTransientFailureUsesDelayedRetry" computerName="c2306aed20e8" duration="00:00:01.0865667" startTime="2026-10-18T13:45:00.2054338+00:00" endTime="2026-10-18T13:45:01.2926111+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="62eb8e8e-4c48-4e4d-b922-d5252461a4e7" />
+    <UnitTestResult executionId="2f8204ed-54f4-4884-b95b-81244a8352f0" testId="b679b5d4-e7f6-bd50-d73b-55ab0a7c4702" testName="TixFlow.Api.Tests.CatalogManagementTests.PublicCatalogIsPagedFilteredStableAndHidesNonPublishedEvents" computerName="c2306aed20e8" duration="00:00:00.2873491" startTime="2026-10-18T13:45:08.6338994+00:00" endTime="2026-10-18T13:45:08.9214341+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2f8204ed-54f4-4884-b95b-81244a8352f0" />
+    <UnitTestResult executionId="03bac397-55f3-4ca3-9f9f-194bbe5a088c" testId="3f7769c7-9908-71b2-bcf6-ce72bd34ce2c" testName="TixFlow.Api.Tests.AuthenticationTests.PoliciesRequireTheExactRole(role: &quot;Customer&quot;, path: &quot;customer&quot;)" computerName="c2306aed20e8" duration="00:00:00.0120298" startTime="2026-10-18T13:45:09.2198579+00:00" endTime="2026-10-18T13:45:09.2322322+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="03bac397-55f3-4ca3-9f9f-194bbe5a088c" />
+    <UnitTestResult executionId="6f7875db-9296-443c-8237-d1a5b8305689" testId="0833def1-c5a8-4d91-f3ce-09675c412126" testName="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;expired&quot;)" computerName="c2306aed20e8" duration="00:00:00.0041135" startTime="2026-10-18T13:45:09.1495881+00:00" endTime="2026-10-18T13:45:09.1541925+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6f7875db-9296-443c-8237-d1a5b8305689" />
+    <UnitTestResult executionId="6f6d356a-9a63-410f-813a-3fb52d878c3a" testId="b505eb29-a2a0-f76c-c8ed-f520db70fff9" testName="TixFlow.Api.Tests.CheckoutPaymentTests.CheckoutCreatesOneOrderAndMockSuccessSettlesInventoryOnce" computerName="c2306aed20e8" duration="00:00:00.7546887" startTime="2026-10-18T13:45:07.3985290+00:00" endTime="2026-10-18T13:45:08.1542443+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6f6d356a-9a63-410f-813a-3fb52d878c3a" />
+    <UnitTestResult executionId="2e7fdaec-15e5-4632-86d6-2cafaa728e7a" testId="a9181790-a8ae-423f-3ca4-b54452b5d973" testName="TixFlow.Api.Tests.Phase9Tests.UserRateLimitPartitionsByValidatedSubject" computerName="c2306aed20e8" duration="00:00:00.3253971" startTime="2026-10-18T13:44:42.9968784+00:00" endTime="2026-10-18T13:44:43.3234268+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2e7fdaec-15e5-4632-86d6-2cafaa728e7a" />
+    <UnitTestResult executionId="3cecf9a1-4ec8-4216-a81f-eb18cab1f67e" testId="91770769-a4cc-1735-ef68-9232a70683ee" testName="TixFlow.Api.Tests.Phase8FaultTests.BrokerHandshakeTimeoutDoesNotLoseAnOutboxLease" computerName="c2306aed20e8" duration="00:00:05.1300266" startTime="2026-10-18T13:44:43.6138457+00:00" endTime="2026-10-18T13:44:48.7433290+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3cecf9a1-4ec8-4216-a81f-eb18cab1f67e" />
+    <UnitTestResult executionId="3173c44b-c155-4999-878e-7f2e8562509d" testId="7604b137-3c21-c494-4ed6-cbf30a0230d7" testName="TixFlow.Api.Tests.Phase7Tests.ConcurrentExpiryReleasesInventoryExactlyOnce" computerName="c2306aed20e8" duration="00:00:00.2456355" startTime="2026-10-18T13:44:52.8254502+00:00" endTime="2026-10-18T13:44:53.0716519+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3173c44b-c155-4999-878e-7f2e8562509d" />
+    <UnitTestResult executionId="6856f619-32f8-4c84-949e-7c3d9d66013c" testId="d8dd8a26-aff6-cb68-c60f-ac534308c0d5" testName="TixFlow.Api.Tests.Phase8FaultTests.CheckoutUsesServerPriceSnapshotAfterCatalogChanges" computerName="c2306aed20e8" duration="00:00:00.2603008" startTime="2026-10-18T13:44:49.2223403+00:00" endTime="2026-10-18T13:44:49.4832677+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6856f619-32f8-4c84-949e-7c3d9d66013c" />
+    <UnitTestResult executionId="19dd869a-e2ea-4c56-806d-72931375c9b9" testId="b4d45eeb-6bf9-d014-baf2-e142f27675ef" testName="TixFlow.Api.Tests.AuthenticationTests.TechnicalRolesAreIgnoredWhenOneApplicationRoleIsPresent" computerName="c2306aed20e8" duration="00:00:00.0117798" startTime="2026-10-18T13:45:09.4505806+00:00" endTime="2026-10-18T13:45:09.4629451+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="19dd869a-e2ea-4c56-806d-72931375c9b9" />
+    <UnitTestResult executionId="e0fa42c2-ba9d-491d-a2ec-ed80bd259e15" testId="497207bf-82ca-e6e4-b7be-b78fa7423a71" testName="TixFlow.Api.Tests.HoldConcurrencyTests.OverlappingMultiSeatRequestsAreAllOrNothing" computerName="c2306aed20e8" duration="00:00:00.1347699" startTime="2026-10-18T13:45:05.8056756+00:00" endTime="2026-10-18T13:45:05.9410067+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e0fa42c2-ba9d-491d-a2ec-ed80bd259e15" />
+    <UnitTestResult executionId="53f1944c-8b53-4f6c-b9cc-d9cd67c86197" testId="432cd668-ead6-0db9-fdd4-f3db9cf9607f" testName="TixFlow.Api.Tests.AuthenticationTests.MigrationCanBeReappliedWithoutChangingSeedData" computerName="c2306aed20e8" duration="00:00:00.0304336" startTime="2026-10-18T13:45:09.4030975+00:00" endTime="2026-10-18T13:45:09.4344763+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="53f1944c-8b53-4f6c-b9cc-d9cd67c86197" />
+    <UnitTestResult executionId="5a5b8c7b-030e-4c76-b7fd-d11467287ca8" testId="c034f0d2-a78a-2fad-d070-c5ff6c0a2d53" testName="TixFlow.Api.Tests.Phase9Tests.TwoApiHostsShareIdempotencyAndInventoryWithoutStickySessions" computerName="c2306aed20e8" duration="00:00:03.6138141" startTime="2026-10-18T13:44:37.8616823+00:00" endTime="2026-10-18T13:44:41.4761900+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5a5b8c7b-030e-4c76-b7fd-d11467287ca8" />
+    <UnitTestResult executionId="7a2040a1-3d15-4963-b5e0-781719fea4f4" testId="652c0759-bb58-19d9-30ed-550733654120" testName="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;issuer&quot;)" computerName="c2306aed20e8" duration="00:00:00.0065031" startTime="2026-10-18T13:45:08.9768682+00:00" endTime="2026-10-18T13:45:08.9841366+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7a2040a1-3d15-4963-b5e0-781719fea4f4" />
+    <UnitTestResult executionId="5441d082-e3cf-44fd-bbe2-753d02b6729d" testId="7e9532ed-5ee1-3b80-b318-5d2a1d994e1b" testName="TixFlow.Api.Tests.Phase9Tests.EachTrafficDimensionReturns429AndRetryAfter(dimension: &quot;Client&quot;)" computerName="c2306aed20e8" duration="00:00:00.2658510" startTime="2026-10-18T13:44:35.6085175+00:00" endTime="2026-10-18T13:44:35.8748029+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5441d082-e3cf-44fd-bbe2-753d02b6729d" />
+    <UnitTestResult executionId="7da24a45-e160-493c-8a11-cfff38b428a4" testId="4f7c1657-ac84-e840-917e-f81e6728f054" testName="TixFlow.Api.Tests.DomainRulesTests.InvalidHoldItemCannotEnterTheDomain(quantity: 1, price: -1, limit: 2, fee: 0)" computerName="c2306aed20e8" duration="00:00:00.0000409" startTime="2026-10-18T13:42:55.7578865+00:00" endTime="2026-10-18T13:42:55.7579446+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7da24a45-e160-493c-8a11-cfff38b428a4" />
+    <UnitTestResult executionId="69b40d36-4c79-4aec-9a2f-d1db8bc033f7" testId="0141b366-a5e9-adb5-0ab1-2e31a522fb6a" testName="TixFlow.Api.Tests.ConfigurationTests.NonDevelopmentRejectsHttpAuthorityOrMetadata(environment: &quot;Production&quot;, authority: &quot;https://id.example/realms/tixflow&quot;, metadata: &quot;http://keycloak:8080/discovery&quot;)" computerName="c2306aed20e8" duration="00:00:00.0003949" startTime="2026-10-18T13:42:55.8733014+00:00" endTime="2026-10-18T13:42:55.8735962+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="69b40d36-4c79-4aec-9a2f-d1db8bc033f7" />
+    <UnitTestResult executionId="46560940-3a4d-411d-af59-4c8200da6c9b" testId="805d00d1-8d99-7104-0b9f-a5597b78587c" testName="TixFlow.Api.Tests.AuthenticationTests.CorsAllowsOnlyTheFrontendOrigin" computerName="c2306aed20e8" duration="00:00:00.0119005" startTime="2026-10-18T13:45:09.1713384+00:00" endTime="2026-10-18T13:45:09.1838015+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="46560940-3a4d-411d-af59-4c8200da6c9b" />
+    <UnitTestResult executionId="b355e655-ca5e-4952-8173-05e72d2ad2c9" testId="655447ad-567c-1ce1-eef2-1cf1bf1e408c" testName="TixFlow.Api.Tests.Phase7Tests.ExpiryPaymentRacePreservesStateAndInventory(deadlineSeconds: 1)" computerName="c2306aed20e8" duration="00:00:00.2610645" startTime="2026-10-18T13:45:01.5217846+00:00" endTime="2026-10-18T13:45:01.7834632+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b355e655-ca5e-4952-8173-05e72d2ad2c9" />
+    <UnitTestResult executionId="8eedff29-9503-4576-9aeb-3c5b91712b05" testId="3dedef5a-238b-74af-bd2a-4b92cf94181e" testName="TixFlow.Api.Tests.Phase7Tests.AbandonedOutboxLeaseAndBrokerFailureRecoverWithoutLosingMessage" computerName="c2306aed20e8" duration="00:00:00.0971872" startTime="2026-10-18T13:44:59.0930384+00:00" endTime="2026-10-18T13:44:59.1908555+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8eedff29-9503-4576-9aeb-3c5b91712b05" />
+    <UnitTestResult executionId="7333c806-80a2-4e57-807c-fa52f7892971" testId="6b269fef-2f1d-8d7c-b453-a83438013329" testName="TixFlow.Api.Tests.AuthenticationTests.CustomerCannotAccessAdminOrOrganizer" computerName="c2306aed20e8" duration="00:00:00.0074025" startTime="2026-10-18T13:45:09.1631916+00:00" endTime="2026-10-18T13:45:09.1711151+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7333c806-80a2-4e57-807c-fa52f7892971" />
+    <UnitTestResult executionId="e050fbde-7cae-475f-a5c8-b6d393916cf5" testId="8a678497-0b5e-93b8-aefb-b0d0ef713753" testName="TixFlow.Api.Tests.DomainRulesTests.SessionTransitionsAndCompletionBoundaryAreGuarded" computerName="c2306aed20e8" duration="00:00:00.0141494" startTime="2026-10-18T13:42:55.7153748+00:00" endTime="2026-10-18T13:42:55.7395237+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e050fbde-7cae-475f-a5c8-b6d393916cf5" />
+    <UnitTestResult executionId="791dc200-e262-4fc9-9e68-6eb1d72d1000" testId="4fe94424-f8f6-a511-b36e-973fb95d7138" testName="TixFlow.Api.Tests.CheckoutPaymentTests.HumanTokenCannotCallServiceCallback" computerName="c2306aed20e8" duration="00:00:00.0346166" startTime="2026-10-18T13:45:08.1545533+00:00" endTime="2026-10-18T13:45:08.1898263+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="791dc200-e262-4fc9-9e68-6eb1d72d1000" />
+    <UnitTestResult executionId="6b32ebc7-8544-466b-9b6c-202be222335e" testId="21b6e613-c19f-e410-97dd-880af57d431c" testName="TixFlow.Api.Tests.AuthenticationTests.PoliciesRequireTheExactRole(role: &quot;Organizer&quot;, path: &quot;organizer&quot;)" computerName="c2306aed20e8" duration="00:00:00.0146179" startTime="2026-10-18T13:45:09.2043329+00:00" endTime="2026-10-18T13:45:09.2195377+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6b32ebc7-8544-466b-9b6c-202be222335e" />
+    <UnitTestResult executionId="73fdd242-f9ad-4e4b-8f23-e58e7f44c589" testId="e571253b-1b85-88af-775a-c4d47368bc5d" testName="TixFlow.Api.Tests.CatalogManagementTests.SessionAndSaleWindowsRejectInvalidTimeRanges" computerName="c2306aed20e8" duration="00:00:00.0478232" startTime="2026-10-18T13:45:08.9216109+00:00" endTime="2026-10-18T13:45:08.9701152+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="73fdd242-f9ad-4e4b-8f23-e58e7f44c589" />
+    <UnitTestResult executionId="bc24788c-42f2-4e15-9ccd-9952b53d389a" testId="ea5c93df-9d47-db14-8fe2-cc9be60af01f" testName="TixFlow.Api.Tests.DomainRulesTests.PriceSnapshotsSurviveCatalogEditsIncludingFreeTicketsAndDecimalFees" computerName="c2306aed20e8" duration="00:00:00.0108241" startTime="2026-10-18T13:42:55.7581617+00:00" endTime="2026-10-18T13:42:55.7582210+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bc24788c-42f2-4e15-9ccd-9952b53d389a" />
+    <UnitTestResult executionId="3d2b1562-6d76-4129-ac0d-cc1a82081117" testId="3f6682eb-36af-3cc1-3650-57271fdacb28" testName="TixFlow.Api.Tests.HoldConcurrencyTests.QuantityInventoryNeverExceedsCapacityUnderContention" computerName="c2306aed20e8" duration="00:00:01.1318013" startTime="2026-10-18T13:45:04.6725720+00:00" endTime="2026-10-18T13:45:05.8053657+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3d2b1562-6d76-4129-ac0d-cc1a82081117" />
+    <UnitTestResult executionId="759c06e4-b962-4bd2-9b19-b4391aa60d40" testId="b0729af1-6b3e-63f6-64d3-92bd5de04f68" testName="TixFlow.Api.Tests.Phase7Tests.CheckInEnforcesWindowSessionReasonAndAuditsManualEntry" computerName="c2306aed20e8" duration="00:00:01.1743413" startTime="2026-10-18T13:44:51.6498357+00:00" endTime="2026-10-18T13:44:52.8250625+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="759c06e4-b962-4bd2-9b19-b4391aa60d40" />
+    <UnitTestResult executionId="71f6cbbe-019f-4d78-b62e-2bad20386da1" testId="b6304733-aba5-293f-4066-17ebd827688c" testName="TixFlow.Api.Tests.Phase8FaultTests.ConcurrentDuplicateCallbacksSettleOnlyOnceAndRejectChangedPayload" computerName="c2306aed20e8" duration="00:00:00.3748089" startTime="2026-10-18T13:44:51.0774818+00:00" endTime="2026-10-18T13:44:51.4527043+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="71f6cbbe-019f-4d78-b62e-2bad20386da1" />
+    <UnitTestResult executionId="7dd71602-cd91-4268-ba59-008776fc5163" testId="b965f3cd-a0fd-dafd-c3ce-92b89ca222df" testName="TixFlow.Api.Tests.DomainRulesTests.InvalidHoldItemCannotEnterTheDomain(quantity: 1, price: 10, limit: 0, fee: 0)" computerName="c2306aed20e8" duration="00:00:00.0000431" startTime="2026-10-18T13:42:55.7574103+00:00" endTime="2026-10-18T13:42:55.7574646+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7dd71602-cd91-4268-ba59-008776fc5163" />
+    <UnitTestResult executionId="9225ca3e-b7e5-49f2-a72a-142693bf94a4" testId="8a85958c-9f1f-8624-d6aa-144e0d49836c" testName="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;audience&quot;)" computerName="c2306aed20e8" duration="00:00:00.0034138" startTime="2026-10-18T13:45:08.9844088+00:00" endTime="2026-10-18T13:45:08.9880617+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9225ca3e-b7e5-49f2-a72a-142693bf94a4" />
+    <UnitTestResult executionId="4b0ff1ec-6876-4050-a12b-c028d64fef87" testId="86312e6f-dcdf-4063-f1f6-95eea7267437" testName="TixFlow.Api.Tests.HoldConcurrencyTests.ConcurrentRequestsForOneSeatHaveExactlyOneWinner" computerName="c2306aed20e8" duration="00:00:00.4435407" startTime="2026-10-18T13:45:03.9286771+00:00" endTime="2026-10-18T13:45:04.3729735+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4b0ff1ec-6876-4050-a12b-c028d64fef87" />
+    <UnitTestResult executionId="d8a859bd-7729-41ae-a682-0eb7ff09c8ee" testId="e5a2bc91-2448-7ff0-4aa1-e3d4d39df372" testName="TixFlow.Api.Tests.Phase8FaultTests.KilledConsumerAfterCommitRedeliversWithoutDuplicatingTickets" computerName="c2306aed20e8" duration="00:00:01.5930709" startTime="2026-10-18T13:44:49.4834860+00:00" endTime="2026-10-18T13:44:51.0771527+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d8a859bd-7729-41ae-a682-0eb7ff09c8ee" />
+    <UnitTestResult executionId="97c93b33-cb76-465a-ba6a-cdead3c51830" testId="7fb25041-c77d-8cce-84d7-466e23ef4234" testName="TixFlow.Api.Tests.InventoryManagementTests.OrganizerManagesQuantityAndSeatInventoryWithoutBreakingInvariants" computerName="c2306aed20e8" duration="00:00:00.7386324" startTime="2026-10-18T13:45:02.8461913+00:00" endTime="2026-10-18T13:45:03.5859046+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="97c93b33-cb76-465a-ba6a-cdead3c51830" />
+    <UnitTestResult executionId="0ba50bfc-b064-4d40-9ab5-7041f2c770e1" testId="a83317fb-75fd-45c9-5681-03e44729ce86" testName="TixFlow.Api.Tests.Phase9PerformanceTests.CatalogCacheReducesQueriesAndHoldListsHaveConstantQueryCount" computerName="c2306aed20e8" duration="00:00:12.3557249" startTime="2026-10-18T13:43:15.2757763+00:00" endTime="2026-10-18T13:43:27.6325716+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0ba50bfc-b064-4d40-9ab5-7041f2c770e1" />
+    <UnitTestResult executionId="94f2e2dd-375b-48be-aa2f-c82c09002003" testId="38660ebc-a625-796e-d4e1-b68508910bb7" testName="TixFlow.Api.Tests.DomainRulesTests.CancellationIsIdempotentAndTerminal" computerName="c2306aed20e8" duration="00:00:00.0041272" startTime="2026-10-18T13:42:55.8212114+00:00" endTime="2026-10-18T13:42:55.8213457+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="94f2e2dd-375b-48be-aa2f-c82c09002003" />
+    <UnitTestResult executionId="b36448ef-24db-4c4a-9db4-0a76b902dc4a" testId="d0e4475b-6c43-ab6b-e23f-7cd74822cb5a" testName="TixFlow.Api.Tests.AuthenticationTests.SyncUpdatesProfileWithoutChangingLocalIdAndTokenRolesControlAccess" computerName="c2306aed20e8" duration="00:00:00.0260686" startTime="2026-10-18T13:45:09.3760037+00:00" endTime="2026-10-18T13:45:09.4028378+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b36448ef-24db-4c4a-9db4-0a76b902dc4a" />
+    <UnitTestResult executionId="eec19c62-a338-45fc-9968-6bb406944c3c" testId="3b7aa5ce-be12-a878-b67e-cf1f6b5048b5" testName="TixFlow.Api.Tests.Phase7Tests.ReservedSeatsAreIssuedOrReleasedWithoutDuplicateAllocation(paid: True)" computerName="c2306aed20e8" duration="00:00:00.8777594" startTime="2026-10-18T13:44:54.1009788+00:00" endTime="2026-10-18T13:44:54.9790822+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eec19c62-a338-45fc-9968-6bb406944c3c" />
+    <UnitTestResult executionId="309602b8-3fb6-4f86-9277-13a06be8c7f5" testId="575aad2a-cfd4-f74b-bdf3-828ffacc9720" testName="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;subject&quot;)" computerName="c2306aed20e8" duration="00:00:00.0055014" startTime="2026-10-18T13:45:08.9705882+00:00" endTime="2026-10-18T13:45:08.9767229+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="309602b8-3fb6-4f86-9277-13a06be8c7f5" />
+    <UnitTestResult executionId="d1d58b4c-adbd-488b-82c6-8a3b8d99730b" testId="39617c1f-5136-b075-3d5b-54529249a7fb" testName="TixFlow.Api.Tests.Phase9Tests.WorkerRenderedImagesAreEncryptedAndBoundToTicketIdentity" computerName="c2306aed20e8" duration="00:00:00.0092512" startTime="2026-10-18T13:44:42.9878600+00:00" endTime="2026-10-18T13:44:42.9966053+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d1d58b4c-adbd-488b-82c6-8a3b8d99730b" />
+    <UnitTestResult executionId="8f10daba-07cb-443e-a761-c8faaff41a48" testId="39fddb9b-0e1f-dd56-0406-808ab2544244" testName="TixFlow.Api.Tests.ConfigurationTests.JwtBearerKeepsOriginalClaimsAndSeparatesPublicIssuerFromInternalMetadata" computerName="c2306aed20e8" duration="00:00:00.0968908" startTime="2026-10-18T13:42:55.8256646+00:00" endTime="2026-10-18T13:42:55.8721604+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8f10daba-07cb-443e-a761-c8faaff41a48" />
+    <UnitTestResult executionId="59b64b42-1135-45ca-8f05-1f69e37825d4" testId="163cf2d5-09c1-2916-2718-bf93c6efadf9" testName="TixFlow.Api.Tests.AuthenticationTests.MissingEmailInvalidatesAuthentication" computerName="c2306aed20e8" duration="00:00:00.0050072" startTime="2026-10-18T13:45:09.1842591+00:00" endTime="2026-10-18T13:45:09.1894676+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="59b64b42-1135-45ca-8f05-1f69e37825d4" />
+    <UnitTestResult executionId="f894c2d5-8856-44f8-8b71-4b079a476c79" testId="6d245336-bf6c-1f7f-1b86-777d8c6cd59d" testName="TixFlow.Api.Tests.HoldConcurrencyTests.SameIdempotencyKeyReplaysAndCancellationReleasesExactlyOnce" computerName="c2306aed20e8" duration="00:00:00.2984956" startTime="2026-10-18T13:45:04.3731747+00:00" endTime="2026-10-18T13:45:04.6723640+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f894c2d5-8856-44f8-8b71-4b079a476c79" />
+    <UnitTestResult executionId="73772afd-26b2-436e-9d5b-a91014e655ba" testId="d147fb39-bef9-8f1f-5e7b-a6c514eea35d" testName="TixFlow.Api.Tests.DomainRulesTests.CancelledEventCannotPublishOrComplete" computerName="c2306aed20e8" duration="00:00:00.0017090" startTime="2026-10-18T13:42:55.8219155+00:00" endTime="2026-10-18T13:42:55.8220022+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="73772afd-26b2-436e-9d5b-a91014e655ba" />
+    <UnitTestResult executionId="aa376a7c-53a2-4f34-b435-9e14a57f5b0f" testId="c6f0323b-5436-bc49-4026-ca03593e1091" testName="TixFlow.Api.Tests.InventoryManagementTests.PublicAvailabilityReturnsQuantityAndReservedSeatSnapshots" computerName="c2306aed20e8" duration="00:00:00.1969263" startTime="2026-10-18T13:45:03.6501680+00:00" endTime="2026-10-18T13:45:03.7838842+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aa376a7c-53a2-4f34-b435-9e14a57f5b0f" />
+    <UnitTestResult executionId="316d16a5-0c0b-4557-a427-873e0165dc34" testId="9db406b2-5dc1-1371-bc2f-da5242024ee3" testName="TixFlow.Api.Tests.CheckoutPaymentTests.MockTimeoutFailsAttemptAndAllowsAnIdempotentRetry" computerName="c2306aed20e8" duration="00:00:01.4563356" startTime="2026-10-18T13:45:05.9413822+00:00" endTime="2026-10-18T13:45:07.3983214+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="316d16a5-0c0b-4557-a427-873e0165dc34" />
+    <UnitTestResult executionId="d5bf62a6-12f3-493d-86af-01ba899c72d3" testId="57dcc2db-2ff1-1878-2e44-2978bf026676" testName="TixFlow.Api.Tests.DomainRulesTests.InvalidHoldItemCannotEnterTheDomain(quantity: 0, price: 10, limit: 2, fee: 0)" computerName="c2306aed20e8" duration="00:00:00.0004778" startTime="2026-10-18T13:42:55.7570664+00:00" endTime="2026-10-18T13:42:55.7571342+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d5bf62a6-12f3-493d-86af-01ba899c72d3" />
+    <UnitTestResult executionId="9b627d21-32a3-4e74-be4e-2080240fa8f1" testId="43a16b34-0002-ca1f-e581-c354d815a396" testName="TixFlow.Api.Tests.Phase7Tests.PaidOrderIssuesOneTicketPerUnitDespiteDuplicateAndConcurrentMessages" computerName="c2306aed20e8" duration="00:00:01.0279780" startTime="2026-10-18T13:44:53.0718839+00:00" endTime="2026-10-18T13:44:54.1006519+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9b627d21-32a3-4e74-be4e-2080240fa8f1" />
+    <UnitTestResult executionId="174a3c8c-2198-42f8-9720-c6160394472c" testId="4d214243-eb85-381e-2184-e8907c2e592a" testName="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;internal-issuer&quot;)" computerName="c2306aed20e8" duration="00:00:00.0034912" startTime="2026-10-18T13:45:09.1598724+00:00" endTime="2026-10-18T13:45:09.1629717+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="174a3c8c-2198-42f8-9720-c6160394472c" />
+    <UnitTestResult executionId="3a2ffa76-ce08-4df6-b6da-a10ed52c6c01" testId="feae0b05-e114-6adf-d520-c4ce55eaaa6c" testName="TixFlow.Api.Tests.DomainRulesTests.PaidOrderCannotBePaidTwice" computerName="c2306aed20e8" duration="00:00:00.0033153" startTime="2026-10-18T13:42:55.8230251+00:00" endTime="2026-10-18T13:42:55.8231916+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3a2ffa76-ce08-4df6-b6da-a10ed52c6c01" />
+    <UnitTestResult executionId="44f06210-96fe-4a5c-a3b7-5665ebce57e7" testId="7f4df62c-f25e-0a25-338f-71d7a686faf3" testName="TixFlow.Api.Tests.DomainRulesTests.ExpiryUsesAnInclusiveDeadline(ticks: 0, mayExpire: True)" computerName="c2306aed20e8" duration="00:00:00.0004657" startTime="2026-10-18T13:42:55.8223508+00:00" endTime="2026-10-18T13:42:55.8224406+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="44f06210-96fe-4a5c-a3b7-5665ebce57e7" />
+    <UnitTestResult executionId="eb1b5851-dabd-41f4-a134-8c43e0069fb8" testId="70f9e770-264a-3304-37f2-aff6bab9c027" testName="TixFlow.Api.Tests.AuthenticationTests.PoliciesRequireTheExactRole(role: &quot;Admin&quot;, path: &quot;admin&quot;)" computerName="c2306aed20e8" duration="00:00:00.0140385" startTime="2026-10-18T13:45:09.1897416+00:00" endTime="2026-10-18T13:45:09.2041429+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eb1b5851-dabd-41f4-a134-8c43e0069fb8" />
+    <UnitTestResult executionId="6f9df52b-6968-45ca-ab9e-ee96778a7ece" testId="448253d2-d6a1-574e-902d-954360ae137c" testName="TixFlow.Api.Tests.Phase9Tests.EachTrafficDimensionReturns429AndRetryAfter(dimension: &quot;User&quot;)" computerName="c2306aed20e8" duration="00:00:00.3604537" startTime="2026-10-18T13:44:35.2474125+00:00" endTime="2026-10-18T13:44:35.6082390+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6f9df52b-6968-45ca-ab9e-ee96778a7ece" />
+    <UnitTestResult executionId="775214d3-cec0-421f-ba0b-353a366b0aa1" testId="19620eb9-9bee-26d1-698c-c945e6ca814b" testName="TixFlow.Api.Tests.Phase9Tests.WorkerPublishesQueueAndLagMetricsForAdminOnly" computerName="c2306aed20e8" duration="00:00:00.1738452" startTime="2026-10-18T13:44:37.6870901+00:00" endTime="2026-10-18T13:44:37.8614539+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="775214d3-cec0-421f-ba0b-353a366b0aa1" />
+    <UnitTestResult executionId="0dfc8fa8-d30f-4b35-8b26-7e9137c5b7b3" testId="8bffb825-670f-eac7-57cb-68631ff73901" testName="TixFlow.Api.Tests.DomainRulesTests.ExpiryUsesAnInclusiveDeadline(ticks: -1, mayExpire: False)" computerName="c2306aed20e8" duration="00:00:00.0006119" startTime="2026-10-18T13:42:55.8221859+00:00" endTime="2026-10-18T13:42:55.8222469+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0dfc8fa8-d30f-4b35-8b26-7e9137c5b7b3" />
+    <UnitTestResult executionId="f8816f9b-3898-4713-8afd-b4222b6eca58" testId="ac993ed1-b01a-c487-1b48-9b85e61c9849" testName="TixFlow.Api.Tests.AuthenticationTests.ExistingSeedIsNeverLinkedByEmail" computerName="c2306aed20e8" duration="00:00:00.0191446" startTime="2026-10-18T13:45:09.3079296+00:00" endTime="2026-10-18T13:45:09.3275482+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f8816f9b-3898-4713-8afd-b4222b6eca58" />
+    <UnitTestResult executionId="bbac3faa-df8c-47cf-a5b3-d8ab3b0be146" testId="f9ec08ac-48cb-be34-d065-c1a7dcc90bd5" testName="TixFlow.Api.Tests.BaselineConcurrencyTests.RepeatedBurstsOf100500And1000NeverOversell" computerName="c2306aed20e8" duration="00:00:52.9860314" startTime="2026-10-18T13:43:27.6379958+00:00" endTime="2026-10-18T13:44:20.6201920+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bbac3faa-df8c-47cf-a5b3-d8ab3b0be146">
+      <Output>
+        <StdOut>Repeat 1, N=100: created=50, capacity conflicts=50, held=50, sold=0, p95=4793.6ms
+Repeat 1, N=500: created=50, capacity conflicts=450, held=50, sold=0, p95=8221.7ms
+Repeat 1, N=1000: created=50, capacity conflicts=950, held=50, sold=0, p95=13214.1ms
+Repeat 2, N=100: created=50, capacity conflicts=50, held=50, sold=0, p95=1858.2ms
+Repeat 2, N=500: created=50, capacity conflicts=450, held=50, sold=0, p95=6541.6ms
+Repeat 2, N=1000: created=50, capacity conflicts=950, held=50, sold=0, p95=12092.4ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="777eed26-5890-44eb-9dd1-65f4cc524943" testId="a502b2c6-adfe-577b-bacf-264d7f29eefe" testName="TixFlow.Api.Tests.Phase9Tests.MetadataCacheInvalidatesAcrossHostsAndAlwaysRefreshesInventory" computerName="c2306aed20e8" duration="00:00:01.4335844" startTime="2026-10-18T13:44:36.1131542+00:00" endTime="2026-10-18T13:44:37.5473793+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="777eed26-5890-44eb-9dd1-65f4cc524943" />
+    <UnitTestResult executionId="db581a34-a1d3-44d4-b0cf-42eed90c872f" testId="9e06462c-a37e-8e2c-db1b-8be1e76822ae" testName="TixFlow.Api.Tests.AuthenticationTests.PublicEndpointsRemainAvailableAndProtectedEndpointsChallenge" computerName="c2306aed20e8" duration="00:00:00.1992334" startTime="2026-10-18T13:45:09.4633885+00:00" endTime="2026-10-18T13:45:09.6630041+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="db581a34-a1d3-44d4-b0cf-42eed90c872f" />
+    <UnitTestResult executionId="d0d5e7aa-bd74-4eab-91e7-d1ff3e045bdd" testId="25b5bb82-be33-c980-6cd4-70cc61260faa" testName="TixFlow.Api.Tests.Phase7Tests.ExpiryPaymentRacePreservesStateAndInventory(deadlineSeconds: -1)" computerName="c2306aed20e8" duration="00:00:00.2218397" startTime="2026-10-18T13:45:01.2986783+00:00" endTime="2026-10-18T13:45:01.5214784+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d0d5e7aa-bd74-4eab-91e7-d1ff3e045bdd" />
+    <UnitTestResult executionId="79845a03-adf3-42a4-a74b-5d80d4e604a5" testId="5dd83142-3a51-2001-d312-c995cf3be9a3" testName="TixFlow.Api.Tests.AuthenticationTests.TokenMustHaveExactlyOneApplicationRoleAndDeniedRequestsDoNotCreateUsers(roles: [])" computerName="c2306aed20e8" duration="00:00:00.0079823" startTime="2026-10-18T13:45:09.3674583+00:00" endTime="2026-10-18T13:45:09.3758264+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="79845a03-adf3-42a4-a74b-5d80d4e604a5" />
+    <UnitTestResult executionId="93d8799f-d33f-4926-95e0-1be7153023c1" testId="b496be22-0721-e691-6691-c18087d4719c" testName="TixFlow.Api.Tests.Phase7Tests.HostedWorkerRunsExpiryOutboxIssuanceAndNotificationAcrossRestart" computerName="c2306aed20e8" duration="00:00:02.8057232" startTime="2026-10-18T13:44:55.1280017+00:00" endTime="2026-10-18T13:44:57.9344401+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="93d8799f-d33f-4926-95e0-1be7153023c1" />
+    <UnitTestResult executionId="40ab995e-9f35-4c8e-bed1-f0f63d2dfdf1" testId="e0a56a9c-17f1-3898-1954-3378843ac828" testName="TixFlow.Api.Tests.Phase8FaultTests.RequestCancelledWhileWaitingForDatabaseLockRollsBackAndCanRetry" computerName="c2306aed20e8" duration="00:00:00.1958307" startTime="2026-10-18T13:44:51.4529173+00:00" endTime="2026-10-18T13:44:51.6494063+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="40ab995e-9f35-4c8e-bed1-f0f63d2dfdf1" />
+    <UnitTestResult executionId="6b6d3430-78f4-4c20-b2eb-f69672e5443a" testId="c8aa930a-95f5-71dc-4d28-74247c0c0be0" testName="TixFlow.Api.Tests.AuthenticationTests.TokenMustHaveExactlyOneApplicationRoleAndDeniedRequestsDoNotCreateUsers(roles: [&quot;Customer&quot;, &quot;Organizer&quot;])" computerName="c2306aed20e8" duration="00:00:00.0113109" startTime="2026-10-18T13:45:09.3553135+00:00" endTime="2026-10-18T13:45:09.3672379+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6b6d3430-78f4-4c20-b2eb-f69672e5443a" />
+    <UnitTestResult executionId="5385271e-5f78-404e-b270-7e333fd4fa05" testId="f5d7f76f-12c0-f07b-89d3-58c47bb7082c" testName="TixFlow.Api.Tests.Phase7Tests.QrKeyRotationPreservesPreviouslyIssuedProof" computerName="c2306aed20e8" duration="00:00:00.0055415" startTime="2026-10-18T13:45:01.2930827+00:00" endTime="2026-10-18T13:45:01.2984125+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5385271e-5f78-404e-b270-7e333fd4fa05" />
+    <UnitTestResult executionId="d5979c13-1ee6-4ea2-b76d-850d276e2d25" testId="ea28cd02-4a13-818f-3796-2f72d4e8564b" testName="TixFlow.Api.Tests.DomainRulesTests.InvalidHoldItemCannotEnterTheDomain(quantity: 3, price: 10, limit: 2, fee: 0)" computerName="c2306aed20e8" duration="00:00:00.0000630" startTime="2026-10-18T13:42:55.7572562+00:00" endTime="2026-10-18T13:42:55.7573114+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d5979c13-1ee6-4ea2-b76d-850d276e2d25" />
+    <UnitTestResult executionId="f0a4a5c3-31fe-488b-bf12-fff5ab2eaefd" testId="de7c11e9-f1d9-4f7e-20c0-c83496c6b8f2" testName="TixFlow.Api.Tests.Phase9Tests.SharedCatalogReadersDoNotSerializeHoldCreation" computerName="c2306aed20e8" duration="00:00:00.1387027" startTime="2026-10-18T13:44:37.5477766+00:00" endTime="2026-10-18T13:44:37.6867722+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f0a4a5c3-31fe-488b-bf12-fff5ab2eaefd" />
+    <UnitTestResult executionId="eee4d4d0-be22-4467-8ec2-cfe7cfcfabcd" testId="66431f15-e6e0-c679-61d0-03dc66cf130e" testName="TixFlow.Api.Tests.AuthenticationTests.ConcurrentAndRepeatedRequestsCreateOnlyOnePasswordlessProfile" computerName="c2306aed20e8" duration="00:00:00.0744480" startTime="2026-10-18T13:45:09.2324780+00:00" endTime="2026-10-18T13:45:09.3076433+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eee4d4d0-be22-4467-8ec2-cfe7cfcfabcd" />
+    <UnitTestResult executionId="5eb52491-c882-4bcd-afc9-7c7ff4674b29" testId="a25faed7-8790-630e-4d16-681ad82e8ea4" testName="TixFlow.Api.Tests.DomainRulesTests.ExpiryUsesAnInclusiveDeadline(ticks: 1, mayExpire: True)" computerName="c2306aed20e8" duration="00:00:00.0000611" startTime="2026-10-18T13:42:55.8226328+00:00" endTime="2026-10-18T13:42:55.8227446+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5eb52491-c882-4bcd-afc9-7c7ff4674b29" />
+    <UnitTestResult executionId="ecc07c08-94c9-46dc-80cc-319f7f9cf1a3" testId="d468ef03-eef7-e3ac-372e-a8d543633e64" testName="TixFlow.Api.Tests.ConfigurationTests.ProfileMappingFiltersRolesAndUsesUsernameFallback" computerName="c2306aed20e8" duration="00:00:00.0303301" startTime="2026-10-18T13:42:55.8781081+00:00" endTime="2026-10-18T13:42:55.9043109+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ecc07c08-94c9-46dc-80cc-319f7f9cf1a3" />
+    <UnitTestResult executionId="30365264-fce5-498b-888c-ec5452d7be9d" testId="38aae160-d64a-1bf0-c90e-0991720f185f" testName="TixFlow.Api.Tests.Phase8FaultTests.InvalidQuantityCannotChangeInventory(quantity: 3)" computerName="c2306aed20e8" duration="00:00:00.1862712" startTime="2026-10-18T13:44:48.7441081+00:00" endTime="2026-10-18T13:44:48.9304130+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="30365264-fce5-498b-888c-ec5452d7be9d" />
+    <UnitTestResult executionId="2a0e1dae-8c9f-41ce-ad3b-9ab93c96bd52" testId="9e0a7c13-4d85-4ecf-1421-cd89d48c7907" testName="TixFlow.Api.Tests.DomainRulesTests.InvalidDatesMoneyCapacityAndImageUrlAreRejectedWithoutMutation" computerName="c2306aed20e8" duration="00:00:00.0038778" startTime="2026-10-18T13:42:55.7585386+00:00" endTime="2026-10-18T13:42:55.7585952+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2a0e1dae-8c9f-41ce-ad3b-9ab93c96bd52" />
+    <UnitTestResult executionId="1d320efb-bc77-43ca-997b-7308973848bb" testId="3197a72d-0231-9392-5f81-51ebdc38a35c" testName="TixFlow.Api.Tests.AuthenticationTests.SynchronizationDoesNotReactivateSuspendedLocalUsers" computerName="c2306aed20e8" duration="00:00:00.0266788" startTime="2026-10-18T13:45:09.3283668+00:00" endTime="2026-10-18T13:45:09.3550441+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1d320efb-bc77-43ca-997b-7308973848bb" />
+    <UnitTestResult executionId="5e93d78c-580d-4409-9124-7d45431a3acc" testId="08f9535c-04e0-0467-6f5f-a4be41e80b9c" testName="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;username&quot;)" computerName="c2306aed20e8" duration="00:00:00.0040511" startTime="2026-10-18T13:45:09.1544030+00:00" endTime="2026-10-18T13:45:09.1588841+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5e93d78c-580d-4409-9124-7d45431a3acc" />
+    <UnitTestResult executionId="d8d2ac15-7fb4-4f29-ac12-97c34e2205bd" testId="32c99a9d-954a-04d2-899b-b63baa7ba931" testName="TixFlow.Api.Tests.Phase9Tests.WorkerBackfillsLegacyQrImagesWithoutChangingTheToken" computerName="c2306aed20e8" duration="00:00:01.5102449" startTime="2026-10-18T13:44:41.4767801+00:00" endTime="2026-10-18T13:44:42.9871887+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d8d2ac15-7fb4-4f29-ac12-97c34e2205bd" />
+    <UnitTestResult executionId="8da79c07-ac45-463b-a303-83efe85d6694" testId="3d461b80-0def-bb69-b92c-1ae48e3fa33a" testName="TixFlow.Api.Tests.Phase7Tests.CheckInHasOneWinnerReplaysSameKeyAndRejectsOtherScanners" computerName="c2306aed20e8" duration="00:00:01.0132319" startTime="2026-10-18T13:44:59.1912258+00:00" endTime="2026-10-18T13:45:00.2050345+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8da79c07-ac45-463b-a303-83efe85d6694" />
+    <UnitTestResult executionId="9c39cc3c-a904-4565-92d2-aea222a1f312" testId="6e481372-e46b-970a-044b-4647c4fc0070" testName="TixFlow.Api.Tests.DomainRulesTests.InvalidHoldItemCannotEnterTheDomain(quantity: -1, price: 10, limit: 2, fee: 0)" computerName="c2306aed20e8" duration="00:00:00.0012201" startTime="2026-10-18T13:42:55.7562208+00:00" endTime="2026-10-18T13:42:55.7564433+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9c39cc3c-a904-4565-92d2-aea222a1f312" />
+    <UnitTestResult executionId="756b61c2-cf22-4826-a96f-38eb7324aa5a" testId="495d6d28-bb6e-10cb-400e-459bddb17923" testName="TixFlow.Api.Tests.Phase8FaultTests.InvalidQuantityCannotChangeInventory(quantity: 0)" computerName="c2306aed20e8" duration="00:00:00.1466655" startTime="2026-10-18T13:44:49.0746380+00:00" endTime="2026-10-18T13:44:49.2219206+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="756b61c2-cf22-4826-a96f-38eb7324aa5a" />
+    <UnitTestResult executionId="7e33733a-951d-49d3-9bd8-bdec41949f66" testId="7c6be5f9-6144-242c-743c-ce731e19de5b" testName="TixFlow.Api.Tests.Phase7Tests.RabbitDuplicateUnackedRestartAndPoisonMessageAreSafe" computerName="c2306aed20e8" duration="00:00:01.1576244" startTime="2026-10-18T13:44:57.9354659+00:00" endTime="2026-10-18T13:44:59.0927403+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7e33733a-951d-49d3-9bd8-bdec41949f66" />
+    <UnitTestResult executionId="159a8820-01a2-41cc-924c-a6931bb38709" testId="68d17edd-000e-7902-ecd5-176862b8e564" testName="TixFlow.Api.Tests.HoldConcurrencyTests.FailureOnLaterItemRollsBackEarlierInventoryAndSeatChanges" computerName="c2306aed20e8" duration="00:00:00.1427809" startTime="2026-10-18T13:45:03.7849670+00:00" endTime="2026-10-18T13:45:03.9284902+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="159a8820-01a2-41cc-924c-a6931bb38709" />
+    <UnitTestResult executionId="755ee519-846d-4bb9-8284-4ff1d2f3d155" testId="f133475f-4aa1-9e02-adb0-53d52df2700f" testName="TixFlow.Api.Tests.ConfigurationTests.NonDevelopmentRejectsHttpAuthorityOrMetadata(environment: &quot;Staging&quot;, authority: &quot;http://id.example/realms/tixflow&quot;, metadata: &quot;https://id.example/discovery&quot;)" computerName="c2306aed20e8" duration="00:00:00.0007756" startTime="2026-10-18T13:42:55.8728194+00:00" endTime="2026-10-18T13:42:55.8730582+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="755ee519-846d-4bb9-8284-4ff1d2f3d155" />
+    <UnitTestResult executionId="6f2666f6-c51b-439c-95bb-8c56768b8427" testId="cdeeec7a-4b9b-c547-c7fb-8dd95753106e" testName="TixFlow.Api.Tests.CatalogManagementTests.OrganizerOwnsCatalogAndEventTransitionsAreGuarded" computerName="c2306aed20e8" duration="00:00:00.4422206" startTime="2026-10-18T13:45:08.1904063+00:00" endTime="2026-10-18T13:45:08.6335241+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6f2666f6-c51b-439c-95bb-8c56768b8427" />
+    <UnitTestResult executionId="f4e81bb9-1a17-4577-a88a-8437f8edc2e7" testId="d13ce8bf-c653-ae82-8962-d39d24f2acd8" testName="TixFlow.Api.Tests.Phase8FaultTests.InvalidQuantityCannotChangeInventory(quantity: -1)" computerName="c2306aed20e8" duration="00:00:00.1431036" startTime="2026-10-18T13:44:48.9305845+00:00" endTime="2026-10-18T13:44:49.0744257+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f4e81bb9-1a17-4577-a88a-8437f8edc2e7" />
+    <UnitTestResult executionId="c005cf01-8e9d-4ada-a1da-20d25f451d9e" testId="70683a36-476f-3474-a3b0-331894c887db" testName="TixFlow.Api.Tests.DomainRulesTests.InvalidHoldItemCannotEnterTheDomain(quantity: 1, price: 10, limit: 2, fee: -1)" computerName="c2306aed20e8" duration="00:00:00.0000729" startTime="2026-10-18T13:42:55.7575712+00:00" endTime="2026-10-18T13:42:55.7576252+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c005cf01-8e9d-4ada-a1da-20d25f451d9e" />
+    <UnitTestResult executionId="56686bbf-c5f0-45ca-bfd7-89f57e5f347c" testId="279f5f78-91db-9cb9-e625-fc2a6d741970" testName="TixFlow.Api.Tests.AuthenticationTests.ConcurrentSubjectsCannotClaimTheSameEmail" computerName="c2306aed20e8" duration="00:00:00.0151030" startTime="2026-10-18T13:45:09.4347974+00:00" endTime="2026-10-18T13:45:09.4503634+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="56686bbf-c5f0-45ca-bfd7-89f57e5f347c" />
+    <UnitTestResult executionId="d5754178-4a4d-4b22-8708-c72caeff639c" testId="4fcff5e6-6a90-77ac-e28d-c1ac0f250ca2" testName="TixFlow.Api.Tests.Phase9Tests.EachTrafficDimensionReturns429AndRetryAfter(dimension: &quot;Ip&quot;)" computerName="c2306aed20e8" duration="00:00:00.2373619" startTime="2026-10-18T13:44:35.8751156+00:00" endTime="2026-10-18T13:44:36.1129037+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d5754178-4a4d-4b22-8708-c72caeff639c" />
+    <UnitTestResult executionId="e9eed904-1141-42aa-bb7d-d0d67c2c22bb" testId="ad3e5439-a226-a791-752b-d4cfe0d81cf6" testName="TixFlow.Api.Tests.Phase7Tests.ReservedSeatsAreIssuedOrReleasedWithoutDuplicateAllocation(paid: False)" computerName="c2306aed20e8" duration="00:00:00.1480816" startTime="2026-10-18T13:44:54.9792849+00:00" endTime="2026-10-18T13:44:55.1277442+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e9eed904-1141-42aa-bb7d-d0d67c2c22bb" />
+    <UnitTestResult executionId="d10b192c-4306-4b92-a3aa-2d894510795f" testId="d1b89b56-c90f-fb4d-1279-11c179eaa525" testName="TixFlow.Api.Tests.Phase8FaultTests.LostResponseAfterCommitReplaysExactlyOneHold" computerName="c2306aed20e8" duration="00:00:00.2887736" startTime="2026-10-18T13:44:43.3241797+00:00" endTime="2026-10-18T13:44:43.6136055+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d10b192c-4306-4b92-a3aa-2d894510795f" />
+    <UnitTestResult executionId="7836edd5-f727-4307-af1b-8cc00e208685" testId="97f6eca4-e2d3-7314-be3f-661826bbd911" testName="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;signature&quot;)" computerName="c2306aed20e8" duration="00:00:00.1603150" startTime="2026-10-18T13:45:08.9881638+00:00" endTime="2026-10-18T13:45:09.1494003+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7836edd5-f727-4307-af1b-8cc00e208685" />
+    <UnitTestResult executionId="2c7ec9b6-86d6-4297-8b9c-9951c97b6f82" testId="ac52f40e-7cad-1698-cf60-c8a1bd14fcc0" testName="TixFlow.Api.Tests.Phase7Tests.CheckoutAndSettlementWorkWithProductionDatabaseRetryStrategy" computerName="c2306aed20e8" duration="00:00:01.0614761" startTime="2026-10-18T13:45:01.7836737+00:00" endTime="2026-10-18T13:45:02.8458534+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2c7ec9b6-86d6-4297-8b9c-9951c97b6f82" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.ConcurrentAndRepeatedRequestsCreateOnlyOnePasswordlessProfile" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="66431f15-e6e0-c679-61d0-03dc66cf130e">
+      <Execution id="eee4d4d0-be22-4467-8ec2-cfe7cfcfabcd" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="ConcurrentAndRepeatedRequestsCreateOnlyOnePasswordlessProfile" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.HoldConcurrencyTests.OverlappingMultiSeatRequestsAreAllOrNothing" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="497207bf-82ca-e6e4-b7be-b78fa7423a71">
+      <Execution id="e0fa42c2-ba9d-491d-a2ec-ed80bd259e15" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.HoldConcurrencyTests" name="OverlappingMultiSeatRequestsAreAllOrNothing" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.InvalidHoldItemCannotEnterTheDomain(quantity: 1, price: -1, limit: 2, fee: 0)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="4f7c1657-ac84-e840-917e-f81e6728f054">
+      <Execution id="7da24a45-e160-493c-8a11-cfff38b428a4" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="InvalidHoldItemCannotEnterTheDomain" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase9Tests.UserRateLimitPartitionsByValidatedSubject" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="a9181790-a8ae-423f-3ca4-b54452b5d973">
+      <Execution id="2e7fdaec-15e5-4632-86d6-2cafaa728e7a" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase9Tests" name="UserRateLimitPartitionsByValidatedSubject" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.HoldConcurrencyTests.QuantityInventoryNeverExceedsCapacityUnderContention" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="3f6682eb-36af-3cc1-3650-57271fdacb28">
+      <Execution id="3d2b1562-6d76-4129-ac0d-cc1a82081117" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.HoldConcurrencyTests" name="QuantityInventoryNeverExceedsCapacityUnderContention" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase9Tests.TwoApiHostsShareIdempotencyAndInventoryWithoutStickySessions" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="c034f0d2-a78a-2fad-d070-c5ff6c0a2d53">
+      <Execution id="5a5b8c7b-030e-4c76-b7fd-d11467287ca8" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase9Tests" name="TwoApiHostsShareIdempotencyAndInventoryWithoutStickySessions" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase8FaultTests.RequestCancelledWhileWaitingForDatabaseLockRollsBackAndCanRetry" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="e0a56a9c-17f1-3898-1954-3378843ac828">
+      <Execution id="40ab995e-9f35-4c8e-bed1-f0f63d2dfdf1" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase8FaultTests" name="RequestCancelledWhileWaitingForDatabaseLockRollsBackAndCanRetry" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.ExpiryPaymentRacePreservesStateAndInventory(deadlineSeconds: -1)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="25b5bb82-be33-c980-6cd4-70cc61260faa">
+      <Execution id="d0d5e7aa-bd74-4eab-91e7-d1ff3e045bdd" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="ExpiryPaymentRacePreservesStateAndInventory" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.TokenMustHaveExactlyOneApplicationRoleAndDeniedRequestsDoNotCreateUsers(roles: [])" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="5dd83142-3a51-2001-d312-c995cf3be9a3">
+      <Execution id="79845a03-adf3-42a4-a74b-5d80d4e604a5" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="TokenMustHaveExactlyOneApplicationRoleAndDeniedRequestsDoNotCreateUsers" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase9Tests.MetadataCacheInvalidatesAcrossHostsAndAlwaysRefreshesInventory" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="a502b2c6-adfe-577b-bacf-264d7f29eefe">
+      <Execution id="777eed26-5890-44eb-9dd1-65f4cc524943" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase9Tests" name="MetadataCacheInvalidatesAcrossHostsAndAlwaysRefreshesInventory" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase8FaultTests.ConcurrentDuplicateCallbacksSettleOnlyOnceAndRejectChangedPayload" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="b6304733-aba5-293f-4066-17ebd827688c">
+      <Execution id="71f6cbbe-019f-4d78-b62e-2bad20386da1" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase8FaultTests" name="ConcurrentDuplicateCallbacksSettleOnlyOnceAndRejectChangedPayload" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.PoliciesRequireTheExactRole(role: &quot;Organizer&quot;, path: &quot;organizer&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="21b6e613-c19f-e410-97dd-880af57d431c">
+      <Execution id="6b32ebc7-8544-466b-9b6c-202be222335e" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="PoliciesRequireTheExactRole" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.PaidOrderIssuesOneTicketPerUnitDespiteDuplicateAndConcurrentMessages" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="43a16b34-0002-ca1f-e581-c354d815a396">
+      <Execution id="9b627d21-32a3-4e74-be4e-2080240fa8f1" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="PaidOrderIssuesOneTicketPerUnitDespiteDuplicateAndConcurrentMessages" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;internal-issuer&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="4d214243-eb85-381e-2184-e8907c2e592a">
+      <Execution id="174a3c8c-2198-42f8-9720-c6160394472c" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="InvalidTokensAreRejected" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;expired&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="0833def1-c5a8-4d91-f3ce-09675c412126">
+      <Execution id="6f7875db-9296-443c-8237-d1a5b8305689" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="InvalidTokensAreRejected" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;username&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="08f9535c-04e0-0467-6f5f-a4be41e80b9c">
+      <Execution id="5e93d78c-580d-4409-9124-7d45431a3acc" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="InvalidTokensAreRejected" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;signature&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="97f6eca4-e2d3-7314-be3f-661826bbd911">
+      <Execution id="7836edd5-f727-4307-af1b-8cc00e208685" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="InvalidTokensAreRejected" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase8FaultTests.BrokerHandshakeTimeoutDoesNotLoseAnOutboxLease" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="91770769-a4cc-1735-ef68-9232a70683ee">
+      <Execution id="3cecf9a1-4ec8-4216-a81f-eb18cab1f67e" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase8FaultTests" name="BrokerHandshakeTimeoutDoesNotLoseAnOutboxLease" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.CheckInEnforcesWindowSessionReasonAndAuditsManualEntry" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="b0729af1-6b3e-63f6-64d3-92bd5de04f68">
+      <Execution id="759c06e4-b962-4bd2-9b19-b4391aa60d40" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="CheckInEnforcesWindowSessionReasonAndAuditsManualEntry" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.CheckoutPaymentTests.CheckoutCreatesOneOrderAndMockSuccessSettlesInventoryOnce" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="b505eb29-a2a0-f76c-c8ed-f520db70fff9">
+      <Execution id="6f6d356a-9a63-410f-813a-3fb52d878c3a" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.CheckoutPaymentTests" name="CheckoutCreatesOneOrderAndMockSuccessSettlesInventoryOnce" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.SessionTransitionsAndCompletionBoundaryAreGuarded" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="8a678497-0b5e-93b8-aefb-b0d0ef713753">
+      <Execution id="e050fbde-7cae-475f-a5c8-b6d393916cf5" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="SessionTransitionsAndCompletionBoundaryAreGuarded" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.BrokerConsumerTransientFailureUsesDelayedRetry" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="e3c3c2a5-baa4-bd66-83af-08e132c48926">
+      <Execution id="62eb8e8e-4c48-4e4d-b922-d5252461a4e7" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="BrokerConsumerTransientFailureUsesDelayedRetry" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.InvalidHoldItemCannotEnterTheDomain(quantity: 3, price: 10, limit: 2, fee: 0)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="ea28cd02-4a13-818f-3796-2f72d4e8564b">
+      <Execution id="d5979c13-1ee6-4ea2-b76d-850d276e2d25" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="InvalidHoldItemCannotEnterTheDomain" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.InvalidHoldItemCannotEnterTheDomain(quantity: 0, price: 10, limit: 2, fee: 0)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="57dcc2db-2ff1-1878-2e44-2978bf026676">
+      <Execution id="d5bf62a6-12f3-493d-86af-01ba899c72d3" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="InvalidHoldItemCannotEnterTheDomain" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.QrKeyRotationPreservesPreviouslyIssuedProof" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="f5d7f76f-12c0-f07b-89d3-58c47bb7082c">
+      <Execution id="5385271e-5f78-404e-b270-7e333fd4fa05" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="QrKeyRotationPreservesPreviouslyIssuedProof" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.CatalogManagementTests.SessionAndSaleWindowsRejectInvalidTimeRanges" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="e571253b-1b85-88af-775a-c4d47368bc5d">
+      <Execution id="73fdd242-f9ad-4e4b-8f23-e58e7f44c589" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.CatalogManagementTests" name="SessionAndSaleWindowsRejectInvalidTimeRanges" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.RabbitDuplicateUnackedRestartAndPoisonMessageAreSafe" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="7c6be5f9-6144-242c-743c-ce731e19de5b">
+      <Execution id="7e33733a-951d-49d3-9bd8-bdec41949f66" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="RabbitDuplicateUnackedRestartAndPoisonMessageAreSafe" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.PriceSnapshotsSurviveCatalogEditsIncludingFreeTicketsAndDecimalFees" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="ea5c93df-9d47-db14-8fe2-cc9be60af01f">
+      <Execution id="bc24788c-42f2-4e15-9ccd-9952b53d389a" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="PriceSnapshotsSurviveCatalogEditsIncludingFreeTicketsAndDecimalFees" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase9Tests.SharedCatalogReadersDoNotSerializeHoldCreation" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="de7c11e9-f1d9-4f7e-20c0-c83496c6b8f2">
+      <Execution id="f0a4a5c3-31fe-488b-bf12-fff5ab2eaefd" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase9Tests" name="SharedCatalogReadersDoNotSerializeHoldCreation" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.ExpiryUsesAnInclusiveDeadline(ticks: 0, mayExpire: True)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="7f4df62c-f25e-0a25-338f-71d7a686faf3">
+      <Execution id="44f06210-96fe-4a5c-a3b7-5665ebce57e7" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="ExpiryUsesAnInclusiveDeadline" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.CheckoutPaymentTests.HumanTokenCannotCallServiceCallback" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="4fe94424-f8f6-a511-b36e-973fb95d7138">
+      <Execution id="791dc200-e262-4fc9-9e68-6eb1d72d1000" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.CheckoutPaymentTests" name="HumanTokenCannotCallServiceCallback" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.CheckInHasOneWinnerReplaysSameKeyAndRejectsOtherScanners" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="3d461b80-0def-bb69-b92c-1ae48e3fa33a">
+      <Execution id="8da79c07-ac45-463b-a303-83efe85d6694" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="CheckInHasOneWinnerReplaysSameKeyAndRejectsOtherScanners" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.AbandonedOutboxLeaseAndBrokerFailureRecoverWithoutLosingMessage" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="3dedef5a-238b-74af-bd2a-4b92cf94181e">
+      <Execution id="8eedff29-9503-4576-9aeb-3c5b91712b05" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="AbandonedOutboxLeaseAndBrokerFailureRecoverWithoutLosingMessage" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.InvalidHoldItemCannotEnterTheDomain(quantity: 1, price: 10, limit: 0, fee: 0)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="b965f3cd-a0fd-dafd-c3ce-92b89ca222df">
+      <Execution id="7dd71602-cd91-4268-ba59-008776fc5163" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="InvalidHoldItemCannotEnterTheDomain" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.ReservedSeatsAreIssuedOrReleasedWithoutDuplicateAllocation(paid: True)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="3b7aa5ce-be12-a878-b67e-cf1f6b5048b5">
+      <Execution id="eec19c62-a338-45fc-9968-6bb406944c3c" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="ReservedSeatsAreIssuedOrReleasedWithoutDuplicateAllocation" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase9Tests.WorkerRenderedImagesAreEncryptedAndBoundToTicketIdentity" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="39617c1f-5136-b075-3d5b-54529249a7fb">
+      <Execution id="d1d58b4c-adbd-488b-82c6-8a3b8d99730b" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase9Tests" name="WorkerRenderedImagesAreEncryptedAndBoundToTicketIdentity" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase8FaultTests.InvalidQuantityCannotChangeInventory(quantity: 0)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="495d6d28-bb6e-10cb-400e-459bddb17923">
+      <Execution id="756b61c2-cf22-4826-a96f-38eb7324aa5a" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase8FaultTests" name="InvalidQuantityCannotChangeInventory" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.ReservedSeatsAreIssuedOrReleasedWithoutDuplicateAllocation(paid: False)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="ad3e5439-a226-a791-752b-d4cfe0d81cf6">
+      <Execution id="e9eed904-1141-42aa-bb7d-d0d67c2c22bb" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="ReservedSeatsAreIssuedOrReleasedWithoutDuplicateAllocation" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.ConcurrentSubjectsCannotClaimTheSameEmail" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="279f5f78-91db-9cb9-e625-fc2a6d741970">
+      <Execution id="56686bbf-c5f0-45ca-bfd7-89f57e5f347c" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="ConcurrentSubjectsCannotClaimTheSameEmail" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.ExistingSeedIsNeverLinkedByEmail" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="ac993ed1-b01a-c487-1b48-9b85e61c9849">
+      <Execution id="f8816f9b-3898-4713-8afd-b4222b6eca58" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="ExistingSeedIsNeverLinkedByEmail" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase8FaultTests.LostResponseAfterCommitReplaysExactlyOneHold" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="d1b89b56-c90f-fb4d-1279-11c179eaa525">
+      <Execution id="d10b192c-4306-4b92-a3aa-2d894510795f" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase8FaultTests" name="LostResponseAfterCommitReplaysExactlyOneHold" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.CustomerCannotAccessAdminOrOrganizer" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="6b269fef-2f1d-8d7c-b453-a83438013329">
+      <Execution id="7333c806-80a2-4e57-807c-fa52f7892971" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="CustomerCannotAccessAdminOrOrganizer" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.ConfigurationTests.JwtBearerKeepsOriginalClaimsAndSeparatesPublicIssuerFromInternalMetadata" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="39fddb9b-0e1f-dd56-0406-808ab2544244">
+      <Execution id="8f10daba-07cb-443e-a761-c8faaff41a48" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.ConfigurationTests" name="JwtBearerKeepsOriginalClaimsAndSeparatesPublicIssuerFromInternalMetadata" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase8FaultTests.CheckoutUsesServerPriceSnapshotAfterCatalogChanges" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="d8dd8a26-aff6-cb68-c60f-ac534308c0d5">
+      <Execution id="6856f619-32f8-4c84-949e-7c3d9d66013c" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase8FaultTests" name="CheckoutUsesServerPriceSnapshotAfterCatalogChanges" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.ExpiryUsesAnInclusiveDeadline(ticks: -1, mayExpire: False)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="8bffb825-670f-eac7-57cb-68631ff73901">
+      <Execution id="0dfc8fa8-d30f-4b35-8b26-7e9137c5b7b3" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="ExpiryUsesAnInclusiveDeadline" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.CheckoutAndSettlementWorkWithProductionDatabaseRetryStrategy" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="ac52f40e-7cad-1698-cf60-c8a1bd14fcc0">
+      <Execution id="2c7ec9b6-86d6-4297-8b9c-9951c97b6f82" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="CheckoutAndSettlementWorkWithProductionDatabaseRetryStrategy" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.CatalogManagementTests.PublicCatalogIsPagedFilteredStableAndHidesNonPublishedEvents" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="b679b5d4-e7f6-bd50-d73b-55ab0a7c4702">
+      <Execution id="2f8204ed-54f4-4884-b95b-81244a8352f0" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.CatalogManagementTests" name="PublicCatalogIsPagedFilteredStableAndHidesNonPublishedEvents" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.ExpiryUsesAnInclusiveDeadline(ticks: 1, mayExpire: True)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="a25faed7-8790-630e-4d16-681ad82e8ea4">
+      <Execution id="5eb52491-c882-4bcd-afc9-7c7ff4674b29" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="ExpiryUsesAnInclusiveDeadline" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;subject&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="575aad2a-cfd4-f74b-bdf3-828ffacc9720">
+      <Execution id="309602b8-3fb6-4f86-9277-13a06be8c7f5" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="InvalidTokensAreRejected" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase8FaultTests.InvalidQuantityCannotChangeInventory(quantity: -1)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="d13ce8bf-c653-ae82-8962-d39d24f2acd8">
+      <Execution id="f4e81bb9-1a17-4577-a88a-8437f8edc2e7" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase8FaultTests" name="InvalidQuantityCannotChangeInventory" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase9Tests.WorkerBackfillsLegacyQrImagesWithoutChangingTheToken" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="32c99a9d-954a-04d2-899b-b63baa7ba931">
+      <Execution id="d8d2ac15-7fb4-4f29-ac12-97c34e2205bd" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase9Tests" name="WorkerBackfillsLegacyQrImagesWithoutChangingTheToken" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase8FaultTests.InvalidQuantityCannotChangeInventory(quantity: 3)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="38aae160-d64a-1bf0-c90e-0991720f185f">
+      <Execution id="30365264-fce5-498b-888c-ec5452d7be9d" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase8FaultTests" name="InvalidQuantityCannotChangeInventory" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.HoldConcurrencyTests.SameIdempotencyKeyReplaysAndCancellationReleasesExactlyOnce" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="6d245336-bf6c-1f7f-1b86-777d8c6cd59d">
+      <Execution id="f894c2d5-8856-44f8-8b71-4b079a476c79" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.HoldConcurrencyTests" name="SameIdempotencyKeyReplaysAndCancellationReleasesExactlyOnce" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase9Tests.EachTrafficDimensionReturns429AndRetryAfter(dimension: &quot;User&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="448253d2-d6a1-574e-902d-954360ae137c">
+      <Execution id="6f9df52b-6968-45ca-ab9e-ee96778a7ece" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase9Tests" name="EachTrafficDimensionReturns429AndRetryAfter" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.BaselineConcurrencyTests.RepeatedBurstsOf100500And1000NeverOversell" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="f9ec08ac-48cb-be34-d065-c1a7dcc90bd5">
+      <Execution id="bbac3faa-df8c-47cf-a5b3-d8ab3b0be146" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.BaselineConcurrencyTests" name="RepeatedBurstsOf100500And1000NeverOversell" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.PoliciesRequireTheExactRole(role: &quot;Customer&quot;, path: &quot;customer&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="3f7769c7-9908-71b2-bcf6-ce72bd34ce2c">
+      <Execution id="03bac397-55f3-4ca3-9f9f-194bbe5a088c" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="PoliciesRequireTheExactRole" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.InvalidHoldItemCannotEnterTheDomain(quantity: 1, price: 10, limit: 2, fee: -1)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="70683a36-476f-3474-a3b0-331894c887db">
+      <Execution id="c005cf01-8e9d-4ada-a1da-20d25f451d9e" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="InvalidHoldItemCannotEnterTheDomain" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase9Tests.WorkerPublishesQueueAndLagMetricsForAdminOnly" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="19620eb9-9bee-26d1-698c-c945e6ca814b">
+      <Execution id="775214d3-cec0-421f-ba0b-353a366b0aa1" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase9Tests" name="WorkerPublishesQueueAndLagMetricsForAdminOnly" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.CancellationIsIdempotentAndTerminal" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="38660ebc-a625-796e-d4e1-b68508910bb7">
+      <Execution id="94f2e2dd-375b-48be-aa2f-c82c09002003" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="CancellationIsIdempotentAndTerminal" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase9Tests.EachTrafficDimensionReturns429AndRetryAfter(dimension: &quot;Ip&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="4fcff5e6-6a90-77ac-e28d-c1ac0f250ca2">
+      <Execution id="d5754178-4a4d-4b22-8708-c72caeff639c" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase9Tests" name="EachTrafficDimensionReturns429AndRetryAfter" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase8FaultTests.KilledConsumerAfterCommitRedeliversWithoutDuplicatingTickets" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="e5a2bc91-2448-7ff0-4aa1-e3d4d39df372">
+      <Execution id="d8a859bd-7729-41ae-a682-0eb7ff09c8ee" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase8FaultTests" name="KilledConsumerAfterCommitRedeliversWithoutDuplicatingTickets" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase9Tests.EachTrafficDimensionReturns429AndRetryAfter(dimension: &quot;Client&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="7e9532ed-5ee1-3b80-b318-5d2a1d994e1b">
+      <Execution id="5441d082-e3cf-44fd-bbe2-753d02b6729d" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase9Tests" name="EachTrafficDimensionReturns429AndRetryAfter" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.MissingEmailInvalidatesAuthentication" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="163cf2d5-09c1-2916-2718-bf93c6efadf9">
+      <Execution id="59b64b42-1135-45ca-8f05-1f69e37825d4" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="MissingEmailInvalidatesAuthentication" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.ExpiryPaymentRacePreservesStateAndInventory(deadlineSeconds: 1)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="655447ad-567c-1ce1-eef2-1cf1bf1e408c">
+      <Execution id="b355e655-ca5e-4952-8173-05e72d2ad2c9" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="ExpiryPaymentRacePreservesStateAndInventory" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.InventoryManagementTests.OrganizerManagesQuantityAndSeatInventoryWithoutBreakingInvariants" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="7fb25041-c77d-8cce-84d7-466e23ef4234">
+      <Execution id="97c93b33-cb76-465a-ba6a-cdead3c51830" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.InventoryManagementTests" name="OrganizerManagesQuantityAndSeatInventoryWithoutBreakingInvariants" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase9PerformanceTests.CatalogCacheReducesQueriesAndHoldListsHaveConstantQueryCount" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="a83317fb-75fd-45c9-5681-03e44729ce86">
+      <Execution id="0ba50bfc-b064-4d40-9ab5-7041f2c770e1" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase9PerformanceTests" name="CatalogCacheReducesQueriesAndHoldListsHaveConstantQueryCount" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.CatalogManagementTests.OrganizerOwnsCatalogAndEventTransitionsAreGuarded" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="cdeeec7a-4b9b-c547-c7fb-8dd95753106e">
+      <Execution id="6f2666f6-c51b-439c-95bb-8c56768b8427" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.CatalogManagementTests" name="OrganizerOwnsCatalogAndEventTransitionsAreGuarded" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.SyncUpdatesProfileWithoutChangingLocalIdAndTokenRolesControlAccess" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="d0e4475b-6c43-ab6b-e23f-7cd74822cb5a">
+      <Execution id="b36448ef-24db-4c4a-9db4-0a76b902dc4a" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="SyncUpdatesProfileWithoutChangingLocalIdAndTokenRolesControlAccess" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.ConcurrentExpiryReleasesInventoryExactlyOnce" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="7604b137-3c21-c494-4ed6-cbf30a0230d7">
+      <Execution id="3173c44b-c155-4999-878e-7f2e8562509d" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="ConcurrentExpiryReleasesInventoryExactlyOnce" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.HoldConcurrencyTests.FailureOnLaterItemRollsBackEarlierInventoryAndSeatChanges" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="68d17edd-000e-7902-ecd5-176862b8e564">
+      <Execution id="159a8820-01a2-41cc-924c-a6931bb38709" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.HoldConcurrencyTests" name="FailureOnLaterItemRollsBackEarlierInventoryAndSeatChanges" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.InvalidHoldItemCannotEnterTheDomain(quantity: -1, price: 10, limit: 2, fee: 0)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="6e481372-e46b-970a-044b-4647c4fc0070">
+      <Execution id="9c39cc3c-a904-4565-92d2-aea222a1f312" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="InvalidHoldItemCannotEnterTheDomain" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.ConfigurationTests.NonDevelopmentRejectsHttpAuthorityOrMetadata(environment: &quot;Production&quot;, authority: &quot;https://id.example/realms/tixflow&quot;, metadata: &quot;http://keycloak:8080/discovery&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="0141b366-a5e9-adb5-0ab1-2e31a522fb6a">
+      <Execution id="69b40d36-4c79-4aec-9a2f-d1db8bc033f7" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.ConfigurationTests" name="NonDevelopmentRejectsHttpAuthorityOrMetadata" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.ConfigurationTests.ProfileMappingFiltersRolesAndUsesUsernameFallback" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="d468ef03-eef7-e3ac-372e-a8d543633e64">
+      <Execution id="ecc07c08-94c9-46dc-80cc-319f7f9cf1a3" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.ConfigurationTests" name="ProfileMappingFiltersRolesAndUsesUsernameFallback" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.Phase7Tests.HostedWorkerRunsExpiryOutboxIssuanceAndNotificationAcrossRestart" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="b496be22-0721-e691-6691-c18087d4719c">
+      <Execution id="93d8799f-d33f-4926-95e0-1be7153023c1" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.Phase7Tests" name="HostedWorkerRunsExpiryOutboxIssuanceAndNotificationAcrossRestart" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.HoldConcurrencyTests.ConcurrentRequestsForOneSeatHaveExactlyOneWinner" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="86312e6f-dcdf-4063-f1f6-95eea7267437">
+      <Execution id="4b0ff1ec-6876-4050-a12b-c028d64fef87" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.HoldConcurrencyTests" name="ConcurrentRequestsForOneSeatHaveExactlyOneWinner" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.InventoryManagementTests.PublicAvailabilityReturnsQuantityAndReservedSeatSnapshots" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="c6f0323b-5436-bc49-4026-ca03593e1091">
+      <Execution id="aa376a7c-53a2-4f34-b435-9e14a57f5b0f" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.InventoryManagementTests" name="PublicAvailabilityReturnsQuantityAndReservedSeatSnapshots" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.ConfigurationTests.NonDevelopmentRejectsHttpAuthorityOrMetadata(environment: &quot;Staging&quot;, authority: &quot;http://id.example/realms/tixflow&quot;, metadata: &quot;https://id.example/discovery&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="f133475f-4aa1-9e02-adb0-53d52df2700f">
+      <Execution id="755ee519-846d-4bb9-8284-4ff1d2f3d155" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.ConfigurationTests" name="NonDevelopmentRejectsHttpAuthorityOrMetadata" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.CancelledEventCannotPublishOrComplete" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="d147fb39-bef9-8f1f-5e7b-a6c514eea35d">
+      <Execution id="73772afd-26b2-436e-9d5b-a91014e655ba" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="CancelledEventCannotPublishOrComplete" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;issuer&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="652c0759-bb58-19d9-30ed-550733654120">
+      <Execution id="7a2040a1-3d15-4963-b5e0-781719fea4f4" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="InvalidTokensAreRejected" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.InvalidTokensAreRejected(defect: &quot;audience&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="8a85958c-9f1f-8624-d6aa-144e0d49836c">
+      <Execution id="9225ca3e-b7e5-49f2-a72a-142693bf94a4" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="InvalidTokensAreRejected" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.PaidOrderCannotBePaidTwice" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="feae0b05-e114-6adf-d520-c4ce55eaaa6c">
+      <Execution id="3a2ffa76-ce08-4df6-b6da-a10ed52c6c01" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="PaidOrderCannotBePaidTwice" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.TechnicalRolesAreIgnoredWhenOneApplicationRoleIsPresent" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="b4d45eeb-6bf9-d014-baf2-e142f27675ef">
+      <Execution id="19dd869a-e2ea-4c56-806d-72931375c9b9" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="TechnicalRolesAreIgnoredWhenOneApplicationRoleIsPresent" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.TokenMustHaveExactlyOneApplicationRoleAndDeniedRequestsDoNotCreateUsers(roles: [&quot;Customer&quot;, &quot;Organizer&quot;])" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="c8aa930a-95f5-71dc-4d28-74247c0c0be0">
+      <Execution id="6b6d3430-78f4-4c20-b2eb-f69672e5443a" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="TokenMustHaveExactlyOneApplicationRoleAndDeniedRequestsDoNotCreateUsers" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.SynchronizationDoesNotReactivateSuspendedLocalUsers" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="3197a72d-0231-9392-5f81-51ebdc38a35c">
+      <Execution id="1d320efb-bc77-43ca-997b-7308973848bb" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="SynchronizationDoesNotReactivateSuspendedLocalUsers" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.PublicEndpointsRemainAvailableAndProtectedEndpointsChallenge" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="9e06462c-a37e-8e2c-db1b-8be1e76822ae">
+      <Execution id="db581a34-a1d3-44d4-b0cf-42eed90c872f" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="PublicEndpointsRemainAvailableAndProtectedEndpointsChallenge" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.PoliciesRequireTheExactRole(role: &quot;Admin&quot;, path: &quot;admin&quot;)" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="70f9e770-264a-3304-37f2-aff6bab9c027">
+      <Execution id="eb1b5851-dabd-41f4-a134-8c43e0069fb8" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="PoliciesRequireTheExactRole" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.CheckoutPaymentTests.MockTimeoutFailsAttemptAndAllowsAnIdempotentRetry" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="9db406b2-5dc1-1371-bc2f-da5242024ee3">
+      <Execution id="316d16a5-0c0b-4557-a427-873e0165dc34" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.CheckoutPaymentTests" name="MockTimeoutFailsAttemptAndAllowsAnIdempotentRetry" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.CorsAllowsOnlyTheFrontendOrigin" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="805d00d1-8d99-7104-0b9f-a5597b78587c">
+      <Execution id="46560940-3a4d-411d-af59-4c8200da6c9b" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="CorsAllowsOnlyTheFrontendOrigin" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.AuthenticationTests.MigrationCanBeReappliedWithoutChangingSeedData" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="432cd668-ead6-0db9-fdd4-f3db9cf9607f">
+      <Execution id="53f1944c-8b53-4f6c-b9cc-d9cd67c86197" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.AuthenticationTests" name="MigrationCanBeReappliedWithoutChangingSeedData" />
+    </UnitTest>
+    <UnitTest name="TixFlow.Api.Tests.DomainRulesTests.InvalidDatesMoneyCapacityAndImageUrlAreRejectedWithoutMutation" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="9e0a7c13-4d85-4ecf-1421-cd89d48c7907">
+      <Execution id="2a0e1dae-8c9f-41ce-ad3b-9ab93c96bd52" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.DomainRulesTests" name="InvalidDatesMoneyCapacityAndImageUrlAreRejectedWithoutMutation" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="e3c3c2a5-baa4-bd66-83af-08e132c48926" executionId="62eb8e8e-4c48-4e4d-b922-d5252461a4e7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b679b5d4-e7f6-bd50-d73b-55ab0a7c4702" executionId="2f8204ed-54f4-4884-b95b-81244a8352f0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f7769c7-9908-71b2-bcf6-ce72bd34ce2c" executionId="03bac397-55f3-4ca3-9f9f-194bbe5a088c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0833def1-c5a8-4d91-f3ce-09675c412126" executionId="6f7875db-9296-443c-8237-d1a5b8305689" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b505eb29-a2a0-f76c-c8ed-f520db70fff9" executionId="6f6d356a-9a63-410f-813a-3fb52d878c3a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a9181790-a8ae-423f-3ca4-b54452b5d973" executionId="2e7fdaec-15e5-4632-86d6-2cafaa728e7a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="91770769-a4cc-1735-ef68-9232a70683ee" executionId="3cecf9a1-4ec8-4216-a81f-eb18cab1f67e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7604b137-3c21-c494-4ed6-cbf30a0230d7" executionId="3173c44b-c155-4999-878e-7f2e8562509d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d8dd8a26-aff6-cb68-c60f-ac534308c0d5" executionId="6856f619-32f8-4c84-949e-7c3d9d66013c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b4d45eeb-6bf9-d014-baf2-e142f27675ef" executionId="19dd869a-e2ea-4c56-806d-72931375c9b9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="497207bf-82ca-e6e4-b7be-b78fa7423a71" executionId="e0fa42c2-ba9d-491d-a2ec-ed80bd259e15" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="432cd668-ead6-0db9-fdd4-f3db9cf9607f" executionId="53f1944c-8b53-4f6c-b9cc-d9cd67c86197" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c034f0d2-a78a-2fad-d070-c5ff6c0a2d53" executionId="5a5b8c7b-030e-4c76-b7fd-d11467287ca8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="652c0759-bb58-19d9-30ed-550733654120" executionId="7a2040a1-3d15-4963-b5e0-781719fea4f4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7e9532ed-5ee1-3b80-b318-5d2a1d994e1b" executionId="5441d082-e3cf-44fd-bbe2-753d02b6729d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4f7c1657-ac84-e840-917e-f81e6728f054" executionId="7da24a45-e160-493c-8a11-cfff38b428a4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0141b366-a5e9-adb5-0ab1-2e31a522fb6a" executionId="69b40d36-4c79-4aec-9a2f-d1db8bc033f7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="805d00d1-8d99-7104-0b9f-a5597b78587c" executionId="46560940-3a4d-411d-af59-4c8200da6c9b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="655447ad-567c-1ce1-eef2-1cf1bf1e408c" executionId="b355e655-ca5e-4952-8173-05e72d2ad2c9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3dedef5a-238b-74af-bd2a-4b92cf94181e" executionId="8eedff29-9503-4576-9aeb-3c5b91712b05" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6b269fef-2f1d-8d7c-b453-a83438013329" executionId="7333c806-80a2-4e57-807c-fa52f7892971" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8a678497-0b5e-93b8-aefb-b0d0ef713753" executionId="e050fbde-7cae-475f-a5c8-b6d393916cf5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4fe94424-f8f6-a511-b36e-973fb95d7138" executionId="791dc200-e262-4fc9-9e68-6eb1d72d1000" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="21b6e613-c19f-e410-97dd-880af57d431c" executionId="6b32ebc7-8544-466b-9b6c-202be222335e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e571253b-1b85-88af-775a-c4d47368bc5d" executionId="73fdd242-f9ad-4e4b-8f23-e58e7f44c589" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ea5c93df-9d47-db14-8fe2-cc9be60af01f" executionId="bc24788c-42f2-4e15-9ccd-9952b53d389a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f6682eb-36af-3cc1-3650-57271fdacb28" executionId="3d2b1562-6d76-4129-ac0d-cc1a82081117" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b0729af1-6b3e-63f6-64d3-92bd5de04f68" executionId="759c06e4-b962-4bd2-9b19-b4391aa60d40" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b6304733-aba5-293f-4066-17ebd827688c" executionId="71f6cbbe-019f-4d78-b62e-2bad20386da1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b965f3cd-a0fd-dafd-c3ce-92b89ca222df" executionId="7dd71602-cd91-4268-ba59-008776fc5163" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8a85958c-9f1f-8624-d6aa-144e0d49836c" executionId="9225ca3e-b7e5-49f2-a72a-142693bf94a4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="86312e6f-dcdf-4063-f1f6-95eea7267437" executionId="4b0ff1ec-6876-4050-a12b-c028d64fef87" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e5a2bc91-2448-7ff0-4aa1-e3d4d39df372" executionId="d8a859bd-7729-41ae-a682-0eb7ff09c8ee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7fb25041-c77d-8cce-84d7-466e23ef4234" executionId="97c93b33-cb76-465a-ba6a-cdead3c51830" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a83317fb-75fd-45c9-5681-03e44729ce86" executionId="0ba50bfc-b064-4d40-9ab5-7041f2c770e1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="38660ebc-a625-796e-d4e1-b68508910bb7" executionId="94f2e2dd-375b-48be-aa2f-c82c09002003" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d0e4475b-6c43-ab6b-e23f-7cd74822cb5a" executionId="b36448ef-24db-4c4a-9db4-0a76b902dc4a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3b7aa5ce-be12-a878-b67e-cf1f6b5048b5" executionId="eec19c62-a338-45fc-9968-6bb406944c3c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="575aad2a-cfd4-f74b-bdf3-828ffacc9720" executionId="309602b8-3fb6-4f86-9277-13a06be8c7f5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="39617c1f-5136-b075-3d5b-54529249a7fb" executionId="d1d58b4c-adbd-488b-82c6-8a3b8d99730b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="39fddb9b-0e1f-dd56-0406-808ab2544244" executionId="8f10daba-07cb-443e-a761-c8faaff41a48" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="163cf2d5-09c1-2916-2718-bf93c6efadf9" executionId="59b64b42-1135-45ca-8f05-1f69e37825d4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6d245336-bf6c-1f7f-1b86-777d8c6cd59d" executionId="f894c2d5-8856-44f8-8b71-4b079a476c79" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d147fb39-bef9-8f1f-5e7b-a6c514eea35d" executionId="73772afd-26b2-436e-9d5b-a91014e655ba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c6f0323b-5436-bc49-4026-ca03593e1091" executionId="aa376a7c-53a2-4f34-b435-9e14a57f5b0f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9db406b2-5dc1-1371-bc2f-da5242024ee3" executionId="316d16a5-0c0b-4557-a427-873e0165dc34" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="57dcc2db-2ff1-1878-2e44-2978bf026676" executionId="d5bf62a6-12f3-493d-86af-01ba899c72d3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="43a16b34-0002-ca1f-e581-c354d815a396" executionId="9b627d21-32a3-4e74-be4e-2080240fa8f1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4d214243-eb85-381e-2184-e8907c2e592a" executionId="174a3c8c-2198-42f8-9720-c6160394472c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="feae0b05-e114-6adf-d520-c4ce55eaaa6c" executionId="3a2ffa76-ce08-4df6-b6da-a10ed52c6c01" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7f4df62c-f25e-0a25-338f-71d7a686faf3" executionId="44f06210-96fe-4a5c-a3b7-5665ebce57e7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="70f9e770-264a-3304-37f2-aff6bab9c027" executionId="eb1b5851-dabd-41f4-a134-8c43e0069fb8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="448253d2-d6a1-574e-902d-954360ae137c" executionId="6f9df52b-6968-45ca-ab9e-ee96778a7ece" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="19620eb9-9bee-26d1-698c-c945e6ca814b" executionId="775214d3-cec0-421f-ba0b-353a366b0aa1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8bffb825-670f-eac7-57cb-68631ff73901" executionId="0dfc8fa8-d30f-4b35-8b26-7e9137c5b7b3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ac993ed1-b01a-c487-1b48-9b85e61c9849" executionId="f8816f9b-3898-4713-8afd-b4222b6eca58" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f9ec08ac-48cb-be34-d065-c1a7dcc90bd5" executionId="bbac3faa-df8c-47cf-a5b3-d8ab3b0be146" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a502b2c6-adfe-577b-bacf-264d7f29eefe" executionId="777eed26-5890-44eb-9dd1-65f4cc524943" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9e06462c-a37e-8e2c-db1b-8be1e76822ae" executionId="db581a34-a1d3-44d4-b0cf-42eed90c872f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="25b5bb82-be33-c980-6cd4-70cc61260faa" executionId="d0d5e7aa-bd74-4eab-91e7-d1ff3e045bdd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5dd83142-3a51-2001-d312-c995cf3be9a3" executionId="79845a03-adf3-42a4-a74b-5d80d4e604a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b496be22-0721-e691-6691-c18087d4719c" executionId="93d8799f-d33f-4926-95e0-1be7153023c1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e0a56a9c-17f1-3898-1954-3378843ac828" executionId="40ab995e-9f35-4c8e-bed1-f0f63d2dfdf1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c8aa930a-95f5-71dc-4d28-74247c0c0be0" executionId="6b6d3430-78f4-4c20-b2eb-f69672e5443a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f5d7f76f-12c0-f07b-89d3-58c47bb7082c" executionId="5385271e-5f78-404e-b270-7e333fd4fa05" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ea28cd02-4a13-818f-3796-2f72d4e8564b" executionId="d5979c13-1ee6-4ea2-b76d-850d276e2d25" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="de7c11e9-f1d9-4f7e-20c0-c83496c6b8f2" executionId="f0a4a5c3-31fe-488b-bf12-fff5ab2eaefd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="66431f15-e6e0-c679-61d0-03dc66cf130e" executionId="eee4d4d0-be22-4467-8ec2-cfe7cfcfabcd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a25faed7-8790-630e-4d16-681ad82e8ea4" executionId="5eb52491-c882-4bcd-afc9-7c7ff4674b29" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d468ef03-eef7-e3ac-372e-a8d543633e64" executionId="ecc07c08-94c9-46dc-80cc-319f7f9cf1a3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="38aae160-d64a-1bf0-c90e-0991720f185f" executionId="30365264-fce5-498b-888c-ec5452d7be9d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9e0a7c13-4d85-4ecf-1421-cd89d48c7907" executionId="2a0e1dae-8c9f-41ce-ad3b-9ab93c96bd52" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3197a72d-0231-9392-5f81-51ebdc38a35c" executionId="1d320efb-bc77-43ca-997b-7308973848bb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="08f9535c-04e0-0467-6f5f-a4be41e80b9c" executionId="5e93d78c-580d-4409-9124-7d45431a3acc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="32c99a9d-954a-04d2-899b-b63baa7ba931" executionId="d8d2ac15-7fb4-4f29-ac12-97c34e2205bd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3d461b80-0def-bb69-b92c-1ae48e3fa33a" executionId="8da79c07-ac45-463b-a303-83efe85d6694" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e481372-e46b-970a-044b-4647c4fc0070" executionId="9c39cc3c-a904-4565-92d2-aea222a1f312" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="495d6d28-bb6e-10cb-400e-459bddb17923" executionId="756b61c2-cf22-4826-a96f-38eb7324aa5a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7c6be5f9-6144-242c-743c-ce731e19de5b" executionId="7e33733a-951d-49d3-9bd8-bdec41949f66" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="68d17edd-000e-7902-ecd5-176862b8e564" executionId="159a8820-01a2-41cc-924c-a6931bb38709" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f133475f-4aa1-9e02-adb0-53d52df2700f" executionId="755ee519-846d-4bb9-8284-4ff1d2f3d155" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cdeeec7a-4b9b-c547-c7fb-8dd95753106e" executionId="6f2666f6-c51b-439c-95bb-8c56768b8427" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d13ce8bf-c653-ae82-8962-d39d24f2acd8" executionId="f4e81bb9-1a17-4577-a88a-8437f8edc2e7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="70683a36-476f-3474-a3b0-331894c887db" executionId="c005cf01-8e9d-4ada-a1da-20d25f451d9e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="279f5f78-91db-9cb9-e625-fc2a6d741970" executionId="56686bbf-c5f0-45ca-bfd7-89f57e5f347c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4fcff5e6-6a90-77ac-e28d-c1ac0f250ca2" executionId="d5754178-4a4d-4b22-8708-c72caeff639c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ad3e5439-a226-a791-752b-d4cfe0d81cf6" executionId="e9eed904-1141-42aa-bb7d-d0d67c2c22bb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d1b89b56-c90f-fb4d-1279-11c179eaa525" executionId="d10b192c-4306-4b92-a3aa-2d894510795f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="97f6eca4-e2d3-7314-be3f-661826bbd911" executionId="7836edd5-f727-4307-af1b-8cc00e208685" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ac52f40e-7cad-1698-cf60-c8a1bd14fcc0" executionId="2c7ec9b6-86d6-4297-8b9c-9951c97b6f82" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="90" executed="90" passed="90" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.01] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 8.0.30)
+[xUnit.net 00:00:00.35]   Discovering: TixFlow.Api.Tests
+[xUnit.net 00:00:00.58]   Discovered:  TixFlow.Api.Tests
+[xUnit.net 00:00:00.64]   Starting:    TixFlow.Api.Tests
+[testcontainers.org 00:00:01.00] Connected to Docker:
+  Host: unix:///var/run/docker.sock
+  Server Version: 29.8.0
+  Kernel Version: 6.18.33.2-microsoft-standard-WSL2
+  API Version: 1.56
+  Operating System: Docker Desktop
+  Total Memory: 7.44 GB
+  Labels: 
+    com.docker.desktop.address=npipe://\\.\pipe\docker_cli
+[testcontainers.org 00:00:01.51] Docker container a5058bf26b62 created
+[testcontainers.org 00:00:01.75] Start Docker container a5058bf26b62
+[testcontainers.org 00:00:02.33] Wait for Docker container a5058bf26b62 to complete readiness checks
+[testcontainers.org 00:00:02.34] Docker container a5058bf26b62 ready
+[testcontainers.org 00:00:04.60] Docker container dbb73d48e166 created
+[testcontainers.org 00:00:04.61] Docker container ab38b19e27e9 created
+[testcontainers.org 00:00:04.64] Start Docker container dbb73d48e166
+[testcontainers.org 00:00:04.65] Start Docker container ab38b19e27e9
+[testcontainers.org 00:00:05.29] Wait for Docker container dbb73d48e166 to complete readiness checks
+[testcontainers.org 00:00:05.37] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container dbb73d48e166
+[testcontainers.org 00:00:05.44] Wait for Docker container ab38b19e27e9 to complete readiness checks
+[testcontainers.org 00:00:06.73] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container dbb73d48e166
+[testcontainers.org 00:00:08.03] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container dbb73d48e166
+[testcontainers.org 00:00:09.40] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container dbb73d48e166
+[testcontainers.org 00:00:10.66] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container dbb73d48e166
+[testcontainers.org 00:00:10.89] Docker container dbb73d48e166 ready
+[testcontainers.org 00:00:18.47] Docker container ab38b19e27e9 ready
+[testcontainers.org 00:01:24.47] Delete Docker container ab38b19e27e9
+[testcontainers.org 00:01:24.88] Delete Docker container dbb73d48e166
+[testcontainers.org 00:01:26.28] Docker container c517e5897d4c created
+[testcontainers.org 00:01:26.28] Docker container 5e82f15d0b58 created
+[testcontainers.org 00:01:26.31] Start Docker container c517e5897d4c
+[testcontainers.org 00:01:26.32] Start Docker container 5e82f15d0b58
+[testcontainers.org 00:01:26.87] Wait for Docker container c517e5897d4c to complete readiness checks
+[testcontainers.org 00:01:26.97] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container c517e5897d4c
+[testcontainers.org 00:01:27.00] Wait for Docker container 5e82f15d0b58 to complete readiness checks
+[testcontainers.org 00:01:28.22] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container c517e5897d4c
+[testcontainers.org 00:01:29.48] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container c517e5897d4c
+[testcontainers.org 00:01:30.76] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container c517e5897d4c
+[testcontainers.org 00:01:32.22] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container c517e5897d4c
+[testcontainers.org 00:01:32.34] Docker container c517e5897d4c ready
+[testcontainers.org 00:01:38.67] Docker container 5e82f15d0b58 ready
+[testcontainers.org 00:02:13.50] Delete Docker container 5e82f15d0b58
+[testcontainers.org 00:02:13.90] Delete Docker container c517e5897d4c
+[xUnit.net 00:02:15.79]   Finished:    TixFlow.Api.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

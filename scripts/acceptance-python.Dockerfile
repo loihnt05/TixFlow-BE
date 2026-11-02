@@ -1,0 +1,4 @@
+FROM python:3.12-slim
+RUN pip install --no-cache-dir matplotlib==3.10.7
+ENV MPLBACKEND=Agg
+WORKDIR /work

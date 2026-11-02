@@ -1,0 +1,62 @@
+name: Production build and images
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-dotnet@v4
+        with: {dotnet-version: '8.0.x'}
+      - run: dotnet restore TixFlow.sln --locked-mode
+      - run: dotnet test TixFlow.sln -c Release --no-restore --filter 'Category!=Baseline' --logger trx --results-directory artifacts/phase12
+      - run: python3 -m unittest discover -s deploy/tests -v
+      - run: python3 deploy/tests/integration.py
+      - run: for script in deploy/scripts/*.sh; do bash -n "$script"; done
+      - name: Dependency vulnerability scan
+        shell: bash
+        run: |
+          dotnet list TixFlow.sln package --vulnerable --include-transitive --format json > artifacts/phase12/dependencies.json
+          python3 deploy/scripts/check-vulnerabilities.py artifacts/phase12/dependencies.json
+      - name: Secret scan
+        run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.24.2 git /repo --gitleaks-ignore-path /repo/.gitleaksignore --redact --no-banner
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: phase12-verification, path: artifacts/phase12/}
+  images:
+    needs: verify
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix: {component: [Api, Worker]}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: image
+        shell: bash
+        run: echo "name=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/tixflow-${COMPONENT,,}" >> "$GITHUB_OUTPUT"
+        env: {COMPONENT: '${{ matrix.component }}'}
+      - uses: docker/build-push-action@v6
+        id: build
+        with:
+          context: .
+          file: src/TixFlow.${{ matrix.component }}/Dockerfile
+          push: true
+          tags: ${{ steps.image.outputs.name }}:${{ github.sha }}
+      - name: Record immutable image
+        run: echo '${{ steps.image.outputs.name }}@${{ steps.build.outputs.digest }}' >> "$GITHUB_STEP_SUMMARY"

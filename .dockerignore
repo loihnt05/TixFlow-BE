@@ -5,4 +5,12 @@
 **/.next
 .env
 *.log
+artifacts
+**/TestResults
+**/ticket-keys
+**/assistant-keys
+.env.production
+deploy/rendered
+backups
+releases
 

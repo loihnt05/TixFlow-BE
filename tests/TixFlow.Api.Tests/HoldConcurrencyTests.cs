@@ -6,7 +6,8 @@ using Npgsql;
 
 namespace TixFlow.Api.Tests;
 
-public sealed class HoldConcurrencyTests(AuthApiFactory factory) : IClassFixture<AuthApiFactory>
+[Collection("Integration")]
+public sealed class HoldConcurrencyTests(AuthApiFactory factory)
 {
     private static readonly Guid SessionId = Guid.Parse("40000000-0000-0000-0000-000000000001");
     private static readonly Guid ReservedTicketTypeId = Guid.Parse("50000000-0000-0000-0000-000000000001");

@@ -1,0 +1,271 @@
+name: tixflow-production
+
+x-runtime: &runtime
+  restart: unless-stopped
+  init: true
+  security_opt: [no-new-privileges:true]
+  logging:
+    driver: json-file
+    options: {max-size: 10m, max-file: '5'}
+  cpus: 1.0
+  mem_limit: 512m
+  pids_limit: 256
+
+x-app-env: &app-env
+  ConnectionStrings__Postgres: Host=postgres;Database=tixflow;Username=tixflow;Password=${POSTGRES_PASSWORD:?required};Maximum Pool Size=50
+  ConnectionStrings__Redis: redis:6379
+  RabbitMq__Host: rabbitmq
+  RabbitMq__Username: tixflow
+  RabbitMq__Password: ${RABBITMQ_PASSWORD:?required}
+
+services:
+  postgres:
+    <<: *runtime
+    image: ${POSTGRES_IMAGE:?required}
+    environment:
+      POSTGRES_DB: tixflow
+      POSTGRES_USER: tixflow
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?required}
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    networks: [data]
+    mem_limit: 1g
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U tixflow -d tixflow']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  keycloak-postgres:
+    <<: *runtime
+    image: ${POSTGRES_IMAGE:?required}
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD:?required}
+    volumes: [keycloak_postgres_data:/var/lib/postgresql/data]
+    networks: [data]
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U keycloak -d keycloak']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    <<: *runtime
+    image: ${REDIS_IMAGE:?required}
+    command: [redis-server, --appendonly, 'yes', --maxmemory, 192mb, --maxmemory-policy, allkeys-lru]
+    volumes: [redis_data:/data]
+    networks: [data]
+    mem_limit: 256m
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  rabbitmq:
+    <<: *runtime
+    image: ${RABBITMQ_IMAGE:?required}
+    environment:
+      RABBITMQ_DEFAULT_USER: tixflow
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?required}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./deploy/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
+    networks: [data]
+    mem_limit: 768m
+    healthcheck:
+      test: [CMD, rabbitmq-diagnostics, -q, ping]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  migrate:
+    image: ${POSTGRES_IMAGE:?required}
+    profiles: [tools]
+    restart: 'no'
+    environment:
+      PGHOST: postgres
+      PGDATABASE: tixflow
+      PGUSER: tixflow
+      PGPASSWORD: ${POSTGRES_PASSWORD:?required}
+    volumes:
+      - ./database:/database:ro
+      - ./deploy/scripts/migrate.sh:/migrate.sh:ro
+    entrypoint: [/bin/sh, /migrate.sh]
+    networks: [data]
+
+  keycloak:
+    <<: *runtime
+    image: ${KEYCLOAK_IMAGE:?required}
+    command: [start, --import-realm]
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:?required}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USERNAME:?required}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?required}
+      KC_HOSTNAME: https://${AUTH_DOMAIN:?required}
+      KC_HTTP_ENABLED: 'true'
+      KC_PROXY_HEADERS: xforwarded
+      KC_PROXY_TRUSTED_ADDRESSES: 172.29.12.10
+      KC_HEALTH_ENABLED: 'true'
+      KC_METRICS_ENABLED: 'true'
+    volumes:
+      - ./deploy/rendered/keycloak:/opt/keycloak/data/import:ro
+      - ./infrastructure/keycloak/providers:/opt/keycloak/providers:ro
+    networks: [edge, data]
+    mem_limit: 1g
+    cpus: 2.0
+    depends_on:
+      keycloak-postgres: {condition: service_healthy}
+    healthcheck:
+      test: [CMD-SHELL, 'bash -ec ''exec 3<>/dev/tcp/127.0.0.1/9000; printf "GET /health/ready HTTP/1.0\r\n\r\n" >&3; grep -q "200 OK" <&3''']
+      interval: 10s
+      timeout: 5s
+      start_period: 90s
+      retries: 30
+
+  api:
+    <<: *runtime
+    image: ${API_IMAGE:?required}
+    environment:
+      <<: *app-env
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      Frontend__Origin: https://${APP_DOMAIN:?required}
+      Authentication__Authority: https://${AUTH_DOMAIN:?required}/realms/tixflow
+      Authentication__MetadataAddress: https://${AUTH_DOMAIN:?required}/realms/tixflow/.well-known/openid-configuration
+      Authentication__Audience: tixflow-api
+      ReverseProxy__KnownProxy: 172.29.12.10
+      Monitoring__Enabled: 'true'
+      Assistant__Provider: OpenAI
+      Assistant__Model: ${ASSISTANT_MODEL:-gpt-5.4-mini}
+      Assistant__ApiKey: ${OPENAI_API_KEY:-}
+      Assistant__BookingApiBaseUrl: http://localhost:8080
+      Assistant__KeyDirectory: /app/assistant-keys
+    volumes: [ticket_keys:/app/ticket-keys, assistant_keys:/app/assistant-keys]
+    networks: [edge, data]
+    mem_limit: 768m
+    cpus: 2.0
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      rabbitmq: {condition: service_healthy}
+      keycloak: {condition: service_healthy}
+    healthcheck:
+      test: [CMD-SHELL, 'bash -ec ''exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /health HTTP/1.0\r\n\r\n" >&3; grep -q "200" <&3''']
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 18
+
+  worker:
+    <<: *runtime
+    image: ${WORKER_IMAGE:?required}
+    environment:
+      <<: *app-env
+      DOTNET_ENVIRONMENT: Production
+      Worker__HeartbeatPath: /tmp/tixflow-worker-heartbeat
+    volumes: [ticket_keys:/app/ticket-keys]
+    networks: [data]
+    mem_limit: 512m
+    depends_on:
+      api: {condition: service_healthy}
+    healthcheck:
+      test: [CMD-SHELL, 'test -f /tmp/tixflow-worker-heartbeat && test $$(($$(date +%s) - $$(date -r /tmp/tixflow-worker-heartbeat +%s))) -lt 60']
+      interval: 15s
+      timeout: 3s
+      start_period: 30s
+      retries: 4
+
+  frontend:
+    <<: *runtime
+    image: ${FRONTEND_IMAGE:?required}
+    environment: {NODE_ENV: production, HOSTNAME: 0.0.0.0, PORT: '3000'}
+    networks: [edge]
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 15
+      start_period: 20s
+
+  nginx:
+    <<: *runtime
+    image: ${NGINX_IMAGE:?required}
+    ports: ['80:80', '443:443']
+    volumes:
+      - ./deploy/rendered/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deploy/rendered/letsencrypt:/etc/letsencrypt:ro
+      - ./deploy/rendered/acme:/var/www/acme:ro
+    networks:
+      edge: {ipv4_address: 172.29.12.10}
+    mem_limit: 128m
+    healthcheck:
+      test: [CMD-SHELL, 'wget -q -O /dev/null http://127.0.0.1:8081/health']
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  prometheus:
+    <<: *runtime
+    image: ${PROMETHEUS_IMAGE:?required}
+    command: [--config.file=/etc/prometheus/prometheus.yml, --storage.tsdb.path=/prometheus, --storage.tsdb.retention.time=14d, --storage.tsdb.retention.size=2GB]
+    volumes:
+      - ./deploy/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./deploy/monitoring/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - prometheus_data:/prometheus
+    networks: [data]
+    mem_limit: 512m
+
+  grafana:
+    <<: *runtime
+    image: ${GRAFANA_IMAGE:?required}
+    environment:
+      GF_SERVER_ROOT_URL: https://${MONITORING_DOMAIN:?required}
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USERNAME:?required}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?required}
+      GF_USERS_ALLOW_SIGN_UP: 'false'
+      GF_AUTH_ANONYMOUS_ENABLED: 'false'
+      GF_SECURITY_COOKIE_SECURE: 'true'
+      GF_SECURITY_COOKIE_SAMESITE: strict
+      GF_ANALYTICS_REPORTING_ENABLED: 'false'
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./deploy/monitoring/provisioning:/etc/grafana/provisioning:ro
+      - ./deploy/monitoring/dashboard.json:/var/lib/grafana/dashboards/tixflow.json:ro
+    networks: [edge, data]
+
+  node-exporter:
+    <<: *runtime
+    image: ${NODE_EXPORTER_IMAGE:?required}
+    command: [--path.rootfs=/host]
+    volumes: ['/:/host:ro,rslave']
+    networks: [data]
+    mem_limit: 64m
+
+  certbot:
+    image: ${CERTBOT_IMAGE:?required}
+    profiles: [tools]
+    volumes:
+      - ./deploy/rendered/letsencrypt:/etc/letsencrypt
+      - ./deploy/rendered/acme:/var/www/acme
+    networks: [edge]
+
+networks:
+  edge:
+    ipam:
+      config: [{subnet: 172.29.12.0/24}]
+  data: {internal: true}
+
+volumes:
+  postgres_data:
+  keycloak_postgres_data:
+  redis_data:
+  rabbitmq_data:
+  ticket_keys:
+  assistant_keys:
+  prometheus_data:
+  grafana_data:

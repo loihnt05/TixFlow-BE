@@ -72,8 +72,10 @@ public static class OrdersModule
         await using IDbContextTransaction tx = await db.Database.BeginTransactionAsync(ct);
         var sessionRef = await db.EventSessions.AsNoTracking().Where(x => x.Id == reference.EventSessionId)
             .Select(x => new { x.Id, x.EventId }).SingleAsync(ct);
-        Event? eventItem = await db.Events.FromSqlInterpolated($"SELECT * FROM events WHERE id = {sessionRef.EventId} FOR UPDATE").SingleOrDefaultAsync(ct);
-        EventSession? session = await db.EventSessions.FromSqlInterpolated($"SELECT * FROM event_sessions WHERE id = {sessionRef.Id} FOR UPDATE").SingleOrDefaultAsync(ct);
+        // Checkout only reads catalog state. Shared locks still exclude lifecycle
+        // writers, while independent holds can create orders concurrently.
+        Event? eventItem = await db.Events.FromSqlInterpolated($"SELECT * FROM events WHERE id = {sessionRef.EventId} FOR SHARE").SingleOrDefaultAsync(ct);
+        EventSession? session = await db.EventSessions.FromSqlInterpolated($"SELECT * FROM event_sessions WHERE id = {sessionRef.Id} FOR SHARE").SingleOrDefaultAsync(ct);
         Hold? hold = await db.Holds.FromSqlInterpolated($"SELECT * FROM holds WHERE id = {holdId} FOR UPDATE").SingleOrDefaultAsync(ct);
         if (hold is null || (hold.UserId != user.Id && !admin)) return NotFound(context);
         replayRecord = await db.IdempotencyRecords.SingleOrDefaultAsync(

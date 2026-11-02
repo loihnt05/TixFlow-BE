@@ -6,7 +6,8 @@ using Npgsql;
 
 namespace TixFlow.Api.Tests;
 
-public sealed class AuthenticationTests(AuthApiFactory factory) : IClassFixture<AuthApiFactory>
+[Collection("Integration")]
+public sealed class AuthenticationTests(AuthApiFactory factory)
 {
     private HttpClient Client(string? token = null)
     {

@@ -1,0 +1,23 @@
+name: Backend correctness and baseline
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reproduce pinned baseline
+        shell: pwsh
+        run: ./scripts/Invoke-Phase8Baseline.ps1 -Mode All
+      - name: Keep test results and experimental evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase8-baseline
+          path: artifacts/phase8/
+          if-no-files-found: error

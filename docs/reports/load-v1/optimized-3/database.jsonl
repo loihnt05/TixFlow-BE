@@ -1,0 +1,4 @@
+{"utc" : "2026-10-19T12:56:24.940433+00:00", "connections" : 4, "active" : 1, "lock_waiters" : 0, "oldest_transaction_seconds" : 0.030804, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T12:56:34.58328+00:00", "connections" : 5, "active" : 1, "lock_waiters" : 0, "oldest_transaction_seconds" : 0.962054, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T12:56:47.61263+00:00", "connections" : 43, "active" : 17, "lock_waiters" : 15, "oldest_transaction_seconds" : 9.097810, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T12:56:57.604828+00:00", "connections" : 44, "active" : 12, "lock_waiters" : 6, "oldest_transaction_seconds" : 0.896508, "pending_outbox" : 13, "oldest_outbox_seconds" : 1.882211}

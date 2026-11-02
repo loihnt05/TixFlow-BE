@@ -1,0 +1,2 @@
+{"utc" : "2026-10-19T12:50:35.100135+00:00", "connections" : 4, "active" : 1, "lock_waiters" : 0, "oldest_transaction_seconds" : 0.020684, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T12:50:41.415701+00:00", "connections" : 43, "active" : 14, "lock_waiters" : 11, "oldest_transaction_seconds" : 3.205675, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}

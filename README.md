@@ -75,15 +75,15 @@ dotnet run --project src/TixFlow.Api
 
 ## Kiểm thử
 
-Authentication, Hold concurrency, checkout/payment và Worker/QR/check-in được kiểm thử với PostgreSQL cách ly tại loopback `15433`, RabbitMQ test tại `15673` và dữ liệu tạm:
+Testcontainers tự dựng PostgreSQL/RabbitMQ trên cổng ngẫu nhiên, áp dụng schema/seed và dọn tài nguyên sau khi chạy. Chỉ cần Docker đang chạy; không cần `.env` hay stack nghiệp vụ:
 
 ```powershell
-docker compose -f docker-compose.test.yml up -d --wait
-dotnet test TixFlow.sln
-docker compose -f docker-compose.test.yml down
+dotnet test TixFlow.sln -c Release --filter 'Category!=Baseline'
+# Baseline có CPU/RAM, SDK, images, DB pool và dataset cố định:
+.\scripts\Invoke-Phase8Baseline.ps1 -Mode All
 ```
 
-Lệnh `down` ở trên không có `-v`; test database dùng `tmpfs` nên không lưu dữ liệu nghiệp vụ.
+`artifacts/phase8/<timestamp>-all/` chứa TRX, manifest SHA-256 và JSON từng request/lock sample/query plan. `docker-compose.test.yml` vẫn có thể dùng để điều tra thủ công, nhưng automated tests không kết nối các cổng cố định đó.
 
 ## Endpoint khởi tạo
 
@@ -105,6 +105,7 @@ Lệnh `down` ở trên không có `-v`; test database dùng `tmpfs` nên không
 | POST | `/api/v1/tickets/check-ins` | Check-in chống quét trùng, Organizer sở hữu Event hoặc Admin |
 | GET | `/api/v1/bookings/status` | Trạng thái module đặt vé |
 | GET | `/api/v1/assistant/status` | Trạng thái module AI Assistant |
+| GET | `/api/v1/operations/metrics` | Admin xem cache hit/miss và snapshot queue/consumer lag của Worker |
 
 ## Bước tiếp theo
 
@@ -114,5 +115,17 @@ Toàn bộ Giai đoạn 2 được ghi tại [JWT, role policy và middleware](d
 
 Giai đoạn 7 được ghi tại [Expiry, RabbitMQ, vé QR và check-in](docs/phase-7-worker-tickets.md), gồm migration, topology, recovery và các ca kiểm thử. FE giữ nguyên giao diện và lấy vé/QR thật từ API.
 
-1. Đóng băng baseline giai đoạn 8, chạy concurrency/load test quy mô lớn và thu metrics lock wait/deadlock.
+1. Baseline giai đoạn 8 và cách tái tạo nằm tại [kiểm thử tính đúng và thực nghiệm](docs/phase-8-baseline.md). Các lần đổi thuật toán/cấu hình/dataset cần baseline version mới.
 2. Chỉ tích hợp AI Booking Assistant sau khi Booking Service đã ổn định.
+
+Giai đoạn 9: [tối ưu có kiểm chứng](docs/phase-9-optimization.md), [quyết định kỹ thuật](docs/adr/008-phase9-optimization.md), [đề xuất model AI](docs/ai-provider-proposal.md). Chạy `./scripts/Invoke-Phase9Verification.ps1 -Mode All`; không dùng script giai đoạn 8 để gắn nhãn baseline v1 cho thuật toán mới. Giao diện FE giữ nguyên.
+
+Giai đoạn 10: [thực nghiệm HTTP bằng k6](docs/phase-10-load-testing.md). Chạy `./scripts/Invoke-Phase10Load.ps1 -Variant both -Repetitions 3` để so sánh hai image đã xác minh trong stack cách ly, rồi dùng `scripts/Summarize-Phase10.py` tổng hợp số liệu. Báo cáo phân biệt smoke với chiến dịch ramp/spike/soak và các tiêu chí nghiệm thu còn mở.
+
+Tiếp tục phase 10: [trạng thái và báo cáo load-v2](docs/reports/load-v2/README.md), có candidate Checkout riêng, monitoring Prometheus/Grafana và script campaign smoke/ramp/spike/soak. Xem `artifacts/phase10/campaign-*/status.json` để biết tiến trình đo thực tế; chưa coi việc khởi động campaign là hoàn tất.
+
+Giai đoạn 11: [AI Booking Assistant](docs/phase-11-ai-assistant.md). API/UI, typed tools, xác nhận hold, audit và adapter OpenAI đã được triển khai; xem báo cáo để biết kiểm thử và phần đánh giá model thật còn mở.
+
+Giai đoạn 12: [setup VPS, HTTPS, monitoring, backup/restore và CI/CD](docs/phase-12-deployment.md). Bộ triển khai production đã tách riêng; điền `.env.production.example`, chuẩn bị image digest và chạy `bash deploy/scripts/deploy.sh` trên VPS khi sẵn sàng. Hiện chỉ chuẩn bị setup, chưa triển khai VPS thật.
+
+Giai đoạn 13: [bộ bàn giao review](docs/phase-13-handover.md), gồm báo cáo, sơ đồ, OpenAPI hiện tại, số liệu truy vết về raw và kịch bản demo. Regression mới 106/106 đạt; campaign phase 10 vẫn failed ở soak. Chạy `python scripts/Build-Phase13Evidence.py --package` để đóng gói source/evidence có manifest SHA-256. Xem [checklist release](docs/release/release-checklist.md) trước khi chốt commit/image hoặc nghiệm thu VPS.

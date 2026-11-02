@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="0feca543-4f75-4c8a-b166-ffb4c84b3f06" name="@af1c8f4a0ed0 2026-10-18 13:40:42" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-18T13:40:42.5923947+00:00" queuing="2026-10-18T13:40:42.5923954+00:00" start="2026-10-18T13:38:29.7322699+00:00" finish="2026-10-18T13:40:43.7769764+00:00" />
+  <TestSettings name="default" id="cc43d488-2789-4915-bfe7-88ebe4e2efd2">
+    <Deployment runDeploymentRoot="_af1c8f4a0ed0_2026-10-18_13_40_42" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="cef00c42-8dcb-4096-9ed2-bcef4ba4dba1" testId="f9ec08ac-48cb-be34-d065-c1a7dcc90bd5" testName="TixFlow.Api.Tests.BaselineConcurrencyTests.RepeatedBurstsOf100500And1000NeverOversell" computerName="af1c8f4a0ed0" duration="00:01:50.5695336" startTime="2026-10-18T13:38:51.4328460+00:00" endTime="2026-10-18T13:40:41.9383130+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cef00c42-8dcb-4096-9ed2-bcef4ba4dba1">
+      <Output>
+        <StdOut>Repeat 1, N=100: created=50, capacity conflicts=50, held=50, sold=0, p95=6286.4ms
+Repeat 1, N=500: created=50, capacity conflicts=450, held=50, sold=0, p95=14158.1ms
+Repeat 1, N=1000: created=50, capacity conflicts=950, held=50, sold=0, p95=31003.3ms
+Repeat 2, N=100: created=50, capacity conflicts=50, held=50, sold=0, p95=6187.0ms
+Repeat 2, N=500: created=50, capacity conflicts=450, held=50, sold=0, p95=14722.3ms
+Repeat 2, N=1000: created=50, capacity conflicts=950, held=50, sold=0, p95=23886.4ms</StdOut>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TixFlow.Api.Tests.BaselineConcurrencyTests.RepeatedBurstsOf100500And1000NeverOversell" storage="/src/tests/tixflow.api.tests/bin/release/net8.0/tixflow.api.tests.dll" id="f9ec08ac-48cb-be34-d065-c1a7dcc90bd5">
+      <Execution id="cef00c42-8dcb-4096-9ed2-bcef4ba4dba1" />
+      <TestMethod codeBase="/src/tests/TixFlow.Api.Tests/bin/Release/net8.0/TixFlow.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TixFlow.Api.Tests.BaselineConcurrencyTests" name="RepeatedBurstsOf100500And1000NeverOversell" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="f9ec08ac-48cb-be34-d065-c1a7dcc90bd5" executionId="cef00c42-8dcb-4096-9ed2-bcef4ba4dba1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.01] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 8.0.30)
+[xUnit.net 00:00:00.49]   Discovering: TixFlow.Api.Tests
+[xUnit.net 00:00:01.25]   Discovered:  TixFlow.Api.Tests
+[xUnit.net 00:00:01.34]   Starting:    TixFlow.Api.Tests
+[testcontainers.org 00:00:00.39] Connected to Docker:
+  Host: unix:///var/run/docker.sock
+  Server Version: 29.8.0
+  Kernel Version: 6.18.33.2-microsoft-standard-WSL2
+  API Version: 1.56
+  Operating System: Docker Desktop
+  Total Memory: 7.44 GB
+  Labels: 
+    com.docker.desktop.address=npipe://\\.\pipe\docker_cli
+[testcontainers.org 00:00:00.97] Docker container f8afe3d9fd32 created
+[testcontainers.org 00:00:01.14] Start Docker container f8afe3d9fd32
+[testcontainers.org 00:00:01.57] Wait for Docker container f8afe3d9fd32 to complete readiness checks
+[testcontainers.org 00:00:02.31] Docker container f8afe3d9fd32 ready
+[testcontainers.org 00:00:02.82] Docker container eb2884c1a26e created
+[testcontainers.org 00:00:02.91] Docker container c08bdccd1295 created
+[testcontainers.org 00:00:02.98] Start Docker container eb2884c1a26e
+[testcontainers.org 00:00:03.08] Start Docker container c08bdccd1295
+[testcontainers.org 00:00:04.73] Wait for Docker container c08bdccd1295 to complete readiness checks
+[testcontainers.org 00:00:04.82] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container c08bdccd1295
+[testcontainers.org 00:00:04.85] Wait for Docker container eb2884c1a26e to complete readiness checks
+[testcontainers.org 00:00:06.22] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container c08bdccd1295
+[testcontainers.org 00:00:07.55] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container c08bdccd1295
+[testcontainers.org 00:00:08.96] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container c08bdccd1295
+[testcontainers.org 00:00:10.11] Execute "pg_isready --host localhost --dbname tixflow_auth_tests --username tixflow_test" at Docker container c08bdccd1295
+[testcontainers.org 00:00:10.23] Docker container c08bdccd1295 ready
+[testcontainers.org 00:00:16.79] Docker container eb2884c1a26e ready
+[testcontainers.org 00:02:08.73] Delete Docker container eb2884c1a26e
+[testcontainers.org 00:02:09.29] Delete Docker container c08bdccd1295
+[xUnit.net 00:02:11.93]   Finished:    TixFlow.Api.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

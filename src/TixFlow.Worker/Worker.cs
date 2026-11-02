@@ -8,7 +8,30 @@ public sealed class Worker(IConfiguration configuration, ILogger<Worker> logger)
     {
         string connection = configuration.GetConnectionString("Postgres")
             ?? throw new InvalidOperationException("Postgres connection is required.");
-        return Task.WhenAll(Expire(connection, stoppingToken), Publish(connection, stoppingToken), Consume(connection, stoppingToken));
+        return Task.WhenAll(Expire(connection, stoppingToken), Publish(connection, stoppingToken), Consume(connection, stoppingToken), Project(connection, stoppingToken));
+    }
+
+    private async Task Project(string connection, CancellationToken ct)
+    {
+        var handler = new TicketDelivery(connection, new QrTokens(configuration));
+        while (!ct.IsCancellationRequested)
+        {
+            try
+            {
+                await handler.BackfillImagesAsync(ct);
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { break; }
+            catch (Exception ex) { logger.LogWarning("Projection retry: {FailureType}", ex.GetType().Name); }
+            try
+            {
+                await ProcessingMetrics.SampleAsync(connection, configuration, ct);
+                if (configuration["Worker:HeartbeatPath"] is { Length: > 0 } path)
+                    await File.WriteAllTextAsync(path, DateTimeOffset.UtcNow.ToString("O"), ct);
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { break; }
+            catch (Exception ex) { logger.LogWarning("Metrics retry: {FailureType}", ex.GetType().Name); }
+            await Task.Delay(5000, ct);
+        }
     }
 
     private async Task Expire(string connection, CancellationToken ct)

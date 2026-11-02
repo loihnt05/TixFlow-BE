@@ -11,4 +11,14 @@
 *.suo
 *.log
 .DS_Store
+artifacts/
+**/TestResults/
+**/ticket-keys/
+**/assistant-keys/
+**/__pycache__/
+*.pyc
+.env.production
+deploy/rendered/
+backups/
+releases/
 

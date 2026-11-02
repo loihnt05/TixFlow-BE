@@ -1,0 +1,11 @@
+{"utc" : "2026-10-19T12:59:35.549387+00:00", "connections" : 4, "active" : 1, "lock_waiters" : 0, "oldest_transaction_seconds" : 0.024927, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T12:59:43.858296+00:00", "connections" : 5, "active" : 1, "lock_waiters" : 0, "oldest_transaction_seconds" : 0.025512, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T12:59:50.559068+00:00", "connections" : 5, "active" : 1, "lock_waiters" : 0, "oldest_transaction_seconds" : 0.020073, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T12:59:57.118087+00:00", "connections" : 5, "active" : 1, "lock_waiters" : 0, "oldest_transaction_seconds" : 0.065275, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T13:00:02.898017+00:00", "connections" : 24, "active" : 17, "lock_waiters" : 15, "oldest_transaction_seconds" : 1.136299, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T13:00:09.807843+00:00", "connections" : 24, "active" : 17, "lock_waiters" : 16, "oldest_transaction_seconds" : 3.430623, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T13:00:16.194586+00:00", "connections" : 24, "active" : 18, "lock_waiters" : 15, "oldest_transaction_seconds" : 0.990433, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T13:00:22.602277+00:00", "connections" : 24, "active" : 19, "lock_waiters" : 16, "oldest_transaction_seconds" : 1.826234, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T13:00:28.674251+00:00", "connections" : 25, "active" : 17, "lock_waiters" : 16, "oldest_transaction_seconds" : 1.102889, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T13:00:33.575997+00:00", "connections" : 25, "active" : 6, "lock_waiters" : 3, "oldest_transaction_seconds" : 0.303139, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}
+{"utc" : "2026-10-19T13:00:38.948482+00:00", "connections" : 25, "active" : 1, "lock_waiters" : 0, "oldest_transaction_seconds" : 0.017699, "pending_outbox" : 0, "oldest_outbox_seconds" : 0}

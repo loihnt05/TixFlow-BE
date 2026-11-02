@@ -1,0 +1,10 @@
+[Unit]
+Description=Check TixFlow certificate renewal twice daily
+
+[Timer]
+OnCalendar=*-*-* 06,18:00:00 UTC
+Persistent=true
+RandomizedDelaySec=1800
+
+[Install]
+WantedBy=timers.target

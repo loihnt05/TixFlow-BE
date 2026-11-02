@@ -94,8 +94,8 @@ public sealed class TicketDelivery(string connectionString, QrTokens? qrTokens =
                     string token = signer.Create(ticketId, nonce, signer.ActiveKeyId);
                     await using var insert = new NpgsqlCommand("""
                         INSERT INTO tickets(id, order_item_id, user_id, event_session_id, seat_id,
-                            ticket_code, qr_token_hash, qr_nonce, qr_key_id, ordinal)
-                        VALUES (@id, @item, @user, @session, @seat, @code, @hash, @nonce, @key, @ordinal)
+                            ticket_code, qr_token_hash, qr_nonce, qr_key_id, ordinal, qr_image)
+                        VALUES (@id, @item, @user, @session, @seat, @code, @hash, @nonce, @key, @ordinal, @image)
                         ON CONFLICT(order_item_id, ordinal) DO NOTHING
                         """, connection, tx);
                     insert.Parameters.AddWithValue("id", ticketId);
@@ -109,6 +109,7 @@ public sealed class TicketDelivery(string connectionString, QrTokens? qrTokens =
                     insert.Parameters.AddWithValue("nonce", nonce);
                     insert.Parameters.AddWithValue("key", signer.ActiveKeyId);
                     insert.Parameters.AddWithValue("ordinal", ordinal);
+                    insert.Parameters.AddWithValue("image", signer.RenderEncrypted(ticketId, token, signer.ActiveKeyId));
                     await insert.ExecuteNonQueryAsync(ct);
                 }
             }
@@ -138,5 +139,28 @@ public sealed class TicketDelivery(string connectionString, QrTokens? qrTokens =
             }
         }
         await tx.CommitAsync(ct);
+    }
+
+    public async Task BackfillImagesAsync(CancellationToken ct)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(ct);
+        var rows = new List<(Guid Id, string Nonce, string Key, string Hash)>();
+        await using (var command = new NpgsqlCommand("SELECT id, qr_nonce, qr_key_id, qr_token_hash FROM tickets WHERE qr_image IS NULL AND qr_nonce IS NOT NULL AND qr_key_id IS NOT NULL ORDER BY id LIMIT 20", connection))
+        {
+            await using var reader = await command.ExecuteReaderAsync(ct);
+            while (await reader.ReadAsync(ct)) rows.Add((reader.GetGuid(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
+        }
+        var signer = qrTokens ?? new QrTokens();
+        foreach (var row in rows)
+        {
+            string token = signer.Create(row.Id, row.Nonce, row.Key);
+            if (!CryptographicOperations.FixedTimeEquals(Convert.FromHexString(row.Hash), Convert.FromHexString(HashToken(token))))
+                throw new CryptographicException("QR signing key mismatch.");
+            await using var update = new NpgsqlCommand("UPDATE tickets SET qr_image=@image WHERE id=@id AND qr_image IS NULL", connection);
+            update.Parameters.AddWithValue("id", row.Id);
+            update.Parameters.AddWithValue("image", signer.RenderEncrypted(row.Id, token, row.Key));
+            await update.ExecuteNonQueryAsync(ct);
+        }
     }
 }

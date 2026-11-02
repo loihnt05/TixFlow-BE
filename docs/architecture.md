@@ -11,7 +11,7 @@ Api/Worker -> Application
 
 Domain không phụ thuộc database, Redis, RabbitMQ hay framework web. Mọi thay đổi trạng thái vé phải đi qua Booking module; AI Assistant chỉ gọi API của module này.
 
-## Module dự kiến
+## Module đã triển khai
 
 | Module | Trách nhiệm |
 |---|---|
@@ -20,10 +20,13 @@ Domain không phụ thuộc database, Redis, RabbitMQ hay framework web. Mọi t
 | Booking | Khả dụng, giữ chỗ, hết hạn và chống oversell |
 | Orders | Đơn hàng, thanh toán giả lập và idempotency |
 | Assistant | Điều phối tool gọi API sau xác nhận người dùng |
+| Tickets/Worker | Expiry, outbox/inbox, phát hành QR, check-in và mock notification |
 
 ## Nguồn dữ liệu
 
-PostgreSQL là nguồn sự thật. Redis chỉ dùng cho cache, rate limit hoặc dữ liệu tạm có thể tái tạo. RabbitMQ truyền sự kiện bất đồng bộ; outbox sẽ được bổ sung để tránh mất thông điệp sau khi transaction đã commit.
+PostgreSQL là nguồn sự thật; inventory được kiểm tra và cập nhật trong transaction với constraint/conditional update. Redis có trong stack nhưng không quyết định tồn kho. Catalog metadata hiện dùng MemoryCache theo process (30 giây, tối đa 256 entry), generation trong PostgreSQL để invalidation; availability đọc live. Rate limiter API theo process, Nginx giới hạn tại gateway.
 
-Các quyết định và phương án đã cân nhắc được ghi trong [5 ADR Giai đoạn 1](adr/README.md). Bộ hợp đồng nghiệp vụ, state/sequence và API nằm tại [bộ thiết kế Giai đoạn 1](phase-1-design-index.md); đây là mục tiêu triển khai, không phải tuyên bố runtime đã hoàn chỉnh.
+RabbitMQ truyền sự kiện bất đồng bộ. Transactional outbox, lease/publisher confirm và inbox consumer đã triển khai ở phase 7; redelivery không được nhân đôi vé. Key volume QR và Assistant phải được giữ cùng dữ liệu khi backup/restore. Assistant chỉ chuẩn bị đề xuất; confirm gọi Booking API bằng quyền của Customer.
+
+Các quyết định ban đầu nằm trong [ADR](adr/README.md) và [thiết kế Giai đoạn 1](phase-1-design-index.md). Sơ đồ hiện trạng rút gọn và nguồn implementation ở [bộ bàn giao phase 13](release/diagrams.md). Compose production hiện là setup đã chuẩn bị, chưa nghiệm thu VPS; giới hạn thực nghiệm/AI được ghi tại [báo cáo](release/thesis-report.md).
 

@@ -1,0 +1,17 @@
+{
+  "checkedUtc": "2026-10-25T05:51:18.641Z",
+  "passed": true,
+  "browser": "156.0.4314.42",
+  "input": "docs/release/offline-demo.html",
+  "sha256": "e41753ea12ba082a4f40ab04d6f352298fdec6842f72992c665aae6cae6e230c",
+  "checks": [
+    "7 pages and boundaries",
+    "keyboard navigation",
+    "previous/next buttons",
+    "embedded images loaded",
+    "no HTTP requests in offline context",
+    "no JavaScript errors",
+    "390px mobile width without horizontal overflow"
+  ],
+  "scope": "Evidence walkthrough only; not authenticated TixFlow UI or VPS acceptance."
+}

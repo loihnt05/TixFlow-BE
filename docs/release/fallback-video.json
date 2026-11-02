@@ -1,0 +1,45 @@
+{
+  "createdUtc": "2026-10-25T05:54:28.116Z",
+  "output": "docs/release/TixFlow-evidence-fallback.webm",
+  "sha256": "fcc31d5473738b2174ea2efe56c61432da85f468b0e457004820764ee387911c",
+  "bytes": 918010,
+  "seconds": 42.05939999997616,
+  "mimeType": "video/webm;codecs=vp9",
+  "playback": {
+    "width": 1280,
+    "height": 850,
+    "decoded": true
+  },
+  "htmlSha256": "e41753ea12ba082a4f40ab04d6f352298fdec6842f72992c665aae6cae6e230c",
+  "frames": [
+    {
+      "path": "artifacts/phase13/verification/offline-browser/desktop-1.png",
+      "sha256": "56a9209bf7f64afd4bb603004446198dbef842fd9f101b10cebeafa426a0a439"
+    },
+    {
+      "path": "artifacts/phase13/verification/offline-browser/desktop-2.png",
+      "sha256": "90c6b16b067cdb376021a1aac9dd54c8c68e803d82b53af54dbc91df6c6cff3e"
+    },
+    {
+      "path": "artifacts/phase13/verification/offline-browser/desktop-3.png",
+      "sha256": "4169152ee4ffcbf165d1123cbed67d4bd79841c712c7b2a552f2ae62a7c28b54"
+    },
+    {
+      "path": "artifacts/phase13/verification/offline-browser/desktop-4.png",
+      "sha256": "3cf68a5e88f195337deeef035c327b8e2d0c214ed964374fee5c7b4d41c9c9ed"
+    },
+    {
+      "path": "artifacts/phase13/verification/offline-browser/desktop-5.png",
+      "sha256": "24b95034f144ec3064d3d10722c9cb1953585c6b15cf0295c628bb16161bace3"
+    },
+    {
+      "path": "artifacts/phase13/verification/offline-browser/desktop-6.png",
+      "sha256": "8739a529ba0dd4fd09825dc3f26abe4f09b4d1c7530bbaff64f82dee3b669c19"
+    },
+    {
+      "path": "artifacts/phase13/verification/offline-browser/desktop-7.png",
+      "sha256": "88b4ac7f162d1029238269a4d2c823ce35fc0f1a00f1f75c5ad71490f465350a"
+    }
+  ],
+  "scope": "Silent 42-second evidence walkthrough from offline pages. Not authenticated application UI, not VPS acceptance, not the planned 8–12 minute live demo."
+}

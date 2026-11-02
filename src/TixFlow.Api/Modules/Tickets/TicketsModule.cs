@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using QRCoder;
 using System.Security.Cryptography;
 using System.Text.Json;
 using TixFlow.Api.Authentication;
@@ -62,15 +61,16 @@ public static class TicketsModule
         if (admin && (string.IsNullOrWhiteSpace(supportReason) || supportReason.Length > 1000))
             return Error(400, "SUPPORT_REASON_REQUIRED");
         var ticket = await db.Tickets.AsNoTracking().Where(x => x.Id == ticketId && (x.UserId == user.Id || admin))
-            .Select(x => new { x.Id, x.QrNonce, x.QrKeyId, x.QrTokenHash, x.Status,
+            .Select(x => new { x.Id, x.QrNonce, x.QrKeyId, x.QrTokenHash, x.QrImage, x.Status,
                 OrderStatus = x.OrderItem.Order.Status, EventStatus = x.EventSession.Event.Status, SessionStatus = x.EventSession.Status }).SingleOrDefaultAsync(ct);
         if (ticket is null) return Error(404, "RESOURCE_NOT_FOUND");
         if (ticket.Status is TicketStatus.Cancelled or TicketStatus.Refunded || ticket.OrderStatus != OrderStatus.Paid
             || ticket.EventStatus != TixFlow.Domain.Events.EventStatus.Published
             || ticket.SessionStatus is TixFlow.Domain.Events.SessionStatus.Cancelled or TixFlow.Domain.Events.SessionStatus.Completed)
             return Error(409, "TICKET_INVALID");
-        if (ticket.QrNonce is null || ticket.QrKeyId is null) return Error(409, "QR_NOT_AVAILABLE");
-        string token = new QrTokens(configuration).Create(ticket.Id, ticket.QrNonce, ticket.QrKeyId);
+        if (ticket.QrNonce is null || ticket.QrKeyId is null || ticket.QrImage is null) return Error(409, "QR_NOT_AVAILABLE");
+        var signer = new QrTokens(configuration);
+        string token = signer.Create(ticket.Id, ticket.QrNonce, ticket.QrKeyId);
         if (!CryptographicOperations.FixedTimeEquals(Convert.FromHexString(ticket.QrTokenHash),
             Convert.FromHexString(TicketDelivery.HashToken(token)))) return Error(503, "QR_KEY_UNAVAILABLE");
         if (admin)
@@ -80,7 +80,7 @@ public static class TicketsModule
             await db.SaveChangesAsync(ct);
         }
         return Results.Ok(new { data = new { qrToken = token, qrImageDataUrl = "data:image/png;base64," +
-            Convert.ToBase64String(PngByteQRCodeHelper.GetQRCode(token, QRCodeGenerator.ECCLevel.M, 5)) } });
+            Convert.ToBase64String(signer.ReadImage(ticket.Id, ticket.QrImage, ticket.QrKeyId)) } });
     }
 
     private static async Task<IResult> CheckInAsync(CheckInRequest request, HttpContext context,

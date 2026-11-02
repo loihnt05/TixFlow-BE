@@ -1,0 +1,70 @@
+{
+  "utc": "2026-10-18T13:33:59.750473Z",
+  "transport": "HTTP -> Nginx -> two Kestrel containers",
+  "catalog": [
+    {
+      "status": 200,
+      "instance": "4eb24fe97092",
+      "cache": "MISS"
+    },
+    {
+      "status": 200,
+      "instance": "197eb5832a04",
+      "cache": "MISS"
+    },
+    {
+      "status": 200,
+      "instance": "4eb24fe97092",
+      "cache": "HIT"
+    },
+    {
+      "status": 200,
+      "instance": "197eb5832a04",
+      "cache": "HIT"
+    },
+    {
+      "status": 200,
+      "instance": "4eb24fe97092",
+      "cache": "HIT"
+    },
+    {
+      "status": 200,
+      "instance": "197eb5832a04",
+      "cache": "HIT"
+    },
+    {
+      "status": 200,
+      "instance": "4eb24fe97092",
+      "cache": "HIT"
+    },
+    {
+      "status": 200,
+      "instance": "197eb5832a04",
+      "cache": "HIT"
+    },
+    {
+      "status": 200,
+      "instance": "4eb24fe97092",
+      "cache": "HIT"
+    },
+    {
+      "status": 200,
+      "instance": "197eb5832a04",
+      "cache": "HIT"
+    },
+    {
+      "status": 200,
+      "instance": "4eb24fe97092",
+      "cache": "HIT"
+    },
+    {
+      "status": 200,
+      "instance": "197eb5832a04",
+      "cache": "HIT"
+    }
+  ],
+  "health": 200,
+  "edgeBurst": 100,
+  "rateLimited": 57,
+  "unexpected": 0
+}

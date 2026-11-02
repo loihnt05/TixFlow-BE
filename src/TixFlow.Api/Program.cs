@@ -9,10 +9,33 @@ using TixFlow.Api.Modules.Users;
 using TixFlow.Api.Modules.Orders;
 using TixFlow.Api.Modules.Tickets;
 using System.Text.Json.Serialization;
+using TixFlow.Api.Performance;
+using Microsoft.AspNetCore.HttpOverrides;
+using System.Net;
+using Serilog;
+using Serilog.Formatting.Json;
+using Prometheus;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((_, configuration) => configuration
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
+    .Enrich.FromLogContext().WriteTo.Console(new JsonFormatter()));
+builder.WebHost.ConfigureKestrel(options => builder.Configuration.GetSection("Kestrel:Limits").Bind(options.Limits));
 
 builder.Services.AddApplication();
+builder.Services.AddSingleton<CatalogCache>();
+builder.Services.AddTrafficLimits(builder.Configuration);
+builder.Services.AddAssistant(builder.Configuration);
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.ForwardLimit = 1;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+    if (IPAddress.TryParse(builder.Configuration["ReverseProxy:KnownProxy"], out var proxy)) options.KnownProxies.Add(proxy);
+});
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddHostedService<MockPaymentSimulator>();
 builder.Services.AddSingleton(TimeProvider.System);
@@ -41,12 +64,38 @@ builder.Services.AddCors(options =>
 });
 
 WebApplication app = builder.Build();
+// Direct deployments ignore forwarding headers. Enable only with an explicit trusted proxy.
+if (IPAddress.TryParse(app.Configuration["ReverseProxy:KnownProxy"], out _)) app.UseForwardedHeaders();
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["X-TixFlow-Instance"] = Environment.MachineName;
+    await next(context);
+});
 
 // Match endpoint metadata before CORS, authentication and authorization.
 app.UseRouting();
+if (app.Configuration.GetValue<bool>("Monitoring:Enabled")) app.UseHttpMetrics();
+// Only log route templates and server-generated correlation IDs, never query strings or bodies.
+app.Use(async (context, next) =>
+{
+    var started = System.Diagnostics.Stopwatch.StartNew();
+    context.Response.Headers["X-Correlation-ID"] = context.TraceIdentifier;
+    using (Serilog.Context.LogContext.PushProperty("CorrelationId", context.TraceIdentifier))
+    {
+        try { await next(context); }
+        finally
+        {
+            Log.Information("HTTP {Method} {Route} responded {StatusCode} in {ElapsedMs} ms",
+                context.Request.Method,
+                (context.GetEndpoint() as RouteEndpoint)?.RoutePattern.RawText ?? "unmatched",
+                context.Response.StatusCode, started.Elapsed.TotalMilliseconds);
+        }
+    }
+});
 app.UseCors("Frontend");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRateLimiter();
 // Only authorized protected requests reach local profile/status checks, before the handler.
 app.UseMiddleware<LocalUserMiddleware>();
 if (app.Environment.IsDevelopment())
@@ -61,6 +110,9 @@ if (app.Environment.IsDevelopment())
     });
 }
 app.MapHealthChecks("/health");
+// Scrape endpoint exists only when enabled and is excluded from the public Nginx routes.
+if (app.Configuration.GetValue<bool>("Monitoring:Enabled"))
+    app.MapMetrics("/internal/metrics");
 
 RouteGroupBuilder api = app.MapGroup("/api/v1");
 api.MapGet("/system/info", (IHostEnvironment environment) => Results.Ok(new
@@ -79,6 +131,7 @@ api.MapOrdersModule();
 api.MapTicketsModule();
 api.MapAssistantModule();
 api.MapUsersModule();
+api.MapOperations();
 
 app.Run();
 
