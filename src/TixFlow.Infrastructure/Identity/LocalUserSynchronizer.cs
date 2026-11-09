@@ -19,20 +19,23 @@ public sealed class LocalUserSynchronizer(TixFlowDbContext dbContext) : ILocalUs
             {
                 // Parameterized PostgreSQL upsert: the unique subject index arbitrates concurrent first logins.
                 // Existing rows are NEVER claimed by matching an email. Their status is also never reset.
+                // A token phone only seeds an empty local phone; a phone saved via PATCH /users/me always wins.
                 await dbContext.Database.ExecuteSqlInterpolatedAsync($"""
                     INSERT INTO users
-                        (id, identity_subject, email, normalized_email, display_name, password_hash, role, status)
+                        (id, identity_subject, email, normalized_email, display_name, phone_number, password_hash, role, status)
                     VALUES
-                        ({Guid.NewGuid()}, {profile.Subject}, {email}, {normalizedEmail}, {profile.Name}, NULL, {role}, 'Active')
+                        ({Guid.NewGuid()}, {profile.Subject}, {email}, {normalizedEmail}, {profile.Name}, {profile.PhoneNumber}, NULL, {role}, 'Active')
                     ON CONFLICT (identity_subject) DO UPDATE
                     SET email = EXCLUDED.email,
                         normalized_email = EXCLUDED.normalized_email,
                         display_name = EXCLUDED.display_name,
+                        phone_number = COALESCE(users.phone_number, EXCLUDED.phone_number),
                         role = EXCLUDED.role,
                         updated_at_utc = now()
-                    WHERE (users.email, users.normalized_email, users.display_name, users.role)
+                    WHERE (users.email, users.normalized_email, users.display_name, users.role, users.phone_number)
                         IS DISTINCT FROM
-                        (EXCLUDED.email, EXCLUDED.normalized_email, EXCLUDED.display_name, EXCLUDED.role)
+                        (EXCLUDED.email, EXCLUDED.normalized_email, EXCLUDED.display_name, EXCLUDED.role,
+                         COALESCE(users.phone_number, EXCLUDED.phone_number))
                     """, cancellationToken);
                 break;
             }

@@ -72,12 +72,14 @@ Chỉ tick khi có **Actual + Evidence**. “Có code”, “trang trả 200”,
 
 ### 1.1. Smoke và hợp đồng API
 
-- [ ] APP-01: API `/health` trả 200; frontend trang chủ tải được; Keycloak discovery đúng realm; Worker/broker/DB hoạt động.
-- [ ] APP-02: kiểm tra API URL từ browser; không có CORS error, mixed content hoặc request tới sai backend.
-- [ ] APP-03: so DTO UI với OpenAPI: ID/slug, trạng thái, tiền tệ, thời gian, page/limit, cấu trúc `events`, lỗi validation.
-- [ ] APP-04: mở DevTools Network ở từng màn hình; lưu request/response đã loại header nhạy cảm; xác nhận UI không âm thầm fallback về mock khi API lỗi.
-- [ ] APP-05: tắt API trong môi trường test, thử timeout/401/403/404/409/422/500 theo contract; UI hiện lỗi đúng, bỏ loading và cho retry phù hợp. Không tự suy mọi 409 thành xung đột email.
-- [ ] APP-06: kiểm tra loading/empty/error/not-found và retry trên desktop/mobile; back/refresh/deep-link không làm mất trạng thái giao dịch đã lưu trên server.
+Kết quả lượt 03/11/2026: APP-01 PASS (smoke môi trường đang chạy), APP-02 PARTIAL, APP-03/04/05 FAIL, APP-06 FAIL với coverage một phần. Xem [Actual, Evidence và giới hạn kiểm tra](acceptance-app01-06-20261103.md).
+
+- [x] APP-01: API `/health` trả 200; frontend trang chủ tải được; Keycloak discovery đúng realm; Worker/broker/DB hoạt động. Evidence: lượt 03/11/2026; chưa chứng minh phát vé hoặc image khớp source.
+- [x] APP-02: kiểm tra API URL từ browser; không có CORS error, mixed content hoặc request tới sai backend.
+- [x] APP-03: so DTO UI với OpenAPI: ID/slug, trạng thái, tiền tệ, thời gian, page/limit, cấu trúc `events`, lỗi validation.
+- [x] APP-04: mở DevTools Network ở từng màn hình; lưu request/response đã loại header nhạy cảm; xác nhận UI không âm thầm fallback về mock khi API lỗi.
+- [x] APP-05: tắt API trong môi trường test, thử timeout/401/403/404/409/422/500 theo contract; UI hiện lỗi đúng, bỏ loading và cho retry phù hợp. Không tự suy mọi 409 thành xung đột email.
+- [x] APP-06: kiểm tra loading/empty/error/not-found và retry trên desktop/mobile; back/refresh/deep-link không làm mất trạng thái giao dịch đã lưu trên server.
 
 ### 1.2. Ma trận luồng cần test từ browser đến DB
 

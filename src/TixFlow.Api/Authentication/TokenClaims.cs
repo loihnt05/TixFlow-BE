@@ -10,6 +10,7 @@ public static class TokenClaims
     public const string Email = "email";
     public const string Username = "preferred_username";
     public const string Roles = "roles";
+    public const string PhoneNumber = "phone_number";
 
     public static IReadOnlyList<string> ApplicationRoles { get; } =
         Array.AsReadOnly(new[] { "Admin", "Organizer", "Customer" });
@@ -41,8 +42,10 @@ public static class TokenClaims
         string username = ReadRequiredString(principal, Username, 255)!.Trim();
         string name = principal.FindFirstValue("name")?.Trim() ?? string.Empty;
         if (string.IsNullOrWhiteSpace(name)) name = username;
+        // Optional OIDC standard claim (Keycloak "phone" scope). Invalid values are ignored, never fatal.
+        string? phoneNumber = PhoneNumbers.Normalize(principal.FindFirstValue(PhoneNumber));
 
-        return new IdentityProfile(subject, email, name[..Math.Min(name.Length, 120)], roles);
+        return new IdentityProfile(subject, email, name[..Math.Min(name.Length, 120)], roles, phoneNumber);
     }
 
     private static string? ReadRequiredString(ClaimsPrincipal principal, string type, int maxLength)

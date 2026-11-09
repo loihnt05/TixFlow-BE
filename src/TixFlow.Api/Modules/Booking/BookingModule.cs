@@ -136,7 +136,7 @@ public static class BookingModule
                 options,
                 cancellationToken);
 
-            HoldEnvelope response = new(await LoadHoldAsync(db, holdId, cancellationToken));
+            TixFlow.Api.Contracts.ApiResponse<HoldDto> response = new(await LoadHoldAsync(db, holdId, cancellationToken));
             string responseBody = JsonSerializer.Serialize(response, JsonOptions);
             DateTimeOffset completedAt = await DatabaseTimeAsync(db, cancellationToken);
             claim.Record.Complete(StatusCodes.Status201Created, responseBody, completedAt);
@@ -422,7 +422,7 @@ public static class BookingModule
         }
 
         context.Response.Headers.CacheControl = "no-store";
-        return Results.Ok(new HoldEnvelope(hold));
+        return Results.Ok(new TixFlow.Api.Contracts.ApiResponse<HoldDto>(hold));
     }
 
     private static async Task<IResult> ListHoldsAsync(
@@ -566,7 +566,7 @@ public static class BookingModule
 
                     if (hold.Status == HoldStatus.Cancelled)
                     {
-                        HoldEnvelope existing = new(await LoadHoldAsync(db, hold.Id, cancellationToken));
+                        TixFlow.Api.Contracts.ApiResponse<HoldDto> existing = new(await LoadHoldAsync(db, hold.Id, cancellationToken));
                         string existingBody = JsonSerializer.Serialize(existing, JsonOptions);
                         claim.Record.Complete(StatusCodes.Status200OK, existingBody,
                             await DatabaseTimeAsync(db, cancellationToken));
@@ -613,7 +613,7 @@ public static class BookingModule
                             "The Hold reached its deadline and was released.");
                     }
 
-                    HoldEnvelope response = new(await LoadHoldAsync(db, hold.Id, cancellationToken));
+                    TixFlow.Api.Contracts.ApiResponse<HoldDto> response = new(await LoadHoldAsync(db, hold.Id, cancellationToken));
                     string responseBody = JsonSerializer.Serialize(response, JsonOptions);
                     claim.Record.Complete(StatusCodes.Status200OK, responseBody, decisionTime);
                     await db.SaveChangesAsync(cancellationToken);
@@ -1030,7 +1030,7 @@ public static class BookingModule
         ProblemText(SerializeProblem(context, problem), problem.Status);
 
     private static string SerializeProblem(HttpContext context, BookingProblemException problem) =>
-        JsonSerializer.Serialize(new ProblemPayload(
+        JsonSerializer.Serialize(new TixFlow.Api.Contracts.ApiErrorResponse(
             $"/problems/{problem.Code.ToLowerInvariant().Replace('_', '-')}",
             problem.Code,
             problem.Status,
@@ -1124,7 +1124,6 @@ public static class BookingModule
 
     private sealed record IdempotencyClaim(IdempotencyRecord Record, bool IsNew);
 
-    private sealed record HoldEnvelope(HoldDto Data);
 
     private sealed record HoldDto(
         Guid Id,
@@ -1149,15 +1148,6 @@ public static class BookingModule
         IReadOnlyList<Guid> SeatIds,
         int MaxPerOrderSnapshot);
 
-    private sealed record ProblemPayload(
-        string Type,
-        string Title,
-        int Status,
-        string Detail,
-        string Instance,
-        string Code,
-        string TraceId,
-        bool Retryable);
 
     private class BookingProblemException(
         int status,

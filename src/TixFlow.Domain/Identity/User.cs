@@ -27,6 +27,9 @@ public sealed class User : Entity
 
     public string DisplayName { get; private set; } = string.Empty;
 
+    // Optional contact phone used to prefill checkout attendee information.
+    public string? PhoneNumber { get; private set; }
+
     // Legacy only. OIDC profiles have no password in the business database.
     public string? PasswordHash { get; private set; }
 

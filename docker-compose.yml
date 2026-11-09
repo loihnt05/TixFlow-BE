@@ -109,6 +109,13 @@ services:
       RabbitMq__Host: rabbitmq
       RabbitMq__Username: ${RABBITMQ_USER:-tixflow}
       RabbitMq__Password: ${RABBITMQ_PASSWORD}
+      Worker__HeartbeatPath: /tmp/worker-heartbeat.txt
+    healthcheck:
+      test: ["CMD-SHELL", "test $$(find /tmp/worker-heartbeat.txt -mmin -1 2>/dev/null)"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
     volumes:
       - ticket_keys:/app/ticket-keys
     depends_on:

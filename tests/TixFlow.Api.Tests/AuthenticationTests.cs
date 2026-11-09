@@ -250,5 +250,44 @@ public sealed class AuthenticationTests(AuthApiFactory factory)
         }
     }
 
-    private sealed record Me(Guid Id, string Sub, string Email, string Name, string[] Roles);
+    [Fact]
+    public async Task CurrentUserExposesCheckoutContactDetailsAndPhoneCanBeSaved()
+    {
+        var identity = Identity();
+        using HttpClient client = Client(factory.Token(identity.Sub, identity.Email, ["Customer"], name: "Contact Test"));
+        Me initial = (await client.GetFromJsonAsync<Me>("/api/v1/users/me"))!;
+        Assert.Equal("Contact Test", initial.Name);
+        Assert.Equal(identity.Email, initial.Email);
+        Assert.Null(initial.PhoneNumber);
+        Assert.Equal("Active", initial.Status);
+
+        using (HttpResponseMessage saved = await client.PatchAsJsonAsync("/api/v1/users/me", new { phoneNumber = "  +84 912   345 678 " }))
+        {
+            saved.EnsureSuccessStatusCode();
+            Assert.Equal("+84 912 345 678", (await saved.Content.ReadFromJsonAsync<Me>())!.PhoneNumber);
+        }
+        Assert.Equal("+84 912 345 678", (await client.GetFromJsonAsync<Me>("/api/v1/users/me"))!.PhoneNumber);
+
+        using (HttpResponseMessage invalid = await client.PatchAsJsonAsync("/api/v1/users/me", new { phoneNumber = "call me maybe" }))
+            Assert.Equal(HttpStatusCode.UnprocessableEntity, invalid.StatusCode);
+        Assert.Equal("+84 912 345 678", (await client.GetFromJsonAsync<Me>("/api/v1/users/me"))!.PhoneNumber);
+
+        using (HttpResponseMessage cleared = await client.PatchAsJsonAsync("/api/v1/users/me", new { phoneNumber = "" }))
+            Assert.Null((await cleared.Content.ReadFromJsonAsync<Me>())!.PhoneNumber);
+    }
+
+    [Fact]
+    public async Task TokenPhoneSeedsEmptyProfileButNeverOverridesSavedPhone()
+    {
+        var identity = Identity();
+        using HttpClient seeded = Client(factory.Token(identity.Sub, identity.Email, ["Customer"], phoneNumber: "0901234567"));
+        Assert.Equal("0901234567", (await seeded.GetFromJsonAsync<Me>("/api/v1/users/me"))!.PhoneNumber);
+
+        using (HttpResponseMessage saved = await seeded.PatchAsJsonAsync("/api/v1/users/me", new { phoneNumber = "+84 988 000 111" }))
+            saved.EnsureSuccessStatusCode();
+        Assert.Equal("+84 988 000 111", (await seeded.GetFromJsonAsync<Me>("/api/v1/users/me"))!.PhoneNumber);
+    }
+
+    private sealed record Me(Guid Id, string Sub, string Email, string Name, string[] Roles,
+        string? PhoneNumber = null, string? Status = null);
 }

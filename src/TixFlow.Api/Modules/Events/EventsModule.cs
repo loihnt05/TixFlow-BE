@@ -30,9 +30,13 @@ public static class EventsModule
 
         group.MapGet("/", GetEventsAsync)
             .WithSummary("List published events")
-            .WithDescription("Returns a stable, paged public catalog. Draft, cancelled and completed events are never exposed.");
+            .WithDescription("Returns a stable, paged public catalog. Draft, cancelled and completed events are never exposed.")
+            .Produces<PublicEventPage>(StatusCodes.Status200OK)
+            .ProducesValidationProblem(StatusCodes.Status400BadRequest);
         group.MapGet("/{identifier}", GetEventAsync)
-            .WithSummary("Get a published event by slug or id");
+            .WithSummary("Get a published event by slug or id")
+            .Produces<PublicEventResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound);
 
         return endpoints;
     }
@@ -140,7 +144,8 @@ public static class EventsModule
 
         return item is null
             ? Results.Problem(statusCode: StatusCodes.Status404NotFound, title: "EVENT_NOT_FOUND",
-                detail: "Published event was not found.")
+                detail: "Published event was not found.",
+                extensions: new Dictionary<string, object?> { ["code"] = "EVENT_NOT_FOUND" })
             : Results.Ok(ToResponse(item));
     }
 
@@ -259,32 +264,32 @@ public static class EventsModule
             sessions);
     }
 
-    private sealed record PublicEventPage(
+    public sealed record PublicEventPage(
         PublicEventResponse[] Events, int Total, int Page, int Limit, int TotalPages);
 
-    private sealed record PublicEventResponse(
+    public sealed record PublicEventResponse(
         Guid Id, string Name, string Slug, string Description, string Category, string? ImageUrl,
         string Status, DateTimeOffset? SaleStartsAtUtc, DateTimeOffset? SaleEndsAtUtc,
         DateTimeOffset? PublishedAtUtc, DateTimeOffset CreatedAtUtc, DateTimeOffset UpdatedAtUtc,
         PublicOrganizerResponse Organizer, PublicVenueResponse? Venue, PublicSessionResponse[] Sessions);
 
-    private sealed record PublicOrganizerResponse(
+    public sealed record PublicOrganizerResponse(
         Guid Id, string Name, string Slug, string Description, int EventCount);
 
-    private sealed record PublicVenueResponse(
+    public sealed record PublicVenueResponse(
         Guid Id, string Name, string AddressLine, string? Ward, string? District,
         string City, string CountryCode, string TimeZone);
 
-    private sealed record PublicSessionResponse(
+    public sealed record PublicSessionResponse(
         Guid Id, string Name, DateTimeOffset StartsAtUtc, DateTimeOffset EndsAtUtc,
         string Status, PublicTicketTypeResponse[] TicketTypes);
 
-    private sealed record PublicTicketTypeResponse(
+    public sealed record PublicTicketTypeResponse(
         Guid Id, string Name, string Description, decimal Price, string Currency,
         string InventoryMode, int TotalQuantity, int HeldQuantity, int SoldQuantity,
         int AvailableQuantity, long Version, DateTimeOffset UpdatedAtUtc, int MaxPerOrder,
         DateTimeOffset? SaleStartsAtUtc, DateTimeOffset? SaleEndsAtUtc, PublicSeatResponse[] Seats);
 
-    private sealed record PublicSeatResponse(Guid Id, string Section, string RowLabel,
+    public sealed record PublicSeatResponse(Guid Id, string Section, string RowLabel,
         string SeatNumber, bool IsAccessible, string Status);
 }
