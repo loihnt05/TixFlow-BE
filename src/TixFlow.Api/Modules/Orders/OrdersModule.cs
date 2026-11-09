@@ -290,11 +290,9 @@ public static class OrdersModule
         Results.Text(JsonSerializer.Serialize(value, JsonOptions), "application/json", Encoding.UTF8, status);
     private static IResult JsonText(string body, int status) =>
         Results.Text(body, "application/json", Encoding.UTF8, status);
-    private static IResult Problem(HttpContext context, int status, string code, string detail) => Results.Json(new
-    {
-        type = $"/problems/{code.ToLowerInvariant().Replace('_', '-')}", title = code, status, detail,
-        instance = context.Request.Path.Value, code, traceId = context.TraceIdentifier, retryable = false
-    }, statusCode: status, contentType: "application/problem+json");
+    private static IResult Problem(HttpContext context, int status, string code, string detail) =>
+        (TixFlow.Api.Contracts.ApiErrorResponse.Create(context, status, code, detail) with
+        { Type = $"/problems/{code.ToLowerInvariant().Replace('_', '-')}" }).ToResult();
     private static IResult NotFound(HttpContext context) => Problem(context, 404, "RESOURCE_NOT_FOUND", "The requested resource was not found.");
 
     public sealed record MockPaymentRequest(string Outcome);

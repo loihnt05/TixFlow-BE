@@ -48,8 +48,11 @@ builder.Services.AddOptions<BookingOptions>()
     .Validate(options => options.IdempotencyRetentionHours is >= 1 and <= 168,
         "Booking idempotency retention must be between 1 and 168 hours.")
     .ValidateOnStart();
+builder.Services.AddProblemDetails();
 builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddIdentityAuthentication(builder.Configuration, builder.Environment);
 builder.Services.AddHealthChecks()
     .AddCheck<PostgresHealthCheck>("postgres");
@@ -110,6 +113,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 app.MapHealthChecks("/health");
+app.MapHealthChecks("/health/ready");
+app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = _ => false
+});
 // Scrape endpoint exists only when enabled and is excluded from the public Nginx routes.
 if (app.Configuration.GetValue<bool>("Monitoring:Enabled"))
     app.MapMetrics("/internal/metrics");
