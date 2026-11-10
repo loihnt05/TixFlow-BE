@@ -1,5 +1,21 @@
 # TixFlow database
 
+## Demo catalog mở rộng (DB nghiệm thu)
+
+### Bản ghi tham khảo từ Zipevent
+
+`demo-zipevent-reference-v1.sql` nạp 14 event có tên, khoảng ngày, venue và URL nguồn từ [danh sách Zipevent](https://www.zipeventapp.com/event/allevent) được đối chiếu ngày 10/11/2026. Chạy bằng `psql -v ON_ERROR_STOP=1 -v target_db=tixflow` (hoặc `tixflow_acceptance`). Các bản ghi có slug `zipevent-reference-01` đến `14`, `image_url` rỗng và không có ticket type/inventory; không nhập ảnh, giá, mô tả hay quyền bán vé của Zipevent. Giờ đầu/cuối trong session chỉ là mốc để biểu diễn **khoảng ngày** trên catalog, không phải lịch suất diễn chi tiết. Chạy lại không nhân đôi row.
+
+Sau khi áp dụng migrations, chạy `demo-catalog-expanded-v1.sql` bằng `psql -v ON_ERROR_STOP=1 -v target_db=tixflow` cho stack local hoặc `-v target_db=tixflow_acceptance` cho DB nghiệm thu. Script kiểm tra tên DB khớp tham số khai báo, dùng ID/slug ổn định và có thể chạy lại mà không nhân đôi dữ liệu. Nó thêm 60 event gốc, 60 session, 60 loại vé GA và 60 inventory; không tạo order/ticket hoặc số bán giả. Ngày sự kiện cố định trong năm 2027 để kiểm thử pagination, category, venue, giá và vé miễn phí. Nếu cần làm mới theo lịch sau đó, hãy tạo phiên bản seed mới thay vì sửa dữ liệu giao dịch đã phát sinh.
+
+Nhóm sự kiện và kiểu danh mục được tham khảo từ [danh mục công khai của Zipevent](https://web.zipeventapp.com/Event/AllEvent); tên và mô tả trong seed do TixFlow viết mới.
+
+### Lịch demo tương lai
+
+`demo-future-calendar-v1.sql` thêm 14 event gốc của TixFlow, mỗi tháng một event từ 06/2027 đến 07/2028. Mỗi event có một session `OnSale`, một loại vé GA và inventory, không tạo order hay số vé đã bán. Chạy sau migrations và baseline seed, với `psql -v ON_ERROR_STOP=1 -v target_db=tixflow` hoặc `target_db=tixflow_acceptance`. Script dùng ID cố định nên chạy lại không nhân đôi dữ liệu. Lịch này có mốc kết thúc 07/2028; khi cần duy trì event tương lai sau mốc đó, tạo seed version tiếp theo.
+
+Sau khi nạp ba seed catalog vào DB local ngày 10/11/2026: 100 event tổng cộng, gồm 92 Published; 14 event mới trải đều 14 tháng. DB nghiệm thu có 102 event vì chứa thêm hai fixture phục vụ kiểm thử đặt vé.
+
 ## Phạm vi schema
 
 Schema ban đầu có 20 bảng, chia thành các nhóm:

@@ -105,6 +105,11 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
             entity.Property(item => item.Slug).HasMaxLength(180).IsRequired();
             entity.Property(item => item.Description).HasMaxLength(2000).IsRequired();
             entity.Property(item => item.ContactEmail).HasMaxLength(320).IsRequired();
+            entity.Property(item => item.AvatarUrl).HasMaxLength(1000);
+            entity.Property(item => item.WebsiteUrl).HasMaxLength(500);
+            entity.Property(item => item.IsVerified);
+            entity.Property(item => item.FollowerCount);
+            entity.Property(item => item.EventCount);
             entity.HasIndex(item => item.Slug).IsUnique();
             entity.HasIndex(item => item.OwnerUserId).IsUnique();
             entity.HasOne(item => item.OwnerUser)

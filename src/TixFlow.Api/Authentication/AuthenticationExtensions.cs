@@ -143,6 +143,13 @@ public static class AuthenticationExtensions
                     }
                 }
             });
+            options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                Description = "Paste accessToken from POST /api/v1/auth/login (Development only)."
+            });
             options.OperationFilter<AuthorizationOperationFilter>();
         });
 

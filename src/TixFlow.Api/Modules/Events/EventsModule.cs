@@ -197,8 +197,10 @@ public static class EventsModule
     private static bool IsPublicSession(EventSession session) =>
         session.Status is SessionStatus.Scheduled or SessionStatus.OnSale or SessionStatus.SoldOut;
 
+    private static readonly TimeSpan VietnamOffset = TimeSpan.FromHours(7);
+
     private static DateTimeOffset UtcStart(DateOnly date) =>
-        new(date.ToDateTime(TimeOnly.MinValue), TimeSpan.Zero);
+        new DateTimeOffset(date.ToDateTime(TimeOnly.MinValue), VietnamOffset).ToUniversalTime();
 
     private static PublicEventResponse ToResponse(Event item)
     {
@@ -257,7 +259,9 @@ public static class EventsModule
             item.UpdatedAtUtc,
             new PublicOrganizerResponse(
                 item.Organizer.Id, item.Organizer.Name, item.Organizer.Slug,
-                item.Organizer.Description, 0),
+                item.Organizer.Description, Math.Max(item.Organizer.EventCount, 1),
+                item.Organizer.AvatarUrl, item.Organizer.WebsiteUrl,
+                item.Organizer.IsVerified, item.Organizer.FollowerCount),
             item.Venue is null ? null : new PublicVenueResponse(
                 item.Venue.Id, item.Venue.Name, item.Venue.AddressLine, item.Venue.Ward,
                 item.Venue.District, item.Venue.City, item.Venue.CountryCode, item.Venue.TimeZone),
@@ -274,7 +278,8 @@ public static class EventsModule
         PublicOrganizerResponse Organizer, PublicVenueResponse? Venue, PublicSessionResponse[] Sessions);
 
     public sealed record PublicOrganizerResponse(
-        Guid Id, string Name, string Slug, string Description, int EventCount);
+        Guid Id, string Name, string Slug, string Description, int EventCount,
+        string? AvatarUrl = null, string? WebsiteUrl = null, bool IsVerified = false, int FollowerCount = 0);
 
     public sealed record PublicVenueResponse(
         Guid Id, string Name, string AddressLine, string? Ward, string? District,

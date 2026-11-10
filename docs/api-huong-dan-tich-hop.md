@@ -1,7 +1,7 @@
 # TixFlow API — hướng dẫn tích hợp
 
 > Cập nhật theo Swagger của stack đang chạy ngày **09/11/2026** (UTC+07:00).  
-> Swagger đang chạy: `http://localhost:8080/swagger/v1/swagger.json` — đây là nguồn tham chiếu cho endpoint và schema hiện tại.
+> Swagger đang chạy: `http://localhost:8080/swagger/v1/swagger.json` — đây là nguồn tham chiếu cho api endpoint và schema hiện tại.
 
 ## 1. Phạm vi và cách đọc tài liệu
 

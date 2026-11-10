@@ -1,0 +1,11 @@
+{
+  "name": "tixflow-api-audience",
+  "protocol": "openid-connect",
+  "protocolMapper": "oidc-audience-mapper",
+  "consentRequired": false,
+  "config": {
+    "included.client.audience": "tixflow-api",
+    "access.token.claim": "true",
+    "id.token.claim": "false"
+  }
+}

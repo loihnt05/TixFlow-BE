@@ -54,6 +54,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddIdentityAuthentication(builder.Configuration, builder.Environment);
+builder.Services.AddHttpClient("LoginToken");
 builder.Services.AddHealthChecks()
     .AddCheck<PostgresHealthCheck>("postgres");
 builder.Services.AddCors(options =>
@@ -123,6 +124,7 @@ if (app.Configuration.GetValue<bool>("Monitoring:Enabled"))
     app.MapMetrics("/internal/metrics");
 
 RouteGroupBuilder api = app.MapGroup("/api/v1");
+if (app.Environment.IsDevelopment()) api.MapDevelopmentLogin();
 api.MapGet("/system/info", (IHostEnvironment environment) => Results.Ok(new
 {
     application = "TixFlow.Api",

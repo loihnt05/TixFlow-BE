@@ -85,6 +85,18 @@ Kết quả lượt 03/11/2026: APP-01 PASS (smoke môi trường đang chạy),
 
 Mỗi dòng cần chạy bằng browser và đối chiếu API; kiểm tra DB bằng query chỉ đọc trên môi trường test khi cần xác nhận invariant. Tên field/body lấy từ OpenAPI hiện tại, không tự tạo contract thứ hai.
 
+**Tiến độ 09/11/2026:** đã tạo DB riêng `tixflow_acceptance`, migrate và nạp [demo-acceptance-v1.sql](../database/demo-acceptance-v1.sql). DB hiện có 12 Published, 1 Draft, 1 Cancelled; fixture `LASTGA` còn 1/1 và `RESERVED` có 2 ghế, chưa phát sinh Hold/Order. Frontend đã bỏ catalog fixture và checkout giả, nhưng chưa có evidence đầy đủ từ browser đến DB cho APP-07–APP-20. Không đánh dấu các dòng này đạt chỉ dựa trên seed hoặc type-check.
+
+API build từ source hiện tại đã chạy với DB này: `/health` = 200, `/events?page=1&limit=100` trả `total=12`, hai slug `acceptance-last-ga-seat`/`acceptance-reserved-seat` trả giá lần lượt 100.000/200.000 VND, availability 1 và 2 ghế; tìm chuỗi không tồn tại trả `total=0`. Frontend `tsc --noEmit` đạt. Lần tải trang chi tiết từ Next dev trên `localhost:3000` bị timeout 30 giây; lần thử lại cũng không nhận response, nên APP-07/08 vẫn cần kiểm tra browser. Các case giao dịch APP-09–APP-20 cần tài khoản Customer/Organizer thật, request qua UI và đối chiếu DB; chưa có evidence đó.
+
+**Bổ sung 10/11/2026:** timeout do Next dev trong sandbox không truy cập được API localhost. Chạy Next dev cùng quyền truy cập localhost đã trả HTTP 200 cho `/events` và hai trang seed; HTML chứa đúng tên sự kiện DB. URL sự kiện không tồn tại hiển thị trang not-found nhưng phản hồi HTML có HTTP 200 (cần sửa hoặc xác nhận cơ chế streaming của Next trước khi đạt APP-08). UI `/events` hiện lọc/paging trên danh sách 100 event đã tải, chưa gửi từng filter tới API như APP-07 yêu cầu. Realm seed không có tài khoản Customer/Organizer thử nghiệm, nên APP-09–APP-20 vẫn thiếu luồng đăng nhập và giao dịch thật.
+
+**Catalog mở rộng 10/11/2026:** đã nạp `database/demo-catalog-expanded-v1.sql` vào DB riêng `tixflow_acceptance`: thêm 60 event/session/ticket type/inventory; tổng cộng 66 Published, 4 Draft, 4 Cancelled. 60 slug mới là duy nhất, tổng capacity của vé mới là 17.610. Chạy lại seed thêm 0 row (idempotent). Đây là chuẩn bị dữ liệu cho APP-07/08, chưa thay thế kiểm thử browser/API/DB.
+
+Dataset này cũng đã nạp vào DB local `tixflow` đang phục vụ frontend: API `/events?page=1&limit=100` trả 64 Published (54 event mới), detail slug `demo-02-local-flavours` trả giá 225.000 VND; HTML `/events` của frontend trả 200 và có sự kiện mới. Không seed order/payment/ticket giả.
+
+**Lịch tương lai 10/11/2026:** đã nạp `database/demo-future-calendar-v1.sql` vào DB local và nghiệm thu: thêm 14 event Published, 14 session OnSale, 14 loại vé và 14 inventory, tổng capacity 2.450 vé, chưa bán vé nào. DB local hiện có 100 event (92 Published); DB nghiệm thu có 102 event do hai fixture riêng. Các event mới trải đều mỗi tháng từ 06/2027 đến 07/2028. Truy vấn DB xác nhận có Published future session trong từng tháng từ 11/2026 đến 07/2028; cần seed version mới sau đó để tiếp tục duy trì lịch tương lai.
+
 | ID | Luồng/thao tác | API chính | Kết quả phải khớp UI và server |
 |---|---|---|---|
 | APP-07 | Tìm kiếm, category, city, ngày, paging, sort | `GET /api/v1/events` | Chỉ thấy published hợp lệ; filter/paging đúng, không trùng/mất item bất thường |

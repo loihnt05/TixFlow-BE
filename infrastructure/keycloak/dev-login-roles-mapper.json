@@ -1,0 +1,14 @@
+{
+  "name": "tixflow-roles",
+  "protocol": "openid-connect",
+  "protocolMapper": "oidc-usermodel-realm-role-mapper",
+  "consentRequired": false,
+  "config": {
+    "usermodel.realmRoleMapping.rolePrefix": "",
+    "multivalued": "true",
+    "claim.name": "roles",
+    "jsonType.label": "String",
+    "access.token.claim": "true",
+    "id.token.claim": "true"
+  }
+}
