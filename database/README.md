@@ -4,7 +4,25 @@
 
 ### Bản ghi tham khảo từ Zipevent
 
-`demo-zipevent-reference-v1.sql` nạp 14 event có tên, khoảng ngày, venue và URL nguồn từ [danh sách Zipevent](https://www.zipeventapp.com/event/allevent) được đối chiếu ngày 10/11/2026. Chạy bằng `psql -v ON_ERROR_STOP=1 -v target_db=tixflow` (hoặc `tixflow_acceptance`). Các bản ghi có slug `zipevent-reference-01` đến `14`, `image_url` rỗng và không có ticket type/inventory; không nhập ảnh, giá, mô tả hay quyền bán vé của Zipevent. Giờ đầu/cuối trong session chỉ là mốc để biểu diễn **khoảng ngày** trên catalog, không phải lịch suất diễn chi tiết. Chạy lại không nhân đôi row.
+`demo-zipevent-reference-v1.sql` nạp 14 event có tên, khoảng ngày, venue và URL nguồn từ [danh sách Zipevent](https://www.zipeventapp.com/event/allevent) được đối chiếu ngày 10/11/2026. Chạy bằng `psql -v ON_ERROR_STOP=1 -v target_db=tixflow` (hoặc `tixflow_acceptance`). Các bản ghi có slug `zipevent-reference-01` đến `14`, ban đầu có `image_url` rỗng và không có ticket type/inventory; không nhập giá, mô tả hay quyền bán vé của Zipevent. Giờ đầu/cuối trong session chỉ là mốc để biểu diễn **khoảng ngày** trên catalog, không phải lịch suất diễn chi tiết. Chạy lại không nhân đôi row.
+
+`demo-zipevent-reference-v2.sql` bổ sung 35 event tham khảo được đối chiếu ngày 20/11/2026 từ [Zipevent](https://www.zipeventapp.com/) và các trang sự kiện liên kết. Chạy sau baseline seed/migrations bằng `psql -v ON_ERROR_STOP=1 -v target_db=tixflow -f database/demo-zipevent-reference-v2.sql` (hoặc `target_db=tixflow_acceptance`). Script dùng ID và slug `zipevent-reference-v2-01` đến `35` cố định, có thể chạy lại mà không nhân đôi dữ liệu. Thể loại Festival, Sports, Fashion của nguồn được chuẩn hóa thành Entertainment, Health, Art để khớp bộ lọc frontend. Session dùng 00:00–23:59 theo giờ Bangkok để biểu diễn **ngày đầu và ngày cuối** được công bố, không phải giờ diễn hay từng suất. Bản ghi chỉ dùng để xem: URL nguồn nằm trong mô tả, ban đầu không có ảnh, giá, ticket type hoặc inventory. Event có thể đổi lịch sau ngày đối chiếu; kiểm tra URL nguồn khi sử dụng lại.
+
+Sau hai seed tham khảo, chạy `demo-zipevent-posters-v1.sql` để điền `image_url` bằng **poster dọc** cho cả 49 event. Poster được lấy từ đúng trang event Zipevent được liệt kê trong mô tả; script đối chiếu đủ 49 nguồn trước khi cập nhật và có thể chạy lại mà không ghi đè các URL không đổi. Frontend dùng poster dọc cho thẻ 4:5 và banner ngang tương ứng từ `tixflow-frontend/lib/zipevent-wide-images.ts` cho carousel. Ảnh hiển thị trực tiếp từ CDN của Zipevent, không lưu bản sao trong repository; URL có thể thay đổi theo nguồn. Với Docker Compose local:
+
+```powershell
+Get-Content .\database\demo-zipevent-posters-v1.sql -Raw |
+    docker compose exec -T postgres psql -v ON_ERROR_STOP=1 -v target_db=tixflow -U tixflow -d tixflow
+```
+
+Với PostgreSQL local đang chạy bằng Docker Compose, có thể nạp bằng PowerShell:
+
+```powershell
+Get-Content .\database\demo-zipevent-reference-v2.sql -Raw |
+    docker compose exec -T postgres psql -v ON_ERROR_STOP=1 -v target_db=tixflow -U tixflow -d tixflow
+```
+
+Sau khi nạp v2 vào DB local ngày 20/11/2026, catalog có 135 event, gồm 127 Published và 49 bản ghi tham khảo Zipevent (v1 + v2).
 
 Sau khi áp dụng migrations, chạy `demo-catalog-expanded-v1.sql` bằng `psql -v ON_ERROR_STOP=1 -v target_db=tixflow` cho stack local hoặc `-v target_db=tixflow_acceptance` cho DB nghiệm thu. Script kiểm tra tên DB khớp tham số khai báo, dùng ID/slug ổn định và có thể chạy lại mà không nhân đôi dữ liệu. Nó thêm 60 event gốc, 60 session, 60 loại vé GA và 60 inventory; không tạo order/ticket hoặc số bán giả. Ngày sự kiện cố định trong năm 2027 để kiểm thử pagination, category, venue, giá và vé miễn phí. Nếu cần làm mới theo lịch sau đó, hãy tạo phiên bản seed mới thay vì sửa dữ liệu giao dịch đã phát sinh.
 

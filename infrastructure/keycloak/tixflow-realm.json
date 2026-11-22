@@ -273,6 +273,14 @@
         "Organizer",
         "Customer"
       ]
+    },
+    {
+      "client": "tixflow-dev-login",
+      "roles": [
+        "Admin",
+        "Organizer",
+        "Customer"
+      ]
     }
   ]
 }

@@ -65,6 +65,7 @@ class ProductionConfigurationTests(unittest.TestCase):
             self.assertEqual(['https://app.tixflow.test/auth/callback'], web['redirectUris'])
             self.assertEqual('S256', web['attributes']['pkce.code.challenge.method'])
             self.assertFalse(web['directAccessGrantsEnabled'])
+            self.assertEqual(['tixflow-web'], [mapping['client'] for mapping in realm['scopeMappings']])
             self.assertTrue(any(m['config'].get('included.client.audience') == 'tixflow-api' for m in web['protocolMappers']))
             role = next(r for r in realm['roles']['realm'] if r['name'] == 'default-roles-tixflow')
             self.assertEqual(['Customer'], role['composites']['realm'])
