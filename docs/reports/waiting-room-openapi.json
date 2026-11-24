@@ -1,0 +1,4848 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "TixFlow API",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/v1/assistant/status": {
+      "get": {
+        "tags": [
+          "Assistant"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/assistant/messages": {
+      "post": {
+        "tags": [
+          "Assistant"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssistantMessage"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/assistant/prepare-hold": {
+      "post": {
+        "tags": [
+          "Assistant"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrepareHoldRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/assistant/confirm-hold": {
+      "post": {
+        "tags": [
+          "Assistant"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmHoldRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Development only: log in with username/email and password",
+        "description": "Returns an access token and Keycloak identity claims. Paste accessToken into Swagger Authorize → bearer. This endpoint is absent outside Development.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/event-sessions/{sessionId}/ticket-types": {
+      "get": {
+        "tags": [
+          "Availability"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/event-sessions/{sessionId}/availability": {
+      "get": {
+        "tags": [
+          "Availability"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/event-sessions/{sessionId}/seats": {
+      "get": {
+        "tags": [
+          "Availability"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "ticketTypeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/ticket-types/{ticketTypeId}/availability": {
+      "get": {
+        "tags": [
+          "Availability"
+        ],
+        "parameters": [
+          {
+            "name": "ticketTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/bookings/status": {
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/holds": {
+      "post": {
+        "tags": [
+          "Booking"
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Required for Hold creation and replay of the same intent.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Admission-Token",
+            "in": "header",
+            "description": "Required when this event session's Waiting Room policy is Active or Paused; omitted when Disabled.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHoldRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/holds/{holdId}": {
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "parameters": [
+          {
+            "name": "holdId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Booking"
+        ],
+        "parameters": [
+          {
+            "name": "holdId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/holds/{holdId}/cancellations": {
+      "post": {
+        "tags": [
+          "Booking"
+        ],
+        "parameters": [
+          {
+            "name": "holdId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelHoldRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/organizers/me": {
+      "get": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizerRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizerRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/organizers": {
+      "get": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminOrganizerRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/organizers/{organizerId}": {
+      "get": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "organizerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "organizerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizerRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "organizerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/users": {
+      "get": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/venues": {
+      "get": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VenueRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/venues/{venueId}": {
+      "get": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "venueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "venueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VenueRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "venueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/events": {
+      "get": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/events/{eventId}": {
+      "get": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/events/{eventId}/publish": {
+      "post": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/events/{eventId}/cancellations": {
+      "post": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancellationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/events/{eventId}/complete": {
+      "post": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/events/{eventId}/sessions": {
+      "get": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/event-sessions/{sessionId}": {
+      "get": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/orders": {
+      "get": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "eventSlug",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/attendees": {
+      "get": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "eventSlug",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eventSessionId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/analytics": {
+      "get": {
+        "tags": [
+          "Catalog Management"
+        ],
+        "parameters": [
+          {
+            "name": "days",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 14
+            }
+          },
+          {
+            "name": "eventId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "eventSlug",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/events": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "List published events",
+        "description": "Returns a stable, paged public catalog. Draft, cancelled and completed events are never exposed.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 12
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicEventPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/events/{identifier}": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Get a published event by slug or id",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicEventResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/management/event-sessions/{sessionId}/ticket-types": {
+      "get": {
+        "tags": [
+          "Inventory Management"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Inventory Management"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketTypeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/ticket-types/{ticketTypeId}": {
+      "get": {
+        "tags": [
+          "Inventory Management"
+        ],
+        "parameters": [
+          {
+            "name": "ticketTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Inventory Management"
+        ],
+        "parameters": [
+          {
+            "name": "ticketTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketTypeUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Inventory Management"
+        ],
+        "parameters": [
+          {
+            "name": "ticketTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/ticket-types/{ticketTypeId}/capacity": {
+      "put": {
+        "tags": [
+          "Inventory Management"
+        ],
+        "parameters": [
+          {
+            "name": "ticketTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CapacityRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/ticket-types/{ticketTypeId}/seat-map": {
+      "get": {
+        "tags": [
+          "Inventory Management"
+        ],
+        "parameters": [
+          {
+            "name": "ticketTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Inventory Management"
+        ],
+        "parameters": [
+          {
+            "name": "ticketTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeatMapRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/ticket-types/{ticketTypeId}/seats": {
+      "post": {
+        "tags": [
+          "Inventory Management"
+        ],
+        "parameters": [
+          {
+            "name": "ticketTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/seats/{seatId}": {
+      "get": {
+        "tags": [
+          "Inventory Management"
+        ],
+        "parameters": [
+          {
+            "name": "seatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Inventory Management"
+        ],
+        "parameters": [
+          {
+            "name": "seatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Inventory Management"
+        ],
+        "parameters": [
+          {
+            "name": "seatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/holds/{holdId}/checkout": {
+      "post": {
+        "tags": [
+          "OrdersModule"
+        ],
+        "parameters": [
+          {
+            "name": "holdId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/orders": {
+      "get": {
+        "tags": [
+          "OrdersModule"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/orders/{orderId}": {
+      "get": {
+        "tags": [
+          "OrdersModule"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/orders/{orderId}/payments/mock": {
+      "post": {
+        "tags": [
+          "OrdersModule"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MockPaymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/payments/{paymentId}": {
+      "get": {
+        "tags": [
+          "OrdersModule"
+        ],
+        "parameters": [
+          {
+            "name": "paymentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/payment-webhooks/mock": {
+      "post": {
+        "tags": [
+          "OrdersModule"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MockPaymentCallback"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/tickets": {
+      "get": {
+        "tags": [
+          "TicketsModule"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/tickets/{ticketId}": {
+      "get": {
+        "tags": [
+          "TicketsModule"
+        ],
+        "parameters": [
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/tickets/{ticketId}/qr": {
+      "get": {
+        "tags": [
+          "TicketsModule"
+        ],
+        "parameters": [
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "supportReason",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/tickets/check-ins": {
+      "post": {
+        "tags": [
+          "TicketsModule"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckInRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/check-ins": {
+      "post": {
+        "tags": [
+          "TicketsModule"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckInRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/system/info": {
+      "get": {
+        "tags": [
+          "TixFlow.Api"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/operations/metrics": {
+      "get": {
+        "tags": [
+          "TixFlow.Api"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/users/me": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCurrentUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentUserResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/users/access/admin": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/users/access/organizer": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/users/access/customer": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/waiting-room/join": {
+      "post": {
+        "tags": [
+          "Waiting Room"
+        ],
+        "summary": "Join or resume the queue for an event session",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JoinRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomJoinDataWaitingRoomResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/waiting-room/status": {
+      "get": {
+        "tags": [
+          "Waiting Room"
+        ],
+        "summary": "Read the current queue state and admission token",
+        "parameters": [
+          {
+            "name": "queueId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomStatusDataWaitingRoomResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/waiting-room/{queueId}": {
+      "delete": {
+        "tags": [
+          "Waiting Room"
+        ],
+        "summary": "Leave the queue",
+        "parameters": [
+          {
+            "name": "queueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/management/event-sessions/{sessionId}/waiting-room-policy": {
+      "get": {
+        "tags": [
+          "Waiting Room Management"
+        ],
+        "summary": "Read a session's waiting room policy and queue depth",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomPolicyResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Waiting Room Management"
+        ],
+        "summary": "Change a waiting room policy with version check and audit",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaitingRoomPolicyChange"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitingRoomPolicyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Role or local account status forbids access"
+          }
+        },
+        "security": [
+          {
+            "oidc": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          },
+          {
+            "bearer": [ ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdminOrganizerRequest": {
+        "type": "object",
+        "properties": {
+          "ownerUserId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/OrganizerRequest"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AssistantMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "conversationToken": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CancelHoldRequest": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CancellationRequest": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CapacityRequest": {
+        "type": "object",
+        "properties": {
+          "capacity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CheckInRequest": {
+        "type": "object",
+        "properties": {
+          "eventSessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "qrToken": {
+            "type": "string",
+            "nullable": true
+          },
+          "ticketCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "bypassWindow": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ConfirmHoldRequest": {
+        "type": "object",
+        "properties": {
+          "confirmationToken": {
+            "type": "string",
+            "nullable": true
+          },
+          "confirmed": {
+            "type": "boolean"
+          },
+          "admissionToken": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateHoldRequest": {
+        "type": "object",
+        "properties": {
+          "eventSessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HoldSelectionRequest"
+            },
+            "nullable": true
+          },
+          "quote": {
+            "$ref": "#/components/schemas/HoldQuote"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CurrentUserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sub": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EventRequest": {
+        "type": "object",
+        "properties": {
+          "organizerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "venueId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "saleStartsAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "saleEndsAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "HoldQuote": {
+        "type": "object",
+        "properties": {
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "holdDurationMinutes": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "HoldSelectionRequest": {
+        "type": "object",
+        "properties": {
+          "ticketTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inventoryMode": {
+            "$ref": "#/components/schemas/InventoryMode"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seatIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "HttpValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "InventoryMode": {
+        "enum": [
+          "ReservedSeating",
+          "GeneralAdmission"
+        ],
+        "type": "string"
+      },
+      "JoinRequest": {
+        "type": "object",
+        "properties": {
+          "eventSessionId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "usernameOrEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "nullable": true
+          },
+          "tokenType": {
+            "type": "string",
+            "nullable": true
+          },
+          "expiresIn": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/LoginUser"
+          },
+          "claims": { }
+        },
+        "additionalProperties": false
+      },
+      "LoginUser": {
+        "type": "object",
+        "properties": {
+          "sub": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MockPaymentCallback": {
+        "type": "object",
+        "properties": {
+          "providerEventId": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "providerTransactionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "outcome": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "occurredAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "failureReason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MockPaymentRequest": {
+        "type": "object",
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizerRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "contactEmail": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PrepareHoldRequest": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ticketTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seatIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "PublicEventPage": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicEventResponse"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublicEventResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "saleStartsAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "saleEndsAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "publishedAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "organizer": {
+            "$ref": "#/components/schemas/PublicOrganizerResponse"
+          },
+          "venue": {
+            "$ref": "#/components/schemas/PublicVenueResponse"
+          },
+          "sessions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicSessionResponse"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublicOrganizerResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "eventCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "websiteUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "isVerified": {
+            "type": "boolean"
+          },
+          "followerCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublicSeatResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "section": {
+            "type": "string",
+            "nullable": true
+          },
+          "rowLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "seatNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "isAccessible": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublicSessionResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "startsAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "ticketTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicTicketTypeResponse"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublicTicketTypeResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "inventoryMode": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalQuantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "heldQuantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "soldQuantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "availableQuantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "updatedAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "maxPerOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "saleStartsAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "saleEndsAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "seats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicSeatResponse"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublicVenueResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressLine": {
+            "type": "string",
+            "nullable": true
+          },
+          "ward": {
+            "type": "string",
+            "nullable": true
+          },
+          "district": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeZone": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeatMapRequest": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "seats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeatRequest"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeatRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "section": {
+            "type": "string",
+            "nullable": true
+          },
+          "rowLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "seatNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "isAccessible": {
+            "type": "boolean"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SessionRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "startsAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/SessionStatus"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SessionStatus": {
+        "enum": [
+          "Scheduled",
+          "OnSale",
+          "SoldOut",
+          "Cancelled",
+          "Completed"
+        ],
+        "type": "string"
+      },
+      "TicketTypeRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "inventoryMode": {
+            "$ref": "#/components/schemas/InventoryMode"
+          },
+          "capacity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxPerOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "saleStartsAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "saleEndsAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "seats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeatRequest"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TicketTypeUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxPerOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "saleStartsAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "saleEndsAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateCurrentUserRequest": {
+        "type": "object",
+        "properties": {
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "VenueRequest": {
+        "type": "object",
+        "properties": {
+          "organizerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressLine": {
+            "type": "string",
+            "nullable": true
+          },
+          "ward": {
+            "type": "string",
+            "nullable": true
+          },
+          "district": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeZone": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "VersionRequest": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WaitingRoomJoinData": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "nullable": true
+          },
+          "queueId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "positionEstimate": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "pollAfterMs": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WaitingRoomJoinDataWaitingRoomResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/WaitingRoomJoinData"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WaitingRoomPolicyChange": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/WaitingRoomPolicyState"
+          },
+          "maxGrantsPerSecond": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "expectedVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WaitingRoomPolicyData": {
+        "type": "object",
+        "properties": {
+          "eventSessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "state": {
+            "$ref": "#/components/schemas/WaitingRoomPolicyState"
+          },
+          "maxGrantsPerSecond": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "queueDepth": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WaitingRoomPolicyResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/WaitingRoomPolicyData"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WaitingRoomPolicyState": {
+        "enum": [
+          "Disabled",
+          "Active",
+          "Paused",
+          "Closed"
+        ],
+        "type": "string"
+      },
+      "WaitingRoomProblem": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "retryable": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "traceId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WaitingRoomStatusData": {
+        "type": "object",
+        "properties": {
+          "queueId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventSessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "positionEstimate": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "expiresAtUnixMs": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "grantId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "pollAfterMs": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "admissionToken": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WaitingRoomStatusDataWaitingRoomResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/WaitingRoomStatusData"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "oidc": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "http://localhost:8180/realms/tixflow/protocol/openid-connect/auth",
+            "tokenUrl": "http://localhost:8180/realms/tixflow/protocol/openid-connect/token",
+            "scopes": {
+              "openid": "OpenID Connect",
+              "profile": "Name",
+              "email": "Email"
+            }
+          }
+        }
+      },
+      "bearer": {
+        "type": "http",
+        "description": "Paste accessToken from POST /api/v1/auth/login (Development only).",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
