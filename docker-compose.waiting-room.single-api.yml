@@ -1,0 +1,10 @@
+# Phase 6 local validation: one API with the same total CPU/RAM as the two-replica probe.
+services:
+  api:
+    cpus: 2
+    mem_limit: 1g
+  nginx:
+    volumes: !override
+      - ./infrastructure/load/nginx-waiting-room.single-api.conf:/etc/nginx/nginx.conf:ro
+    depends_on: !override
+      - api
