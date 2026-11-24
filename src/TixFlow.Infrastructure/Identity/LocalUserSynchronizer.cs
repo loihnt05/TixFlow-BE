@@ -13,6 +13,14 @@ public sealed class LocalUserSynchronizer(TixFlowDbContext dbContext) : ILocalUs
         string email = profile.Email.Trim();
         string normalizedEmail = email.ToUpperInvariant();
         string role = profile.PrimaryRole.ToString();
+        User? existing = await dbContext.Users.AsNoTracking()
+            .SingleOrDefaultAsync(user => user.IdentitySubject == profile.Subject, cancellationToken);
+        // The common case only reads the live local status. A changed claim still uses the
+        // same constrained upsert below, and a first login remains subject-key atomic.
+        if (existing is not null && existing.Email == email && existing.NormalizedEmail == normalizedEmail
+            && existing.DisplayName == profile.Name && existing.Role.ToString() == role
+            && (existing.PhoneNumber is not null || profile.PhoneNumber is null))
+            return existing;
         for (int attempt = 0; ; attempt++)
         {
             try
