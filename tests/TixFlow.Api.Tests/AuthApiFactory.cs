@@ -36,6 +36,7 @@ public sealed partial class AuthApiFactory : WebApplicationFactory<Program>, IAs
         builder.ConfigureAppConfiguration((_, config) => config.AddInMemoryCollection(new Dictionary<string, string?>
         {
             ["ConnectionStrings:Postgres"] = ConnectionString,
+            ["ConnectionStrings:Redis"] = RedisConnectionString,
             ["CatalogCache:Enabled"] = "false",
             ["TrafficLimits:Enabled"] = "false",
             ["Authentication:Authority"] = Issuer,
