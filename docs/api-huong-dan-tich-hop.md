@@ -3,6 +3,8 @@
 > Cập nhật theo Swagger của stack đang chạy ngày **09/11/2026** (UTC+07:00).  
 > Swagger đang chạy: `http://localhost:8080/swagger/v1/swagger.json` — đây là nguồn tham chiếu cho api endpoint và schema hiện tại.
 
+> Bổ sung ngày 23/11/2026: các route Virtual Waiting Room, quản trị policy và header `X-Admission-Token` trên `POST /holds` có trong [OpenAPI runtime xuất riêng](reports/waiting-room-openapi.json). Xem [validation local mới nhất](virtual-waiting-room-phase-9.md) và [API quản trị](virtual-waiting-room-phase-8.md). Danh sách operation dưới đây vẫn là ảnh chụp 09/11/2026.
+
 ## 1. Phạm vi và cách đọc tài liệu
 
 Tài liệu này mô tả **API đang được triển khai**: base URL, xác thực, định dạng dữ liệu, endpoint và luồng gọi chính. Nó không thay thế OpenAPI/Swagger.

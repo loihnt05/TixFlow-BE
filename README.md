@@ -93,7 +93,10 @@ dotnet test TixFlow.sln -c Release --filter 'Category!=Baseline'
 | GET | `/api/v1/system/info` | Kiểm tra phiên bản và môi trường |
 | GET | `/swagger/v1/swagger.json` | OpenAPI document và OAuth2 security scheme |
 | GET | `/api/v1/events` | Danh sách sự kiện `Published` đọc từ PostgreSQL |
-| POST | `/api/v1/holds` | Giữ vé/ghế all-or-nothing với idempotency |
+| POST | `/api/v1/holds` | Giữ vé/ghế all-or-nothing với idempotency; yêu cầu `X-Admission-Token` khi policy Waiting Room `Active`/`Paused` |
+| POST | `/api/v1/waiting-room/join` | Vào hàng chờ theo suất diễn; policy mặc định trả `Direct` |
+| GET | `/api/v1/waiting-room/status?queueId={id}` | Xem trạng thái và vị trí ước lượng của entry thuộc tài khoản |
+| DELETE | `/api/v1/waiting-room/{queueId}` | Bỏ hàng chờ |
 | GET | `/api/v1/holds/{holdId}` | Đọc Hold trong phạm vi Customer/Admin |
 | POST | `/api/v1/holds/{holdId}/cancellations` | Hủy và giải phóng Hold đúng một lần |
 | POST | `/api/v1/holds/{holdId}/checkout` | Chuyển Hold thành Order, không tạo lặp |
@@ -121,6 +124,8 @@ Giai đoạn 7 được ghi tại [Expiry, RabbitMQ, vé QR và check-in](docs/p
 Giai đoạn 9: [tối ưu có kiểm chứng](docs/phase-9-optimization.md), [quyết định kỹ thuật](docs/adr/008-phase9-optimization.md), [đề xuất model AI](docs/ai-provider-proposal.md). Chạy `./scripts/Invoke-Phase9Verification.ps1 -Mode All`; không dùng script giai đoạn 8 để gắn nhãn baseline v1 cho thuật toán mới. Giao diện FE giữ nguyên.
 
 Giai đoạn 10: [thực nghiệm HTTP bằng k6](docs/phase-10-load-testing.md). Chạy `./scripts/Invoke-Phase10Load.ps1 -Variant both -Repetitions 3` để so sánh hai image đã xác minh trong stack cách ly, rồi dùng `scripts/Summarize-Phase10.py` tổng hợp số liệu. Báo cáo phân biệt smoke với chiến dịch ramp/spike/soak và các tiêu chí nghiệm thu còn mở.
+
+Virtual Waiting Room đã [qua đủ ba cặp đối chứng tính đúng và độ trễ local ở bước 9](docs/virtual-waiting-room-phase-9.md), trên nền [quản trị policy/audit/metric và tối ưu khóa bước 8](docs/virtual-waiting-room-phase-8.md), [chẩn đoán bước 7](docs/virtual-waiting-room-phase-7.md), [OpenAPI bước 6](docs/virtual-waiting-room-phase-6.md), [test đa replica/restart bước 5](docs/virtual-waiting-room-phase-5.md), [giao diện bước 4](docs/virtual-waiting-room-phase-4.md) và [Gate/controller bước 3](docs/virtual-waiting-room-phase-3.md). [Hợp đồng luồng](docs/virtual-waiting-room-phase-1.md), [runbook vận hành](docs/virtual-waiting-room-operations.md) và [báo cáo validation](docs/reports/waiting-room-step9-20261123.md) có số liệu chi tiết. Policy production mặc định `Disabled` cho đến khi diễn tập môi trường triển khai và failover.
 
 Tiếp tục phase 10: [trạng thái và báo cáo load-v2](docs/reports/load-v2/README.md), có candidate Checkout riêng, monitoring Prometheus/Grafana và script campaign smoke/ramp/spike/soak. Xem `artifacts/phase10/campaign-*/status.json` để biết tiến trình đo thực tế; chưa coi việc khởi động campaign là hoàn tất.
 
