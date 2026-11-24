@@ -32,12 +32,14 @@ public sealed class AssistantBookingApi(HttpClient client, IHttpContextAccessor 
         return await response.Content.ReadFromJsonAsync<JsonElement>(ct);
     }
 
-    public async Task<IResult> CreateHoldAsync(BookingModule.CreateHoldRequest request, string idempotencyKey, CancellationToken ct)
+    public async Task<IResult> CreateHoldAsync(BookingModule.CreateHoldRequest request, string idempotencyKey,
+        string? admissionToken, CancellationToken ct)
     {
         using var message = new HttpRequestMessage(HttpMethod.Post, "/api/v1/holds");
         // Copy only the current caller's bearer token, never expose it to tools/model output.
         message.Headers.Authorization = AuthenticationHeaderValue.Parse(accessor.HttpContext!.Request.Headers.Authorization.ToString());
         message.Headers.Add("Idempotency-Key", idempotencyKey);
+        if (!string.IsNullOrWhiteSpace(admissionToken)) message.Headers.Add("X-Admission-Token", admissionToken);
         message.Content = JsonContent.Create(request, options: JsonOptions);
         using var response = await client.SendAsync(message, ct);
         foreach (string header in new[] { "Idempotency-Replayed", "Retry-After", "Location" })

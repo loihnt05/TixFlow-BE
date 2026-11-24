@@ -85,7 +85,8 @@ public static class AssistantModule
         {
             if (!request.Confirmed) throw new AssistantProblem(422, "EXPLICIT_CONFIRMATION_REQUIRED");
             var state = tokens.Confirmation(tools.Subject, request.ConfirmationToken);
-            return await tools.Audited("CreateHold", () => api.CreateHoldAsync(state.Request, $"assistant-{state.Nonce:N}", ct), ct);
+            return await tools.Audited("CreateHold", () => api.CreateHoldAsync(state.Request,
+                $"assistant-{state.Nonce:N}", request.AdmissionToken, ct), ct);
         });
         return endpoints;
     }
