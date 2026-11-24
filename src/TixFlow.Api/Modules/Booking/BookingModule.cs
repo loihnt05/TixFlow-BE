@@ -12,6 +12,10 @@ using TixFlow.Domain.Booking;
 using TixFlow.Domain.Events;
 using TixFlow.Domain.Identity;
 using TixFlow.Infrastructure.Persistence;
+using TixFlow.Api.Modules.WaitingRoom;
+using TixFlow.Application.WaitingRoom;
+using TixFlow.Domain.WaitingRoom;
+using StackExchange.Redis;
 
 namespace TixFlow.Api.Modules.Booking;
 
@@ -32,7 +36,10 @@ public static class BookingModule
             }));
 
         RouteGroupBuilder holds = endpoints.MapGroup("/holds").WithTags("Booking");
-        holds.MapPost("/", CreateHoldAsync).RequireAuthorization("Customer");
+        holds.MapPost("/", CreateHoldAsync).RequireAuthorization("Customer")
+            .Produces(201)
+            .Produces<WaitingRoomProblem>(409, "application/problem+json")
+            .Produces<WaitingRoomProblem>(503, "application/problem+json");
         holds.MapGet("/", ListHoldsAsync).RequireAuthorization("CustomerOrAdmin");
         holds.MapGet("/{holdId:guid}", GetHoldAsync).RequireAuthorization("CustomerOrAdmin");
         holds.MapPost("/{holdId:guid}/cancellations", CancelHoldAsync)
@@ -47,6 +54,8 @@ public static class BookingModule
         CreateHoldRequest request,
         HttpContext context,
         TixFlowDbContext db,
+        AdmissionTokens admissionTokens,
+        IServiceProvider services,
         IOptions<BookingOptions> options,
         CancellationToken cancellationToken)
     {
@@ -67,6 +76,9 @@ public static class BookingModule
         }
 
         string requestHash = HashCanonicalRequest(canonical);
+        IResult? admissionError = await CheckAdmissionAsync(canonical.EventSessionId, user, idempotencyKey,
+            requestHash, context, db, admissionTokens, services, cancellationToken);
+        if (admissionError is not null) return admissionError;
         IExecutionStrategy strategy = db.Database.CreateExecutionStrategy();
 
         try
@@ -93,6 +105,55 @@ public static class BookingModule
                 "REQUEST_IN_PROGRESS",
                 "A conflicting booking request is still in progress.",
                 retryable: true));
+        }
+    }
+
+    private static async Task<IResult?> CheckAdmissionAsync(Guid sessionId, User user, string idempotencyKey,
+        string requestHash, HttpContext context, TixFlowDbContext db, AdmissionTokens tokens,
+        IServiceProvider services, CancellationToken ct)
+    {
+        WaitingRoomPolicyState? state = await db.WaitingRoomPolicies.AsNoTracking()
+            .Where(policy => policy.EventSessionId == sessionId)
+            .Select(policy => (WaitingRoomPolicyState?)policy.State)
+            .SingleOrDefaultAsync(ct);
+        if (state is null or WaitingRoomPolicyState.Disabled) return null;
+
+        // A committed result can be replayed even after a grant expires or Redis restarts.
+        IdempotencyRecord? committed = await db.IdempotencyRecords.AsNoTracking()
+            .SingleOrDefaultAsync(record => record.UserId == user.Id && record.Scope == CreateHoldScope
+                && record.Key == idempotencyKey && record.IsCompleted, ct);
+        if (committed is not null) return ReplayOrConflict(committed, requestHash, context);
+        if (state == WaitingRoomPolicyState.Closed)
+            return Problem(context, new BookingProblemException(409, "WAITING_ROOM_CLOSED", "This sale is closed."));
+
+        string? tokenText = context.Request.Headers["X-Admission-Token"].FirstOrDefault();
+        if (string.IsNullOrWhiteSpace(tokenText))
+            return Problem(context, new BookingProblemException(409, "WAITING_ROOM_REQUIRED", "An admission token is required."));
+        AdmissionClaim? claim = tokens.Read(tokenText);
+        if (claim is null || claim.Subject != context.User.FindFirst("sub")?.Value
+            || claim.EventSessionId != sessionId || claim.QueueId == Guid.Empty || claim.GrantId == Guid.Empty
+            || claim.Nonce == Guid.Empty || claim.IssuedAtUtc > DateTimeOffset.UtcNow.AddSeconds(5))
+            return Problem(context, new BookingProblemException(409, "ADMISSION_INVALID", "The admission token is invalid."));
+        if (claim.ExpiresAtUtc <= DateTimeOffset.UtcNow)
+            return Problem(context, new BookingProblemException(409, "ADMISSION_EXPIRED", "The admission token has expired."));
+
+        try
+        {
+            string keyHash = Sha256(idempotencyKey);
+            string result = await services.GetRequiredService<IWaitingRoomStore>().BindIntentAsync(claim.QueueId,
+                sessionId, claim.GrantId, claim.Subject, keyHash, requestHash, ct);
+            return result switch
+            {
+                "OK" => null,
+                "EXPIRED" => Problem(context, new BookingProblemException(409, "ADMISSION_EXPIRED", "The grant has expired.")),
+                "CONFLICT" => Problem(context, new BookingProblemException(409, "ADMISSION_INTENT_CONFLICT", "The grant is bound to another Hold intent.")),
+                _ => Problem(context, new BookingProblemException(409, "ADMISSION_INVALID", "The grant is invalid."))
+            };
+        }
+        catch (Exception exception) when (exception is RedisException or TimeoutException)
+        {
+            context.Response.Headers.RetryAfter = "3";
+            return Problem(context, new BookingProblemException(503, "WAITING_ROOM_UNAVAILABLE", "Admission is unavailable.", retryable: true));
         }
     }
 
