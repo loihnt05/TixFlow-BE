@@ -6,6 +6,7 @@ using TixFlow.Domain.Identity;
 using TixFlow.Domain.Messaging;
 using TixFlow.Domain.Orders;
 using TixFlow.Domain.Organizers;
+using TixFlow.Domain.WaitingRoom;
 
 namespace TixFlow.Infrastructure.Persistence;
 
@@ -51,6 +52,7 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
 
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<WaitingRoomPolicy> WaitingRoomPolicies => Set<WaitingRoomPolicy>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -60,6 +62,16 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
         ConfigureBooking(modelBuilder);
         ConfigureOrders(modelBuilder);
         ConfigureOperationalTables(modelBuilder);
+        modelBuilder.Entity<WaitingRoomPolicy>(entity =>
+        {
+            entity.ToTable("waiting_room_policies");
+            entity.HasKey(item => item.EventSessionId);
+            entity.Property(item => item.State).HasConversion<string>().HasMaxLength(16).IsRequired();
+            entity.Property(item => item.MaxGrantsPerSecond).IsRequired();
+            entity.Property(item => item.Version).IsRequired();
+            entity.HasOne<EventSession>().WithOne().HasForeignKey<WaitingRoomPolicy>(item => item.EventSessionId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 
     private static void ConfigureUsers(ModelBuilder modelBuilder)
