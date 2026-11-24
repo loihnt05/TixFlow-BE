@@ -151,6 +151,7 @@ public static class AuthenticationExtensions
                 Description = "Paste accessToken from POST /api/v1/auth/login (Development only)."
             });
             options.OperationFilter<AuthorizationOperationFilter>();
+            options.OperationFilter<TixFlow.Api.Modules.WaitingRoom.WaitingRoomHoldHeaderOperationFilter>();
         });
 
         return services;
