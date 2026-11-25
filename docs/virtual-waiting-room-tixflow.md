@@ -204,3 +204,7 @@ Giả sử website có 3 backend instances:
 10.000 người dùng
 
 Load Balancer
+
+API Server 1
+
+API Server 2
