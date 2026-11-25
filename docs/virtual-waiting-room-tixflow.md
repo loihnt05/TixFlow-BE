@@ -515,3 +515,7 @@ Trong Virtual Waiting Room, việc tiếp tục phục vụ nhưng cấp quyền
 Vì vậy, bạn có thể chọn chiến lược fail-closed: khi không thể xác minh trạng thái admission, không cho phép cấp quyền mới.
 
 Đặc biệt, hãy chứng minh hai invariant: Xem công thức trong bản DOCX.
+
+Công thức thứ hai thể hiện nguyên tắc FIFO: người vào trước không được admitted sau người vào sau, trong phạm vi cùng một chính sách ưu tiên và không xét trường hợp hủy hoặc hết hạn.
+
+Đây là những thuộc tính có thể kiểm chứng bằng automated tests và load tests.
