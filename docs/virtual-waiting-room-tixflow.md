@@ -263,3 +263,5 @@ Hãy xét những tình huống:
 Bạn cần định nghĩa một quy tắc rõ ràng:
 
 Thứ tự phải do server quyết định, không được phụ thuộc vào thời gian do client gửi lên.
+
+Ví dụ, khi hai request có cùng timestamp, bạn cần sequence number tăng đơn điệu để xác định thứ tự chính xác.
