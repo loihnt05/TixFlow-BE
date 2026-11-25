@@ -2,6 +2,8 @@
 
 TixFlow là hệ thống quản lý và đặt vé cho nhiều sự kiện, được thiết kế để nghiên cứu cơ chế giữ chỗ an toàn khi có nhiều yêu cầu đồng thời và khả năng xử lý lưu lượng cao.
 
+Tài liệu đối chiếu Virtual Waiting Room: [bản nghiên cứu có thể tìm kiếm](docs/virtual-waiting-room-tixflow.md) và [bản Word có hình, công thức](docs/virtual-waiting-room-tixflow.docx). Các phép đo hiện tại là validation local, xem [báo cáo bước 9](docs/virtual-waiting-room-phase-9.md).
+
 ## Kiến trúc hiện tại
 
 - `TixFlow.Api`: ASP.NET Core API và các module nghiệp vụ.
