@@ -160,3 +160,7 @@ if (activeUsers < capacity)
 activeUsers++;
 
 return GenerateToken();
+
+}
+
+Nhưng hãy tưởng tượng 100 request cùng đọc activeUsers = 499 trước khi bất kỳ request nào cập nhật nó.
