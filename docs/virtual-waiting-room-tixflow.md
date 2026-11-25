@@ -410,3 +410,7 @@ Khi hệ thống quá tải nghiêm trọng, tạm dừng admission.
 Đây là một hướng nghiên cứu có giá trị hơn nhiều so với việc chỉ đặt Capacity = 500 rồi cấp quyền tuần tự.
 
 Lưu ý: Không nên chỉ dựa vào CPU; cần có ngưỡng và cơ chế chống dao động để tránh hệ thống liên tục tăng giảm admission rate.
+
+## 6. Realtime – Cập nhật hàng đợi cho hàng nghìn người
+
+Giả sử có 10.000 người đang chờ.
