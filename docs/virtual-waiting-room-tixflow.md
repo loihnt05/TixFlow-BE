@@ -379,3 +379,7 @@ Memory utilization.
 API response time.
 
 Database connection pool.
+
+Request error rate.
+
+Ví dụ, xây dựng các mức điều tiết:
