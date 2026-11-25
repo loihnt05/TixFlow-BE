@@ -265,3 +265,7 @@ Bạn cần định nghĩa một quy tắc rõ ràng:
 Thứ tự phải do server quyết định, không được phụ thuộc vào thời gian do client gửi lên.
 
 Ví dụ, khi hai request có cùng timestamp, bạn cần sequence number tăng đơn điệu để xác định thứ tự chính xác.
+
+Ngoài ra, có một bài toán thú vị hơn: Randomized Pre-Queue.
+
+Thay vì ai đến trước trong giai đoạn mở bán được ưu tiên, hệ thống có thể tập hợp người dùng trong một khoảng thời gian trước giờ mở bán, sau đó phân phối vị trí ngẫu nhiên. Khi đã có thứ tự ban đầu, những người tiếp theo sẽ được xếp FIFO.
