@@ -369,3 +369,5 @@ Nhưng trên thực tế, hệ thống có thể hoạt động tốt khi có 50
 Nói cách khác:
 
 Số lượng người dùng đồng thời không hoàn toàn phản ánh khả năng xử lý của server.
+
+Bạn có thể xây dựng cơ chế điều tiết dựa trên các chỉ số:
