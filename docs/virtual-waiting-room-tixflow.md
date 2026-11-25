@@ -11,3 +11,7 @@ Virtual Waiting Room là hệ thống phòng chờ trực tuyến, được sử
 Ý tưởng cốt lõi:
 
 Người dùng truy cập website.
+
+Hệ thống kiểm tra khả năng tiếp nhận.
+
+Nếu còn chỗ, người dùng được phép truy cập.
