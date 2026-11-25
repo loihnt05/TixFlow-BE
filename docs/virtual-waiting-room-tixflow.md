@@ -164,3 +164,7 @@ return GenerateToken();
 }
 
 Nhưng hãy tưởng tượng 100 request cùng đọc activeUsers = 499 trước khi bất kỳ request nào cập nhật nó.
+
+Kết quả: cả 100 request đều có thể được cấp quyền.
+
+Minh họa race condition
