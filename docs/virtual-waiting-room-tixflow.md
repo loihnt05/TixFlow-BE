@@ -230,3 +230,7 @@ Server 3 có thể trả về một vị trí hoàn toàn khác.
 Vì vậy, bạn cần một nguồn trạng thái dùng chung.
 
 Nhưng Redis dùng chung cũng tạo ra những vấn đề khác:
+
+Nhiều server cùng cập nhật queue.
+
+Nhiều Background Worker cùng xử lý admission.
