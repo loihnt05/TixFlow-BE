@@ -285,3 +285,5 @@ Người dùng đóng trình duyệt.
 Người dùng không thực hiện bất kỳ thao tác nào.
 
 Token vẫn còn hiệu lực.
+
+Hệ thống vẫn tính người này vào số lượng active users.
