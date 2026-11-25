@@ -27,3 +27,5 @@ Khi hết lượt truy cập hoặc hết thời gian cho phép, quyền truy c�
 ### 2.1. Quản lý thứ tự bằng FIFO
 
 FIFO (First In, First Out) nghĩa là người vào trước được xử lý trước.
+
+Ví dụ:
