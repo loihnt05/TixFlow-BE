@@ -1,3 +1,7 @@
 # Virtual Waiting Room trong TixFlow
 
 Tài liệu này chuyển nội dung nghiên cứu trong DOCX sang dạng có thể tìm kiếm trong Git. Các ví dụ 5.000 người đến cùng lúc, 500 phiên active và admission thích ứng là kịch bản đề xuất, không phải tính năng hoặc số liệu benchmark đã xác nhận. Phần trạng thái hiện tại ở cuối tài liệu đối chiếu trực tiếp với mã và báo cáo local.
+
+Bản Markdown chỉ chuyển phần chữ và bảng; hình cùng công thức nằm trong [bản DOCX](virtual-waiting-room-tixflow.docx). Kết quả kiểm chứng: [bước 9](virtual-waiting-room-phase-9.md), [đối chứng local](reports/waiting-room-step9-20261123.md), [soak 10 phút](reports/waiting-room-soak-20261123.md).
+
+## 1. Virtual Waiting Room là gì?
