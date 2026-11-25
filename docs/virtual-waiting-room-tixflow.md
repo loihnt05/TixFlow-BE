@@ -307,3 +307,5 @@ ACTIVE
 Đang sử dụng quyền truy cập
 
 COMPLETED
+
+Hoàn thành
