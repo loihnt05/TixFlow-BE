@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
@@ -124,7 +125,12 @@ public static class WaitingRoomModule
 
     // The same client keeps a stable interval while the flash crowd's first polls
     // are distributed across two seconds instead of landing at one deadline.
-    private static int PollAfterMs(Guid queueId) => 3000 + Math.Abs(queueId.GetHashCode() % 2001);
+    private static int PollAfterMs(Guid queueId)
+    {
+        Span<byte> bytes = stackalloc byte[16];
+        queueId.TryWriteBytes(bytes);
+        return 3000 + (int)(BinaryPrimitives.ReadUInt32LittleEndian(bytes) % 2001);
+    }
 
     private sealed record JoinRequest(Guid EventSessionId);
 }

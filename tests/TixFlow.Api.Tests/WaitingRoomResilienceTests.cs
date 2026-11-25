@@ -61,12 +61,16 @@ public sealed class WaitingRoomResilienceTests(AuthApiFactory factory)
             using HttpResponseMessage join = await clientA.PostAsJsonAsync("/api/v1/waiting-room/join",
                 new { eventSessionId = SessionId });
             Assert.Equal(HttpStatusCode.OK, join.StatusCode);
-            Guid queueId = (await Read(join)).GetProperty("data").GetProperty("queueId").GetGuid();
+            JsonElement joinData = (await Read(join)).GetProperty("data");
+            Guid queueId = joinData.GetProperty("queueId").GetGuid();
+            int pollAfterMs = joinData.GetProperty("pollAfterMs").GetInt32();
+            Assert.InRange(pollAfterMs, 3000, 5000);
             string? token = null;
             for (int attempt = 0; attempt < 40; attempt++)
             {
                 using HttpResponseMessage status = await clientB.GetAsync($"/api/v1/waiting-room/status?queueId={queueId}");
                 JsonElement data = (await Read(status)).GetProperty("data");
+                Assert.Equal(pollAfterMs, data.GetProperty("pollAfterMs").GetInt32());
                 if (data.GetProperty("status").GetString() == "Admitted")
                 {
                     token = data.GetProperty("admissionToken").GetString();
