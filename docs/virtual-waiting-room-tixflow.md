@@ -142,3 +142,7 @@ Sử dụng k6 để mô phỏng lượng người dùng lớn và Grafana để
 ## Các vấn đề kỹ thuật và phạm vi triển khai trong TixFlow
 
 ## 1. Concurrency – Truy cập đồng thời
+
+Giả sử hệ thống có cấu hình:
+
+Capacity: 500 người.
