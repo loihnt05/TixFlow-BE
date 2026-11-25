@@ -436,3 +436,7 @@ Một giải pháp là không cần thông báo mỗi khi vị trí thay đổi.
 Độ realtime.
 
 Số lượng kết nối.
+
+Băng thông.
+
+CPU và RAM.
