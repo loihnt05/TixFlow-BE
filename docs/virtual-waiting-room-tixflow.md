@@ -321,3 +321,7 @@ Bạn cần giải quyết những câu hỏi:
 A. Admission Token tồn tại bao lâu?
 
 Có thể dùng JWT hoặc một opaque token ngẫu nhiên được lưu trạng thái phía server.
+
+Token cần được ràng buộc với:
+
+Event ID.
