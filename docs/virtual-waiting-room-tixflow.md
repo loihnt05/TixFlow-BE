@@ -103,3 +103,13 @@ Giới hạn active users giả định
 Đây là cấu hình thử nghiệm giả định, không phải kết quả benchmark.
 
 Các chỉ số cần thu thập:
+
+| Chỉ số | Mục đích |
+| --- | --- |
+| Response Time | Thời gian phản hồi API |
+| Throughput | Request xử lý mỗi giây |
+| Error Rate | Tỷ lệ lỗi |
+| CPU / RAM | Tài nguyên hệ thống |
+| Queue Processing Time | Thời gian xử lý hàng đợi |
+| Admission Accuracy | Có vượt quá capacity không |
+| Queue Fairness | Có đảm bảo đúng thứ tự không |
