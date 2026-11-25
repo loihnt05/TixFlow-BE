@@ -446,3 +446,7 @@ Khả năng mở rộng.
 ## 7. Vấn đề thứ bảy: Security – Ngăn chặn người dùng vượt qua phòng chờ
 
 Giả sử người dùng A đang ở vị trí 5.000.
+
+Người dùng B phát hiện API:
+
+GET /api/booking/checkout
