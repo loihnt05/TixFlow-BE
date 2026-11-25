@@ -248,3 +248,14 @@ Làm sao tránh cấp quyền hai lần?
 Bạn có thể sử dụng Redis Sorted Set và sắp xếp theo timestamp.
 
 Nhưng FIFO không đơn giản như việc lấy phần tử đầu tiên.
+
+Hãy xét những tình huống:
+
+| Tình huống | Vấn đề |
+| --- | --- |
+| Hai người join cùng thời điểm | Ai được xếp trước? |
+| Người dùng refresh | Có bị mất vị trí không? |
+| Người dùng mở 5 tab | Có 5 vị trí hay 1 vị trí? |
+| Người dùng mất mạng 30 giây | Có bị loại khỏi queue? |
+| Người dùng cố gửi request liên tục | Có thể chiếm nhiều vị trí không? |
+| Người dùng chỉnh giờ máy | Có ảnh hưởng thứ tự không? |
