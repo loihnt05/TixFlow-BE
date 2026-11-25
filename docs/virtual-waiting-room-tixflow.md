@@ -244,3 +244,7 @@ Làm sao tránh cấp quyền hai lần?
 Đây là bài toán Distributed State Management.
 
 ## 3. Fairness – Đảm bảo công bằng
+
+Bạn có thể sử dụng Redis Sorted Set và sắp xếp theo timestamp.
+
+Nhưng FIFO không đơn giản như việc lấy phần tử đầu tiên.
