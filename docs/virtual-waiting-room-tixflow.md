@@ -462,3 +462,5 @@ Xác thực token được server cấp.
 Kiểm tra token có đúng event không.
 
 Kiểm tra session có còn hiệu lực không.
+
+Kiểm tra ticket đã được admitted chưa.
