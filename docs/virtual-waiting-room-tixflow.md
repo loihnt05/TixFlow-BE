@@ -513,3 +513,5 @@ Consistency: Hệ thống có đảm bảo dữ liệu và trạng thái chính 
 Trong Virtual Waiting Room, việc tiếp tục phục vụ nhưng cấp quyền vượt quá capacity có thể nguy hiểm hơn việc tạm thời không cấp thêm quyền.
 
 Vì vậy, bạn có thể chọn chiến lược fail-closed: khi không thể xác minh trạng thái admission, không cho phép cấp quyền mới.
+
+Đặc biệt, hãy chứng minh hai invariant: Xem công thức trong bản DOCX.
