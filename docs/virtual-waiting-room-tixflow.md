@@ -464,3 +464,7 @@ Kiểm tra token có đúng event không.
 Kiểm tra session có còn hiệu lực không.
 
 Kiểm tra ticket đã được admitted chưa.
+
+Kiểm tra token có bị sử dụng sai session hoặc bị thu hồi không.
+
+Ngoài ra còn có:
