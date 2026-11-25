@@ -357,3 +357,7 @@ Người dùng vi phạm điều kiện truy cập.
 ## 5. Dynamic Admission Control – Không phải lúc nào cũng cấp quyền cố định
 
 Đây là phần có thể tạo ra chiều sâu nghiên cứu đáng kể cho khóa luận.
+
+Giả sử bạn đặt:
+
+Capacity = 500.
