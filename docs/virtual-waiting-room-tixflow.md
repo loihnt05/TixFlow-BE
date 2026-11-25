@@ -152,3 +152,7 @@ Active users hiện tại: 499 người.
 Có 100 request cùng lúc muốn được admitted.
 
 Một đoạn code đơn giản có thể như sau:
+
+if (activeUsers < capacity)
+
+{
