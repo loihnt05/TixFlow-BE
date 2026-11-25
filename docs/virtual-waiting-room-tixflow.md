@@ -15,3 +15,7 @@ Người dùng truy cập website.
 Hệ thống kiểm tra khả năng tiếp nhận.
 
 Nếu còn chỗ, người dùng được phép truy cập.
+
+Nếu đã đạt giới hạn, người dùng được đưa vào hàng đợi.
+
+Hệ thống lần lượt cấp quyền truy cập cho người đang chờ.
