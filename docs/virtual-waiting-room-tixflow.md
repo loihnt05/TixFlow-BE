@@ -63,3 +63,7 @@ Công thức cơ bản: Xem công thức trong bản DOCX.
 Ví dụ:
 
 Có 900 người phía trước.
+
+Hệ thống cấp 10 người mỗi giây.
+
+Thời gian chờ ước tính: Xem công thức trong bản DOCX.
