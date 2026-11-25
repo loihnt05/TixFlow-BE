@@ -5,3 +5,5 @@ Tài liệu này chuyển nội dung nghiên cứu trong DOCX sang dạng có th
 Bản Markdown chỉ chuyển phần chữ và bảng; hình cùng công thức nằm trong [bản DOCX](virtual-waiting-room-tixflow.docx). Kết quả kiểm chứng: [bước 9](virtual-waiting-room-phase-9.md), [đối chứng local](reports/waiting-room-step9-20261123.md), [soak 10 phút](reports/waiting-room-soak-20261123.md).
 
 ## 1. Virtual Waiting Room là gì?
+
+Virtual Waiting Room là hệ thống phòng chờ trực tuyến, được sử dụng để kiểm soát lượng người dùng truy cập vào một website hoặc một chức năng có giới hạn khả năng xử lý.
