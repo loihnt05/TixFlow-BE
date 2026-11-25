@@ -454,3 +454,7 @@ GET /api/booking/checkout
 B thử gọi thẳng API mà không đi qua Virtual Waiting Room.
 
 Nếu backend không xác thực admission token thì toàn bộ hệ thống phòng chờ gần như vô nghĩa.
+
+Bạn phải bảo vệ các endpoint nghiệp vụ bằng cách:
+
+Xác thực token được server cấp.
