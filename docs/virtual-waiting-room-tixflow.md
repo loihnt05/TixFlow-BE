@@ -234,3 +234,5 @@ Nhưng Redis dùng chung cũng tạo ra những vấn đề khác:
 Nhiều server cùng cập nhật queue.
 
 Nhiều Background Worker cùng xử lý admission.
+
+Redis bị mất kết nối thì hệ thống phản ứng thế nào?
