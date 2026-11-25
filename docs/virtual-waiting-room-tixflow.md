@@ -19,3 +19,7 @@ Nếu còn chỗ, người dùng được phép truy cập.
 Nếu đã đạt giới hạn, người dùng được đưa vào hàng đợi.
 
 Hệ thống lần lượt cấp quyền truy cập cho người đang chờ.
+
+Khi hết lượt truy cập hoặc hết thời gian cho phép, quyền truy cập được thu hồi và chuyển cho người tiếp theo.
+
+## 2. Cách triển khai cơ chế hàng đợi
