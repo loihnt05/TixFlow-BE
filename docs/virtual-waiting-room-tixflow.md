@@ -309,3 +309,7 @@ ACTIVE
 COMPLETED
 
 Hoàn thành
+
+EXPIRED
+
+Hết hạn
