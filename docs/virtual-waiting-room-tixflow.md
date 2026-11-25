@@ -186,3 +186,7 @@ Request 3
 Sai lệch
 
 Nhiều request cùng được admitted
+
+Bạn phải giải quyết:
+
+Atomic operations.
