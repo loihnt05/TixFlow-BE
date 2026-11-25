@@ -45,3 +45,7 @@ ZADD queue:event-01 1003 user-C
 3. Kiểm tra giới hạn tốc độ admission.
 
 4. Lấy các ticket đầu hàng đợi.
+
+5. Chuyển ticket sang ADMITTED.
+
+6. Cấp admission token.
