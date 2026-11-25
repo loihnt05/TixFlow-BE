@@ -353,3 +353,7 @@ Người dùng vi phạm điều kiện truy cập.
 Điểm khó là không được giải phóng slot hai lần, hoặc giải phóng slot của một session vẫn đang hoạt động.
 
 Đây là bài toán quản lý tài nguyên có giới hạn (Resource Lifecycle Management).
+
+## 5. Dynamic Admission Control – Không phải lúc nào cũng cấp quyền cố định
+
+Đây là phần có thể tạo ra chiều sâu nghiên cứu đáng kể cho khóa luận.
