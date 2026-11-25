@@ -49,3 +49,5 @@ ZADD queue:event-01 1003 user-C
 5. Chuyển ticket sang ADMITTED.
 
 6. Cấp admission token.
+
+7. Gửi thông báo cho người dùng.
