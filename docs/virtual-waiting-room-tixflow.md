@@ -113,3 +113,7 @@ Các chỉ số cần thu thập:
 | Queue Processing Time | Thời gian xử lý hàng đợi |
 | Admission Accuracy | Có vượt quá capacity không |
 | Queue Fairness | Có đảm bảo đúng thứ tự không |
+
+Sử dụng k6 để mô phỏng lượng người dùng lớn và Grafana để trực quan hóa kết quả.
+
+Đối chiếu với TixFlow: hệ thống đã điều tiết grant theo giây và bảo vệ Hold bằng admission token. Hệ thống chưa áp dụng giới hạn 500 phiên active; kết quả kiểm thử local được nêu ở phần cuối tài liệu.
