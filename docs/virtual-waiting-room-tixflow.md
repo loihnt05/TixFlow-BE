@@ -1,535 +1,72 @@
 # Virtual Waiting Room trong TixFlow
 
-Tài liệu này chuyển nội dung nghiên cứu trong DOCX sang dạng có thể tìm kiếm trong Git. Các ví dụ 5.000 người đến cùng lúc, 500 phiên active và admission thích ứng là kịch bản đề xuất, không phải tính năng hoặc số liệu benchmark đã xác nhận. Phần trạng thái hiện tại ở cuối tài liệu đối chiếu trực tiếp với mã và báo cáo local.
+Tài liệu này đối chiếu ý tưởng trong [bản Word](virtual-waiting-room-tixflow.docx) với phần đã triển khai trong backend. TixFlow dùng hàng chờ theo suất diễn để điều tiết **tốc độ được thử tạo Hold**. Quyền vào hàng chờ không giữ sẵn vé; PostgreSQL vẫn quyết định tồn kho và kết quả đặt chỗ. Kết quả đo hiện có chỉ xác nhận môi trường local với workload đã công bố.
 
-Bản Markdown chỉ chuyển phần chữ và bảng; hình cùng công thức nằm trong [bản DOCX](virtual-waiting-room-tixflow.docx). Kết quả kiểm chứng: [bước 9](virtual-waiting-room-phase-9.md), [đối chứng local](reports/waiting-room-step9-20261123.md), [soak 10 phút](reports/waiting-room-soak-20261123.md).
+## Phạm vi hiện tại
 
-## 1. Virtual Waiting Room là gì?
+Mỗi `eventSessionId` có một policy `Disabled`, `Active`, `Paused` hoặc `Closed`, mặc định `Disabled`. Khi `Active`, các API replica cùng đọc queue và cấp grant theo `MaxGrantsPerSecond`. `Paused` dừng cấp lượt nhưng vẫn giữ gate tạo Hold. `Closed` dừng nhận khách vào hàng. Khi policy không bật, khách đi thẳng tới luồng Hold thông thường.
 
-Virtual Waiting Room là hệ thống phòng chờ trực tuyến, được sử dụng để kiểm soát lượng người dùng truy cập vào một website hoặc một chức năng có giới hạn khả năng xử lý.
+Gate áp dụng tại `POST /api/v1/holds` và lời gọi tạo Hold từ Assistant. Nó không bảo vệ việc xem catalog, checkout hoặc thanh toán cho một Hold đã tồn tại. Grant chỉ cho phép **thử** tạo Hold; khách vẫn có thể nhận lỗi hết vé.
 
-Ý tưởng cốt lõi:
+Mã tham chiếu: [policy](../src/TixFlow.Domain/WaitingRoom/WaitingRoomPolicy.cs), [API phòng chờ](../src/TixFlow.Api/Modules/WaitingRoom/WaitingRoomModule.cs), [gate tạo Hold](../src/TixFlow.Api/Modules/Booking/BookingModule.cs).
 
-Người dùng truy cập website.
+## FIFO và trạng thái dùng chung
 
-Hệ thống kiểm tra khả năng tiếp nhận.
+Redis cấp sequence bằng `INCR` phía server. Entry được xếp trong Sorted Set theo sequence; Lua script lấy phần tử đầu còn hiệu lực và chuyển sang `Admitted`. Cùng một người dùng tham gia lại một suất diễn khi entry còn hiệu lực sẽ nhận lại entry cũ và giữ vị trí. Thời gian do trình duyệt gửi không quyết định thứ tự.
 
-Nếu còn chỗ, người dùng được phép truy cập.
+Các API replica dùng cùng Redis và cùng ngân sách grant theo giây. Mỗi replica có controller, nhưng Lua script kiểm tra ngân sách chung trước khi cấp lượt, nên nhiều controller không được tự nhân hạn mức. Redis không phải nguồn sự thật về số vé.
 
-Nếu đã đạt giới hạn, người dùng được đưa vào hàng đợi.
+Mã tham chiếu: [RedisWaitingRoomStore](../src/TixFlow.Infrastructure/WaitingRoom/RedisWaitingRoomStore.cs), [WaitingRoomController](../src/TixFlow.Api/Modules/WaitingRoom/WaitingRoomController.cs). Kiểm thử đa replica và restart: [WaitingRoomResilienceTests](../tests/TixFlow.Api.Tests/WaitingRoomResilienceTests.cs).
 
-Hệ thống lần lượt cấp quyền truy cập cho người đang chờ.
+## Vòng đời entry và grant
 
-Khi hết lượt truy cập hoặc hết thời gian cho phép, quyền truy cập được thu hồi và chuyển cho người tiếp theo.
+Các trạng thái có trong mã là `Waiting`, `Admitted`, `Consumed`, `Expired`, `Abandoned` và `Rejected`. Entry đang chờ hết hạn sau năm phút không hoạt động; gọi status hoặc join lại sẽ gia hạn thời gian chờ. Grant đã cấp hết hạn sau hai phút. Việc hủy hàng chờ đánh dấu `Abandoned`; khi suất diễn không còn mở bán, entry có thể bị đánh dấu `Rejected`.
 
-## 2. Cách triển khai cơ chế hàng đợi
+`Consumed` nghĩa là grant đã được ràng buộc với một Hold intent, không chứng minh Hold thành công. Khi retry cùng idempotency key và cùng request hash, gate cho phép phát lại intent đó. Dùng grant cho intent khác sẽ bị từ chối. Token được bảo vệ bằng ASP.NET Data Protection và gắn với subject, suất diễn, queue ID, grant ID và hạn dùng. Backend kiểm tra cả token lẫn trạng thái grant trong Redis.
 
-### 2.1. Quản lý thứ tự bằng FIFO
+TixFlow **chưa** có trạng thái phiên truy cập `ACTIVE`/`COMPLETED`, heartbeat cho người đã admitted hoặc cơ chế giải phóng slot active. Vì vậy không thể suy từ grant rate ra giới hạn số người hoạt động đồng thời.
 
-FIFO (First In, First Out) nghĩa là người vào trước được xử lý trước.
+Mã tham chiếu: [AdmissionTokens](../src/TixFlow.Api/Modules/WaitingRoom/AdmissionTokens.cs), [RedisWaitingRoomStore](../src/TixFlow.Infrastructure/WaitingRoom/RedisWaitingRoomStore.cs), [BookingModule](../src/TixFlow.Api/Modules/Booking/BookingModule.cs).
 
-Ví dụ:
+## Điều tiết tải và ví dụ 5.000 người
 
-ZADD queue:event-01 1001 user-A
+Ví dụ 5.000 người đến cùng lúc và chỉ cho 500 người active trong bản Word là **mô hình nghiên cứu**. Bản hiện tại giới hạn số grant trong mỗi giây bằng `MaxGrantsPerSecond`; không có `activeUsers <= capacity` hay bộ đếm slot active. API cũng có rate limit theo IP, user và client để giảm lạm dụng request. Chưa có thuật toán tự điều chỉnh grant rate dựa trên latency, CPU, memory hoặc lỗi.
 
-ZADD queue:event-01 1002 user-B
+Muốn triển khai giới hạn active thật, cần định nghĩa rõ thời điểm chiếm và giải phóng slot, timeout, retry, nhiều tab, nhiều replica và xử lý khi Redis mất kết nối. Phép thử cần chứng minh bất biến `activeUsers <= capacity` dưới tranh chấp đồng thời, thay vì chỉ quan sát một biểu đồ thông lượng.
 
-ZADD queue:event-01 1003 user-C
+## Cập nhật trạng thái cho client
 
-### 2.2. Cơ chế phân phối lượt truy cập
+TixFlow chọn polling. API trả `pollAfterMs` ổn định theo `queueId` trong khoảng 3–5 giây; frontend và k6 thêm jitter 0–500 ms để phân tán các lần hỏi. Status trả vị trí **ước lượng**, trạng thái entry và admission token khi đến lượt. Client lưu `queueId` để có thể đọc lại status sau khi refresh. Hệ thống hiện không dùng SignalR, WebSocket hoặc Redis Pub/Sub cho đường cập nhật này.
 
-1. Đọc số người đang active.
+Mã tham chiếu: [WaitingRoomModule](../src/TixFlow.Api/Modules/WaitingRoom/WaitingRoomModule.cs). Phép đo sau thay đổi polling: [báo cáo bước 9](reports/waiting-room-step9-20261123.md).
 
-2. Tính số slot còn trống.
+## Bảo vệ đường tạo Hold
 
-3. Kiểm tra giới hạn tốc độ admission.
+Khi policy đang bảo vệ suất diễn, client gọi trực tiếp API tạo Hold cũng phải trình admission token. Gate kiểm tra người dùng, suất diễn, thời hạn, grant và Hold intent; việc bảo vệ giao diện frontend một mình không đủ. Khi Redis không thể xác minh grant, gate trả `503 WAITING_ROOM_UNAVAILABLE` và `Retry-After` thay vì bỏ qua phòng chờ.
 
-4. Lấy các ticket đầu hàng đợi.
+Một tài khoản chỉ có một entry còn hiệu lực cho mỗi suất diễn và các endpoint yêu cầu xác thực Customer. Đây là các lớp giảm lạm dụng hiện có; dự án chưa chứng minh CAPTCHA, phát hiện bot nhiều tài khoản hoặc chống DDoS ở tầng mạng.
 
-5. Chuyển ticket sang ADMITTED.
+Mã tham chiếu: [WaitingRoomModule](../src/TixFlow.Api/Modules/WaitingRoom/WaitingRoomModule.cs), [BookingModule](../src/TixFlow.Api/Modules/Booking/BookingModule.cs).
 
-6. Cấp admission token.
+## Độ tin cậy và vận hành
 
-7. Gửi thông báo cho người dùng.
+Các bài test đã kiểm tra hai API host dùng chung trạng thái, controller thay thế và Redis restart trong điều kiện thử nghiệm. API quản trị policy ghi audit, từ chối chuyển sang `Active` khi Redis không sẵn sàng, nhưng vẫn cho phép `Paused` hoặc `Closed` để xử lý sự cố. Runbook mô tả cách quan sát queue depth, controller và chuyển trạng thái policy.
 
-Công thức đơn giản: Xem công thức trong bản DOCX.
+Điều kiện còn thiếu trước khi bật cho khách thật là diễn tập failover Redis và lỗi mạng trên môi trường triển khai, theo dõi alert thực tế, kiểm tra rollback và đo tải trên tài nguyên tương đương production. Kết quả local không phải SLA production.
 
-### 2.3. Ước tính thời gian chờ
+Tham chiếu: [runbook](virtual-waiting-room-operations.md), [bước 8](virtual-waiting-room-phase-8.md), [bước 9](virtual-waiting-room-phase-9.md).
 
-Một tính năng hữu ích là cho người dùng biết họ phải chờ bao lâu.
+## Bằng chứng hiệu năng hiện có
 
-Công thức cơ bản: Xem công thức trong bản DOCX.
+Ba cặp run Active/Disabled của bước 9 dùng cùng image, dataset và tài nguyên. Mỗi run có 100 customer bắt đầu join trong một giây, 50 Hold/Paid/Ticket và 50 conflict hết vé. Cả ba run Active đạt status p95 lần lượt 246, 187 và 56 ms; không có lỗi kỹ thuật, iteration drop, oversell hoặc thiếu vé sau thanh toán. Đây là phép so sánh local, không phải thử nghiệm 5.000 người đồng thời.
 
-Ví dụ:
+Soak local mười phút phân bổ 1.000 lượt join trên 600 giây (khoảng 1,67 lượt/giây), đạt 1.000 grant, 50 Hold/Paid/Ticket và 950 conflict hết vé. Soak xác minh ổn định ở tốc độ đến thấp; không thay thế flash crowd hoặc failover.
 
-Có 900 người phía trước.
+Số liệu, cấu hình và giới hạn phép đo: [đối chứng bước 9](reports/waiting-room-step9-20261123.md), [soak 10 phút](reports/waiting-room-soak-20261123.md).
 
-Hệ thống cấp 10 người mỗi giây.
+## Việc tiếp theo có thể kiểm chứng
 
-Thời gian chờ ước tính: Xem công thức trong bản DOCX.
-
-## 3. Những cơ chế quan trọng cần xây dựng
-
-| Cơ chế | Ý nghĩa | Trạng thái |
-| --- | --- | --- |
-| FIFO Queue | Đảm bảo thứ tự người dùng | Đã hoàn thành |
-| Admission Control | Kiểm soát số lượng người được truy cập | Đang thực hiện |
-| Rate Limiting | Giới hạn tốc độ cấp quyền | Đã hoàn thành |
-| Session Management | Quản lý phiên truy cập | Đã hoàn thành |
-| Ticket Expiration | Thu hồi ticket hết hạn | Đã hoàn thành |
-| Reconnection | Cho phép người dùng kết nối lại | Đã hoàn thành |
-| Anti-bot | Hạn chế bot chiếm dụng vị trí | Đang thực hiện |
-| Access Token | Xác minh người dùng đã được cấp quyền | Đã hoàn thành |
-| Monitoring | Theo dõi lưu lượng và hiệu suất | Đã hoàn thành |
-
-## 4. Case Study
-
-Kịch bản minh họa cần kiểm thử; các con số dưới đây là giả định, chưa phải phép đo của TixFlow.
-
-Mô phỏng 5.000 người truy cập cùng một thời điểm vào một sự kiện.
-
-Không có Virtual Waiting Room
-
-**5.000**
-
-Request đồng thời đổ vào ứng dụng
-
-Có Virtual Waiting Room
-
-**500**
-
-Giới hạn active users giả định
-
-Đây là cấu hình thử nghiệm giả định, không phải kết quả benchmark.
-
-Các chỉ số cần thu thập:
-
-| Chỉ số | Mục đích |
-| --- | --- |
-| Response Time | Thời gian phản hồi API |
-| Throughput | Request xử lý mỗi giây |
-| Error Rate | Tỷ lệ lỗi |
-| CPU / RAM | Tài nguyên hệ thống |
-| Queue Processing Time | Thời gian xử lý hàng đợi |
-| Admission Accuracy | Có vượt quá capacity không |
-| Queue Fairness | Có đảm bảo đúng thứ tự không |
-
-Sử dụng k6 để mô phỏng lượng người dùng lớn và Grafana để trực quan hóa kết quả.
-
-Đối chiếu với TixFlow: hệ thống đã điều tiết grant theo giây và bảo vệ Hold bằng admission token. Hệ thống chưa áp dụng giới hạn 500 phiên active; kết quả kiểm thử local được nêu ở phần cuối tài liệu.
-
-| Cơ chế | Trạng thái | Triển khai | Cách triển khai trong code base |
-| --- | --- | --- | --- |
-| FIFO Queue | Đã hoàn thành | Redis Sorted Set, INCR, Lua Script | Mỗi lần join mới, Redis INCR cấp một sequence tăng dần. Entry được đưa vào Redis Sorted Set với sequence làm thứ tự; Lua Script lấy entry đầu hàng để cấp lượt. Thứ tự do server quyết định. |
-| Admission Control | Đang thực hiện | Waiting Room Policy, BackgroundService, Admission Gate | WaitingRoomController chỉ cấp lượt khi policy là Active và suất diễn đang mở bán. Backend tạo Hold yêu cầu admission token khi phòng chờ được bật. Hiện cơ chế kiểm soát bằng tốc độ cấp lượt, chưa giới hạn tổng số người được truy cập đồng thời. |
-| Rate Limiting | Đã hoàn thành | MaxGrantsPerSecond, Redis counter, fixed window rate limiter | Lua Script dùng Redis key đếm grant theo từng giây và chặn cấp thêm khi đạt MaxGrantsPerSecond; ngân sách này dùng chung giữa các API replica. Ngoài ra, API có fixed window rate limit theo IP, user và client cho request. |
-| Session Management | Đã hoàn thành | Redis entry, queueId, subject, status | Phiên phòng chờ là một entry gắn với user và suất diễn, lưu trong Redis với queueId, trạng thái, thời điểm tham gia và hạn dùng. API hỗ trợ join, đọc status và rời hàng chờ; mỗi user chỉ có một entry còn hiệu lực cho mỗi suất diễn. Đây là quản lý phiên phòng chờ, chưa phải quản lý số phiên truy cập active đồng thời. |
-| Ticket Expiration | Đã hoàn thành | TTL, expiresAt, trạng thái Expired | Với ticket/lượt của phòng chờ, entry đang chờ hết hạn sau 5 phút không hoạt động; quyền đã được cấp hết hạn sau 2 phút. Script đánh dấu Expired, loại entry chờ hết hạn khỏi queue và gate từ chối grant/token quá hạn. Việc dọn entry hết hạn diễn ra khi đọc hoặc xử lý queue, không phải một job thu hồi riêng. |
-| Reconnection | Đã hoàn thành | sessionStorage, queueId, join idempotent | Frontend lưu queueId trong sessionStorage và dùng nó để lấy lại status sau khi tải lại trang hoặc gián đoạn. Nếu join lại bằng cùng user khi entry còn hạn, Redis trả entry cũ và giữ nguyên vị trí FIFO. |
-| Anti-bot | Đang thực hiện | Authentication, one entry per user, API rate limit | Phòng chờ yêu cầu user đã xác thực với vai trò Customer; ánh xạ user–suất diễn ngăn một tài khoản tạo nhiều vị trí còn hiệu lực; API rate limit giảm việc gửi request liên tục. Chưa có CAPTCHA, challenge hoặc nhận diện nhiều tài khoản do cùng bot điều khiển. |
-| Access Token | Đã hoàn thành | Admission token, ASP.NET Data Protection, Redis validation | Khi entry chuyển sang Admitted, API phát admission token được bảo vệ bằng ASP.NET Data Protection. Khi tạo Hold, backend kiểm tra token, user, suất diễn, thời hạn và grant tương ứng trong Redis; grant được ràng buộc với một Hold intent để chống dùng sai mục đích. |
-| Monitoring | Đã hoàn thành | Prometheus metrics, Grafana dashboard, alert rules | API xuất metric HTTP và metric phòng chờ qua /internal/metrics; có Prometheus thu thập, Grafana dashboard và alert cho queue backlog, controller ngừng chạy hoặc gặp lỗi. Đây là phần mã và cấu hình đã xây dựng; repository chưa chứng minh monitoring production đang vận hành. |
-
-| Đặc điểm | Ứng dụng |
-| --- | --- |
-| In-memory | Đọc ghi trạng thái nhanh |
-| Sorted Set | Quản lý FIFO queue |
-| Atomic commands | Cấp sequence và đếm ngân sách grant dùng chung |
-| Lua Script | Xử lý admission atomic |
-| TTL | Tự động hết hạn key |
-| Pub/Sub | Một lựa chọn mở rộng; TixFlow hiện dùng polling |
-
-## Các vấn đề kỹ thuật và phạm vi triển khai trong TixFlow
-
-## 1. Concurrency – Truy cập đồng thời
-
-Giả sử hệ thống có cấu hình:
-
-Capacity: 500 người.
-
-Active users hiện tại: 499 người.
-
-Có 100 request cùng lúc muốn được admitted.
-
-Một đoạn code đơn giản có thể như sau:
-
-if (activeUsers < capacity)
-
-{
-
-activeUsers++;
-
-return GenerateToken();
-
-}
-
-Nhưng hãy tưởng tượng 100 request cùng đọc activeUsers = 499 trước khi bất kỳ request nào cập nhật nó.
-
-Kết quả: cả 100 request đều có thể được cấp quyền.
-
-Minh họa race condition
-
-Active Users = 499 / 500
-
-Request 1
-
-Đọc 499
-
-Request 2
-
-Đọc 499
-
-Request 3
-
-Đọc 499
-
-Sai lệch
-
-Nhiều request cùng được admitted
-
-Bạn phải giải quyết:
-
-Atomic operations.
-
-Distributed locking hoặc cơ chế đồng bộ phù hợp.
-
-Redis Lua Script.
-
-Kiểm soát giới hạn capacity trên nhiều server instance.
-
-## 2. Distributed System – Nhiều server cùng quản lý một hàng đợi
-
-Giả sử website có 3 backend instances:
-
-10.000 người dùng
-
-Load Balancer
-
-API Server 1
-
-API Server 2
-
-API Server 3
-
-Redis – Shared Queue State
-
-Nguồn dữ liệu hàng đợi dùng chung
-
-Một câu hỏi quan trọng:
-
-Nếu người dùng A gửi request đến Server 1 để tham gia queue, nhưng request tiếp theo lại được Load Balancer chuyển đến Server 3, Server 3 làm sao biết A đang ở vị trí nào?
-
-Nếu mỗi server giữ queue riêng:
-
-Server 1 có thể nghĩ A ở vị trí 100.
-
-Server 2 có thể không biết A tồn tại.
-
-Server 3 có thể trả về một vị trí hoàn toàn khác.
-
-Vì vậy, bạn cần một nguồn trạng thái dùng chung.
-
-Nhưng Redis dùng chung cũng tạo ra những vấn đề khác:
-
-Nhiều server cùng cập nhật queue.
-
-Nhiều Background Worker cùng xử lý admission.
-
-Redis bị mất kết nối thì hệ thống phản ứng thế nào?
-
-Khi Redis restart, làm sao khôi phục trạng thái?
-
-Làm sao tránh cấp quyền hai lần?
-
-Đây là bài toán Distributed State Management.
-
-## 3. Fairness – Đảm bảo công bằng
-
-Bạn có thể sử dụng Redis Sorted Set và sắp xếp theo timestamp.
-
-Nhưng FIFO không đơn giản như việc lấy phần tử đầu tiên.
-
-Hãy xét những tình huống:
-
-| Tình huống | Vấn đề |
-| --- | --- |
-| Hai người join cùng thời điểm | Ai được xếp trước? |
-| Người dùng refresh | Có bị mất vị trí không? |
-| Người dùng mở 5 tab | Có 5 vị trí hay 1 vị trí? |
-| Người dùng mất mạng 30 giây | Có bị loại khỏi queue? |
-| Người dùng cố gửi request liên tục | Có thể chiếm nhiều vị trí không? |
-| Người dùng chỉnh giờ máy | Có ảnh hưởng thứ tự không? |
-
-Bạn cần định nghĩa một quy tắc rõ ràng:
-
-Thứ tự phải do server quyết định, không được phụ thuộc vào thời gian do client gửi lên.
-
-Ví dụ, khi hai request có cùng timestamp, bạn cần sequence number tăng đơn điệu để xác định thứ tự chính xác.
-
-Ngoài ra, có một bài toán thú vị hơn: Randomized Pre-Queue.
-
-Thay vì ai đến trước trong giai đoạn mở bán được ưu tiên, hệ thống có thể tập hợp người dùng trong một khoảng thời gian trước giờ mở bán, sau đó phân phối vị trí ngẫu nhiên. Khi đã có thứ tự ban đầu, những người tiếp theo sẽ được xếp FIFO.
-
-Điều này giúp hạn chế lợi thế của người có kết nối mạng nhanh hơn trong một cuộc mở bán có thời điểm bắt đầu cố định.
-
-## 4. Admission Lifecycle – Quản lý vòng đời quyền truy cập
-
-Bạn cấp token cho người dùng và họ được admitted. Nhưng sau đó thì sao?
-
-Ví dụ:
-
-Người dùng được cấp quyền.
-
-Người dùng đóng trình duyệt.
-
-Người dùng không thực hiện bất kỳ thao tác nào.
-
-Token vẫn còn hiệu lực.
-
-Hệ thống vẫn tính người này vào số lượng active users.
-
-Kết quả: Capacity bị chiếm dụng dù người dùng không còn hoạt động.
-
-Bạn cần xây dựng vòng đời quyền truy cập.
-
-Ticket / Admission State Machine
-
-WAITING
-
-Đang chờ trong queue
-
-ADMITTED
-
-Đã được cấp quyền truy cập
-
-ACTIVE
-
-Đang sử dụng quyền truy cập
-
-COMPLETED
-
-Hoàn thành
-
-EXPIRED
-
-Hết hạn
-
-Luồng trạng thái minh họa. Ngoài ra có thể có CANCELLED và các trạng thái lỗi.
-
-Bạn cần giải quyết những câu hỏi:
-
-A. Admission Token tồn tại bao lâu?
-
-Có thể dùng JWT hoặc một opaque token ngẫu nhiên được lưu trạng thái phía server.
-
-Token cần được ràng buộc với:
-
-Event ID.
-
-Ticket ID.
-
-Session ID.
-
-Thời hạn hiệu lực.
-
-B. Làm sao biết người dùng vẫn đang hoạt động?
-
-Sử dụng Heartbeat.
-
-Ví dụ, frontend gửi heartbeat mỗi 15 giây. Nếu quá 60 giây không nhận được heartbeat, hệ thống có thể đánh dấu session hết hạn sau khi kiểm tra điều kiện timeout.
-
-C. Khi nào giải phóng slot?
-
-Khi:
-
-Người dùng hoàn thành giao dịch.
-
-Người dùng chủ động rời khỏi hệ thống.
-
-Session hết hạn.
-
-Người dùng vi phạm điều kiện truy cập.
-
-Điểm khó là không được giải phóng slot hai lần, hoặc giải phóng slot của một session vẫn đang hoạt động.
-
-Đây là bài toán quản lý tài nguyên có giới hạn (Resource Lifecycle Management).
-
-## 5. Dynamic Admission Control – Không phải lúc nào cũng cấp quyền cố định
-
-Đây là phần có thể tạo ra chiều sâu nghiên cứu đáng kể cho khóa luận.
-
-Giả sử bạn đặt:
-
-Capacity = 500.
-
-Admission rate = 10 người/giây.
-
-Nhưng trên thực tế, hệ thống có thể hoạt động tốt khi có 500 người nhưng lại quá tải khi có 300 người nếu những người đó thực hiện nhiều thao tác nặng.
-
-Nói cách khác:
-
-Số lượng người dùng đồng thời không hoàn toàn phản ánh khả năng xử lý của server.
-
-Bạn có thể xây dựng cơ chế điều tiết dựa trên các chỉ số:
-
-CPU utilization.
-
-Memory utilization.
-
-API response time.
-
-Database connection pool.
-
-Request error rate.
-
-Ví dụ, xây dựng các mức điều tiết:
-
-| Trạng thái hệ thống | Admission rate |
-| --- | --- |
-| Bình thường | 20 users/s |
-| Tải cao | 10 users/s |
-| Quá tải | 3 users/s |
-| Critical | 0 users/s |
-
-Implementing Adaptive Concurrency Limits
-
-dzone.com
-
-Bạn có thể phát triển một thuật toán tự điều chỉnh admission rate.
-
-Ví dụ:
-
-Khi latency tăng vượt ngưỡng, giảm tốc độ cấp quyền.
-
-Khi latency ổn định trở lại, tăng dần tốc độ cấp quyền.
-
-Khi hệ thống quá tải nghiêm trọng, tạm dừng admission.
-
-Điều này gần với Adaptive Concurrency Control.
-
-Đây là một hướng nghiên cứu có giá trị hơn nhiều so với việc chỉ đặt Capacity = 500 rồi cấp quyền tuần tự.
-
-Lưu ý: Không nên chỉ dựa vào CPU; cần có ngưỡng và cơ chế chống dao động để tránh hệ thống liên tục tăng giảm admission rate.
-
-## 6. Realtime – Cập nhật hàng đợi cho hàng nghìn người
-
-Giả sử có 10.000 người đang chờ.
-
-Mỗi khi một người được admitted, vị trí của những người còn lại có thể thay đổi.
-
-Nếu bạn cập nhật từng người bằng cách gửi một message riêng cho tất cả người dùng mỗi lần có một thay đổi, hệ thống sẽ tạo ra rất nhiều message không cần thiết.
-
-Cân nhắc:
-
-Polling: Client định kỳ hỏi server.
-
-Server-Sent Events: Server đẩy dữ liệu một chiều.
-
-SignalR/WebSocket: Giao tiếp hai chiều realtime.
-
-Redis Pub/Sub: Phân phối thông báo giữa các backend instances.
-
-Một giải pháp là không cần thông báo mỗi khi vị trí thay đổi. Thay vào đó, client có thể nhận cập nhật theo chu kỳ, hoặc nhận sự kiện khi trạng thái của ticket thay đổi.
-
-Điểm đáng nghiên cứu là sự cân bằng giữa:
-
-Độ realtime.
-
-Số lượng kết nối.
-
-Băng thông.
-
-CPU và RAM.
-
-Khả năng mở rộng.
-
-## 7. Vấn đề thứ bảy: Security – Ngăn chặn người dùng vượt qua phòng chờ
-
-Giả sử người dùng A đang ở vị trí 5.000.
-
-Người dùng B phát hiện API:
-
-GET /api/booking/checkout
-
-B thử gọi thẳng API mà không đi qua Virtual Waiting Room.
-
-Nếu backend không xác thực admission token thì toàn bộ hệ thống phòng chờ gần như vô nghĩa.
-
-Bạn phải bảo vệ các endpoint nghiệp vụ bằng cách:
-
-Xác thực token được server cấp.
-
-Kiểm tra token có đúng event không.
-
-Kiểm tra session có còn hiệu lực không.
-
-Kiểm tra ticket đã được admitted chưa.
-
-Kiểm tra token có bị sử dụng sai session hoặc bị thu hồi không.
-
-Ngoài ra còn có:
-
-Bot tự động lấy nhiều ticket.
-
-Replay attack (sử dụng lại request/token).
-
-Token bị đánh cắp.
-
-Người dùng chia sẻ token cho người khác.
-
-DDoS vào endpoint tham gia hàng đợi.
-
-Điểm quan trọng: Virtual Waiting Room không chỉ bảo vệ trang frontend mà phải bảo vệ cả backend và tài nguyên nghiệp vụ phía sau.
-
-## 8. Reliability – Khi hệ thống phòng chờ gặp sự cố?
-
-Đây là một tình huống rất thực tế.
-
-Giả sử đang có:
-
-10.000 người trong queue.
-
-500 người đã được admitted.
-
-Redis đột nhiên bị mất kết nối.
-
-Bạn phải quyết định hệ thống phản ứng như thế nào.
-
-| Sự cố | Cách xử lý cần nghiên cứu |
-| --- | --- |
-| Redis mất kết nối | Tạm dừng admission, tránh cấp quyền không kiểm soát |
-| Backend restart | Khôi phục trạng thái từ Redis |
-| Worker bị crash | Worker khác tiếp tục xử lý an toàn |
-| SignalR disconnect | Client reconnect và lấy lại trạng thái |
-| Token hết hạn | Xác thực và cấp lại theo chính sách |
-| PostgreSQL không hoạt động | Giới hạn các nghiệp vụ cần ghi dữ liệu lâu dài |
-
-Đặc biệt, cần phân biệt hai khái niệm:
-
-Availability: Hệ thống có tiếp tục phục vụ được không?
-
-Consistency: Hệ thống có đảm bảo dữ liệu và trạng thái chính xác không?
-
-Trong Virtual Waiting Room, việc tiếp tục phục vụ nhưng cấp quyền vượt quá capacity có thể nguy hiểm hơn việc tạm thời không cấp thêm quyền.
-
-Vì vậy, bạn có thể chọn chiến lược fail-closed: khi không thể xác minh trạng thái admission, không cho phép cấp quyền mới.
-
-Đặc biệt, hãy chứng minh hai invariant: Xem công thức trong bản DOCX.
-
-Công thức thứ hai thể hiện nguyên tắc FIFO: người vào trước không được admitted sau người vào sau, trong phạm vi cùng một chính sách ưu tiên và không xét trường hợp hủy hoặc hết hạn.
-
-Đây là những thuộc tính có thể kiểm chứng bằng automated tests và load tests.
-
-## Đối chiếu chín vấn đề với triển khai hiện tại
-
-| Vấn đề | Trạng thái | Cách triển khai hiện có / phần còn thiếu |
-| --- | --- | --- |
-| 1. Concurrency – truy cập đồng thời | Đang thực hiện | Các thao tác join và cấp lượt dùng Redis Lua Script để thực hiện nguyên tử; ngân sách cấp lượt theo giây được chia sẻ giữa các API replica. Tuy nhiên, hệ thống chưa có giới hạn ActiveUsers ≤ Capacity như ví dụ 500 người đang truy cập cùng lúc. |
-| 2. Distributed state – nhiều server dùng chung hàng đợi | Đã hoàn thành | Trạng thái entry, thứ tự queue và ngân sách grant nằm trong Redis; mỗi API replica đều có controller và cùng xử lý queue. Có test hai host dùng chung trạng thái, controller thay thế tiếp tục cấp lượt và Redis restart với AOF vẫn giữ thứ tự. |
-| 3. Fairness – công bằng FIFO | Đã hoàn thành | Redis INCR tạo số thứ tự ở phía server, Sorted Set xếp theo số đó, controller lấy phần tử đầu hàng. Cùng một user join lại khi entry còn hiệu lực sẽ giữ vị trí, nên refresh hoặc mở nhiều tab không tạo thêm vị trí. Randomized Pre-Queue trong tài liệu là hướng mở rộng, hiện chưa có. |
-| 4. Admission lifecycle – vòng đời quyền truy cập | Đang thực hiện | Đã có các trạng thái Waiting, Admitted, Consumed, Expired, Abandoned; entry chờ hết hạn sau 5 phút không hoạt động, grant hết hạn sau 2 phút, và một grant được ràng buộc với một ý định tạo Hold. Chưa có mô hình ACTIVE/COMPLETED và giải phóng slot đang truy cập, vì hiện chưa quản lý capacity đồng thời. Polling gia hạn entry đang chờ, nhưng chưa có heartbeat cho phiên đã được admitted. |
-| 5. Dynamic Admission Control – tự điều chỉnh tốc độ | Chưa thực hiện | MaxGrantsPerSecond hiện là giá trị cố định do Admin/Organizer cập nhật qua API quản trị. Monitoring đã thu thập chỉ số, nhưng chưa có thuật toán dùng latency, lỗi hoặc tải hệ thống để tự tăng giảm tốc độ cấp lượt. |
-| 6. Realtime – cập nhật trạng thái hàng đợi | Đã hoàn thành | Project chọn polling: frontend gọi status theo khoảng 3–5 giây do server trả về và cộng jitter để phân tán tải. API trả vị trí ước lượng, trạng thái và token khi đến lượt. Đây là cập nhật theo chu kỳ, không phải WebSocket/SignalR; chưa có bằng chứng đo với 10.000 người chờ. |
-| 7. Security – chống vượt phòng chờ và lạm dụng | Đang thực hiện | Backend tạo Hold yêu cầu admission token khi policy được bật; kiểm tra chữ ký, user, suất diễn, hạn dùng và trạng thái grant trong Redis. Grant chỉ dùng cho cùng một Hold intent; API có rate limit theo IP/user/client. Phần chống bot chuyên biệt và DDoS chưa thấy triển khai. |
-| 8. Reliability – xử lý sự cố | Đang thực hiện | Khi Redis không thể xác minh grant, gate trả 503 thay vì cho tạo Hold; có test Redis restart, nhiều replica và controller thay thế. Frontend cũng thử kết nối lại bằng queueId đã lưu. Tài liệu vẫn ghi chưa diễn tập đầy đủ mất mạng, Redis bị kill đột ngột và failover nhiều máy trong môi trường triển khai. |
-| 9. Performance benchmarking – chứng minh bằng số liệu | Đang thực hiện | Các phép đo local gồm ba cặp đối chứng Active/Disabled với 100 join mỗi run và một soak 10 phút với 1.000 join, 50 Hold/Paid/Ticket, không oversell. Đây không phải phép đo 5.000 join đồng thời hoặc xác nhận SLA production. Xem báo cáo bước 9 và báo cáo soak ngày 23/11/2026. |
+1. Định nghĩa và triển khai capacity active nếu đề tài cần chứng minh `activeUsers <= capacity`, kèm lifecycle và test tranh chấp đa replica.
+2. Đo workload 5.000 join theo protocol cố định; báo riêng số grant, Hold thành công, conflict hết vé, lỗi kỹ thuật, p95 và thời gian drain.
+3. Diễn tập Redis mất kết nối, restart đột ngột và failover nhiều máy; chứng minh gate fail closed và quy trình khôi phục.
+4. Chỉ nghiên cứu admission thích ứng sau khi có tín hiệu tải đáng tin cậy, ngưỡng và cơ chế chống dao động; so sánh với policy grant rate cố định trên cùng workload.
