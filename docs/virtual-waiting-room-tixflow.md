@@ -196,3 +196,7 @@ Distributed locking hoặc cơ chế đồng bộ phù hợp.
 Redis Lua Script.
 
 Kiểm soát giới hạn capacity trên nhiều server instance.
+
+## 2. Distributed System – Nhiều server cùng quản lý một hàng đợi
+
+Giả sử website có 3 backend instances:
