@@ -81,3 +81,5 @@ Thời gian chờ ước tính: Xem công thức trong bản DOCX.
 | Anti-bot | Hạn chế bot chiếm dụng vị trí | Đang thực hiện |
 | Access Token | Xác minh người dùng đã được cấp quyền | Đã hoàn thành |
 | Monitoring | Theo dõi lưu lượng và hiệu suất | Đã hoàn thành |
+
+## 4. Case Study
