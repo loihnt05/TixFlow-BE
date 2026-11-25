@@ -172,3 +172,5 @@ Minh họa race condition
 Active Users = 499 / 500
 
 Request 1
+
+Đọc 499
