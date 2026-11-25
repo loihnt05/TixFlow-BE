@@ -156,3 +156,7 @@ Một đoạn code đơn giản có thể như sau:
 if (activeUsers < capacity)
 
 {
+
+activeUsers++;
+
+return GenerateToken();
