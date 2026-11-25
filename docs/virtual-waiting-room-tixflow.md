@@ -303,3 +303,7 @@ ADMITTED
 Đã được cấp quyền truy cập
 
 ACTIVE
+
+Đang sử dụng quyền truy cập
+
+COMPLETED
