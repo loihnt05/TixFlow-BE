@@ -440,3 +440,5 @@ Số lượng kết nối.
 Băng thông.
 
 CPU và RAM.
+
+Khả năng mở rộng.
