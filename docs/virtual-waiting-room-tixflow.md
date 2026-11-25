@@ -200,3 +200,7 @@ Kiểm soát giới hạn capacity trên nhiều server instance.
 ## 2. Distributed System – Nhiều server cùng quản lý một hàng đợi
 
 Giả sử website có 3 backend instances:
+
+10.000 người dùng
+
+Load Balancer
