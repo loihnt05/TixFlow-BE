@@ -273,3 +273,7 @@ Thay vì ai đến trước trong giai đoạn mở bán được ưu tiên, h�
 Điều này giúp hạn chế lợi thế của người có kết nối mạng nhanh hơn trong một cuộc mở bán có thời điểm bắt đầu cố định.
 
 ## 4. Admission Lifecycle – Quản lý vòng đời quyền truy cập
+
+Bạn cấp token cho người dùng và họ được admitted. Nhưng sau đó thì sao?
+
+Ví dụ:
