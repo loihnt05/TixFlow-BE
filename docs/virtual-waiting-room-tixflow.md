@@ -383,3 +383,12 @@ Database connection pool.
 Request error rate.
 
 Ví dụ, xây dựng các mức điều tiết:
+
+| Trạng thái hệ thống | Admission rate |
+| --- | --- |
+| Bình thường | 20 users/s |
+| Tải cao | 10 users/s |
+| Quá tải | 3 users/s |
+| Critical | 0 users/s |
+
+Implementing Adaptive Concurrency Limits
