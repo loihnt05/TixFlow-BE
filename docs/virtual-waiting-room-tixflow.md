@@ -37,3 +37,7 @@ ZADD queue:event-01 1002 user-B
 ZADD queue:event-01 1003 user-C
 
 ### 2.2. Cơ chế phân phối lượt truy cập
+
+1. Đọc số người đang active.
+
+2. Tính số slot còn trống.
