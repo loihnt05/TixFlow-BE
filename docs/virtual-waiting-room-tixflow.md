@@ -287,3 +287,7 @@ Người dùng không thực hiện bất kỳ thao tác nào.
 Token vẫn còn hiệu lực.
 
 Hệ thống vẫn tính người này vào số lượng active users.
+
+Kết quả: Capacity bị chiếm dụng dù người dùng không còn hoạt động.
+
+Bạn cần xây dựng vòng đời quyền truy cập.
