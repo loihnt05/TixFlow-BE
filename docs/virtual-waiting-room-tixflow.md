@@ -226,3 +226,7 @@ Server 1 có thể nghĩ A ở vị trí 100.
 Server 2 có thể không biết A tồn tại.
 
 Server 3 có thể trả về một vị trí hoàn toàn khác.
+
+Vì vậy, bạn cần một nguồn trạng thái dùng chung.
+
+Nhưng Redis dùng chung cũng tạo ra những vấn đề khác:
