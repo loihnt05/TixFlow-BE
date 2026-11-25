@@ -375,3 +375,7 @@ Bạn có thể xây dựng cơ chế điều tiết dựa trên các chỉ số
 CPU utilization.
 
 Memory utilization.
+
+API response time.
+
+Database connection pool.
