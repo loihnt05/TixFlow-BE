@@ -450,3 +450,7 @@ Giả sử người dùng A đang ở vị trí 5.000.
 Người dùng B phát hiện API:
 
 GET /api/booking/checkout
+
+B thử gọi thẳng API mà không đi qua Virtual Waiting Room.
+
+Nếu backend không xác thực admission token thì toàn bộ hệ thống phòng chờ gần như vô nghĩa.
