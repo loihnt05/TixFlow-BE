@@ -277,3 +277,7 @@ Thay vì ai đến trước trong giai đoạn mở bán được ưu tiên, h�
 Bạn cấp token cho người dùng và họ được admitted. Nhưng sau đó thì sao?
 
 Ví dụ:
+
+Người dùng được cấp quyền.
+
+Người dùng đóng trình duyệt.
