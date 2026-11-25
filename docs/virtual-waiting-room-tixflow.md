@@ -51,3 +51,7 @@ ZADD queue:event-01 1003 user-C
 6. Cấp admission token.
 
 7. Gửi thông báo cho người dùng.
+
+Công thức đơn giản: Xem công thức trong bản DOCX.
+
+### 2.3. Ước tính thời gian chờ
