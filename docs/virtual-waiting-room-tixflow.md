@@ -117,3 +117,24 @@ Các chỉ số cần thu thập:
 Sử dụng k6 để mô phỏng lượng người dùng lớn và Grafana để trực quan hóa kết quả.
 
 Đối chiếu với TixFlow: hệ thống đã điều tiết grant theo giây và bảo vệ Hold bằng admission token. Hệ thống chưa áp dụng giới hạn 500 phiên active; kết quả kiểm thử local được nêu ở phần cuối tài liệu.
+
+| Cơ chế | Trạng thái | Triển khai | Cách triển khai trong code base |
+| --- | --- | --- | --- |
+| FIFO Queue | Đã hoàn thành | Redis Sorted Set, INCR, Lua Script | Mỗi lần join mới, Redis INCR cấp một sequence tăng dần. Entry được đưa vào Redis Sorted Set với sequence làm thứ tự; Lua Script lấy entry đầu hàng để cấp lượt. Thứ tự do server quyết định. |
+| Admission Control | Đang thực hiện | Waiting Room Policy, BackgroundService, Admission Gate | WaitingRoomController chỉ cấp lượt khi policy là Active và suất diễn đang mở bán. Backend tạo Hold yêu cầu admission token khi phòng chờ được bật. Hiện cơ chế kiểm soát bằng tốc độ cấp lượt, chưa giới hạn tổng số người được truy cập đồng thời. |
+| Rate Limiting | Đã hoàn thành | MaxGrantsPerSecond, Redis counter, fixed window rate limiter | Lua Script dùng Redis key đếm grant theo từng giây và chặn cấp thêm khi đạt MaxGrantsPerSecond; ngân sách này dùng chung giữa các API replica. Ngoài ra, API có fixed window rate limit theo IP, user và client cho request. |
+| Session Management | Đã hoàn thành | Redis entry, queueId, subject, status | Phiên phòng chờ là một entry gắn với user và suất diễn, lưu trong Redis với queueId, trạng thái, thời điểm tham gia và hạn dùng. API hỗ trợ join, đọc status và rời hàng chờ; mỗi user chỉ có một entry còn hiệu lực cho mỗi suất diễn. Đây là quản lý phiên phòng chờ, chưa phải quản lý số phiên truy cập active đồng thời. |
+| Ticket Expiration | Đã hoàn thành | TTL, expiresAt, trạng thái Expired | Với ticket/lượt của phòng chờ, entry đang chờ hết hạn sau 5 phút không hoạt động; quyền đã được cấp hết hạn sau 2 phút. Script đánh dấu Expired, loại entry chờ hết hạn khỏi queue và gate từ chối grant/token quá hạn. Việc dọn entry hết hạn diễn ra khi đọc hoặc xử lý queue, không phải một job thu hồi riêng. |
+| Reconnection | Đã hoàn thành | sessionStorage, queueId, join idempotent | Frontend lưu queueId trong sessionStorage và dùng nó để lấy lại status sau khi tải lại trang hoặc gián đoạn. Nếu join lại bằng cùng user khi entry còn hạn, Redis trả entry cũ và giữ nguyên vị trí FIFO. |
+| Anti-bot | Đang thực hiện | Authentication, one entry per user, API rate limit | Phòng chờ yêu cầu user đã xác thực với vai trò Customer; ánh xạ user–suất diễn ngăn một tài khoản tạo nhiều vị trí còn hiệu lực; API rate limit giảm việc gửi request liên tục. Chưa có CAPTCHA, challenge hoặc nhận diện nhiều tài khoản do cùng bot điều khiển. |
+| Access Token | Đã hoàn thành | Admission token, ASP.NET Data Protection, Redis validation | Khi entry chuyển sang Admitted, API phát admission token được bảo vệ bằng ASP.NET Data Protection. Khi tạo Hold, backend kiểm tra token, user, suất diễn, thời hạn và grant tương ứng trong Redis; grant được ràng buộc với một Hold intent để chống dùng sai mục đích. |
+| Monitoring | Đã hoàn thành | Prometheus metrics, Grafana dashboard, alert rules | API xuất metric HTTP và metric phòng chờ qua /internal/metrics; có Prometheus thu thập, Grafana dashboard và alert cho queue backlog, controller ngừng chạy hoặc gặp lỗi. Đây là phần mã và cấu hình đã xây dựng; repository chưa chứng minh monitoring production đang vận hành. |
+
+| Đặc điểm | Ứng dụng |
+| --- | --- |
+| In-memory | Đọc ghi trạng thái nhanh |
+| Sorted Set | Quản lý FIFO queue |
+| Atomic commands | Cấp sequence và đếm ngân sách grant dùng chung |
+| Lua Script | Xử lý admission atomic |
+| TTL | Tự động hết hạn key |
+| Pub/Sub | Một lựa chọn mở rộng; TixFlow hiện dùng polling |
