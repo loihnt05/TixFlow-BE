@@ -509,3 +509,7 @@ Bạn phải quyết định hệ thống phản ứng như thế nào.
 Availability: Hệ thống có tiếp tục phục vụ được không?
 
 Consistency: Hệ thống có đảm bảo dữ liệu và trạng thái chính xác không?
+
+Trong Virtual Waiting Room, việc tiếp tục phục vụ nhưng cấp quyền vượt quá capacity có thể nguy hiểm hơn việc tạm thời không cấp thêm quyền.
+
+Vì vậy, bạn có thể chọn chiến lược fail-closed: khi không thể xác minh trạng thái admission, không cho phép cấp quyền mới.
