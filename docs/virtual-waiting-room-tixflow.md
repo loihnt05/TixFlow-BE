@@ -325,3 +325,7 @@ Có thể dùng JWT hoặc một opaque token ngẫu nhiên được lưu trạn
 Token cần được ràng buộc với:
 
 Event ID.
+
+Ticket ID.
+
+Session ID.
