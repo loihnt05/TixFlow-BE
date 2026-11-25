@@ -398,3 +398,7 @@ dzone.com
 Bạn có thể phát triển một thuật toán tự điều chỉnh admission rate.
 
 Ví dụ:
+
+Khi latency tăng vượt ngưỡng, giảm tốc độ cấp quyền.
+
+Khi latency ổn định trở lại, tăng dần tốc độ cấp quyền.
