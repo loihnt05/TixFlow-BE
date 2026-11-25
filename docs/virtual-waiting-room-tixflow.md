@@ -339,3 +339,7 @@ Sử dụng Heartbeat.
 Ví dụ, frontend gửi heartbeat mỗi 15 giây. Nếu quá 60 giây không nhận được heartbeat, hệ thống có thể đánh dấu session hết hạn sau khi kiểm tra điều kiện timeout.
 
 C. Khi nào giải phóng slot?
+
+Khi:
+
+Người dùng hoàn thành giao dịch.
