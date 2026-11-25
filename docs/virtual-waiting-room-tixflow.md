@@ -91,3 +91,7 @@ Mô phỏng 5.000 người truy cập cùng một thời điểm vào một sự
 Không có Virtual Waiting Room
 
 **5.000**
+
+Request đồng thời đổ vào ứng dụng
+
+Có Virtual Waiting Room
