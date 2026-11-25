@@ -402,3 +402,7 @@ Ví dụ:
 Khi latency tăng vượt ngưỡng, giảm tốc độ cấp quyền.
 
 Khi latency ổn định trở lại, tăng dần tốc độ cấp quyền.
+
+Khi hệ thống quá tải nghiêm trọng, tạm dừng admission.
+
+Điều này gần với Adaptive Concurrency Control.
