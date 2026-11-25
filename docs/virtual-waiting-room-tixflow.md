@@ -329,3 +329,5 @@ Event ID.
 Ticket ID.
 
 Session ID.
+
+Thời hạn hiệu lực.
