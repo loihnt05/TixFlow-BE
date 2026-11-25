@@ -406,3 +406,7 @@ Khi latency ổn định trở lại, tăng dần tốc độ cấp quyền.
 Khi hệ thống quá tải nghiêm trọng, tạm dừng admission.
 
 Điều này gần với Adaptive Concurrency Control.
+
+Đây là một hướng nghiên cứu có giá trị hơn nhiều so với việc chỉ đặt Capacity = 500 rồi cấp quyền tuần tự.
+
+Lưu ý: Không nên chỉ dựa vào CPU; cần có ngưỡng và cơ chế chống dao động để tránh hệ thống liên tục tăng giảm admission rate.
