@@ -1,5 +1,7 @@
 # Virtual Waiting Room — hợp đồng và đường đo gốc
 
+**Tài liệu lịch sử ngày 22/11/2026.** Các câu về hạng mục “chưa triển khai” và ngưỡng “chưa đạt” bên dưới phản ánh thời điểm chốt hợp đồng ban đầu. Xem [trạng thái triển khai hiện tại](virtual-waiting-room-tixflow.md) và [validation bước 9](virtual-waiting-room-phase-9.md) trước khi dùng tài liệu này để đánh giá hệ thống.
+
 Ngày chốt bản đầu: 22/11/2026. Tài liệu này là **hợp đồng mục tiêu cho toàn bộ Waiting Room**. Bước 5 đã có test đa replica/restart; [bước 6](virtual-waiting-room-phase-6.md) đã đo ba cặp Disabled/Active và xuất OpenAPI runtime. Cổng tính đúng đạt nhưng ngưỡng độ trễ chưa đạt. API quản trị policy và audit chưa triển khai.
 
 ## 1. Phạm vi và ranh giới
