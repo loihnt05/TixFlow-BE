@@ -67,3 +67,17 @@ Có 900 người phía trước.
 Hệ thống cấp 10 người mỗi giây.
 
 Thời gian chờ ước tính: Xem công thức trong bản DOCX.
+
+## 3. Những cơ chế quan trọng cần xây dựng
+
+| Cơ chế | Ý nghĩa | Trạng thái |
+| --- | --- | --- |
+| FIFO Queue | Đảm bảo thứ tự người dùng | Đã hoàn thành |
+| Admission Control | Kiểm soát số lượng người được truy cập | Đang thực hiện |
+| Rate Limiting | Giới hạn tốc độ cấp quyền | Đã hoàn thành |
+| Session Management | Quản lý phiên truy cập | Đã hoàn thành |
+| Ticket Expiration | Thu hồi ticket hết hạn | Đã hoàn thành |
+| Reconnection | Cho phép người dùng kết nối lại | Đã hoàn thành |
+| Anti-bot | Hạn chế bot chiếm dụng vị trí | Đang thực hiện |
+| Access Token | Xác minh người dùng đã được cấp quyền | Đã hoàn thành |
+| Monitoring | Theo dõi lưu lượng và hiệu suất | Đã hoàn thành |
