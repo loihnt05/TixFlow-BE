@@ -1,5 +1,7 @@
 # Virtual Waiting Room — bước 8: quản trị và giảm tranh chấp khóa
 
+**Báo cáo tại thời điểm bước 8.** Run status p95 vượt ngưỡng được giữ nguyên bên dưới. [Bước 9](virtual-waiting-room-phase-9.md) ghi lại tập validation mới sau khi phân tán lịch polling; không thay thế hoặc xóa kết quả bước 8.
+
 Ngày 23/11/2026. Bước này đổi khóa đọc catalog trong settlement và TicketDelivery sang `FOR SHARE`, thêm API quản trị policy có version/audit, cache status phản ánh policy `Closed`/`Disabled`, cùng metric và alert cho controller/queue. [Runbook vận hành](virtual-waiting-room-operations.md) mô tả cách bật, tạm dừng và xử lý sự cố.
 
 ## Mã và kiểm thử
