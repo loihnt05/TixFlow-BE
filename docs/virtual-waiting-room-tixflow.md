@@ -95,3 +95,7 @@ Không có Virtual Waiting Room
 Request đồng thời đổ vào ứng dụng
 
 Có Virtual Waiting Room
+
+**500**
+
+Giới hạn active users giả định
