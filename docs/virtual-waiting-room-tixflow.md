@@ -420,3 +420,7 @@ Mỗi khi một người được admitted, vị trí của những người cò
 Nếu bạn cập nhật từng người bằng cách gửi một message riêng cho tất cả người dùng mỗi lần có một thay đổi, hệ thống sẽ tạo ra rất nhiều message không cần thiết.
 
 Cân nhắc:
+
+Polling: Client định kỳ hỏi server.
+
+Server-Sent Events: Server đẩy dữ liệu một chiều.
