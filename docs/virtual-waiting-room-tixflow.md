@@ -486,3 +486,7 @@ DDoS vào endpoint tham gia hàng đợi.
 Đây là một tình huống rất thực tế.
 
 Giả sử đang có:
+
+10.000 người trong queue.
+
+500 người đã được admitted.
