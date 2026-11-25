@@ -331,3 +331,7 @@ Ticket ID.
 Session ID.
 
 Thời hạn hiệu lực.
+
+B. Làm sao biết người dùng vẫn đang hoạt động?
+
+Sử dụng Heartbeat.
