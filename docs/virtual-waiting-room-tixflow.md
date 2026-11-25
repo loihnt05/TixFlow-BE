@@ -33,3 +33,7 @@ Ví dụ:
 ZADD queue:event-01 1001 user-A
 
 ZADD queue:event-01 1002 user-B
+
+ZADD queue:event-01 1003 user-C
+
+### 2.2. Cơ chế phân phối lượt truy cập
