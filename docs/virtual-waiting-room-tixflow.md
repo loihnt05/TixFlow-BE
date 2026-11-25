@@ -87,3 +87,7 @@ Thời gian chờ ước tính: Xem công thức trong bản DOCX.
 Kịch bản minh họa cần kiểm thử; các con số dưới đây là giả định, chưa phải phép đo của TixFlow.
 
 Mô phỏng 5.000 người truy cập cùng một thời điểm vào một sự kiện.
+
+Không có Virtual Waiting Room
+
+**5.000**
