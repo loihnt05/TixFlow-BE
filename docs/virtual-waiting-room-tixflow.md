@@ -347,3 +347,7 @@ Người dùng hoàn thành giao dịch.
 Người dùng chủ động rời khỏi hệ thống.
 
 Session hết hạn.
+
+Người dùng vi phạm điều kiện truy cập.
+
+Điểm khó là không được giải phóng slot hai lần, hoặc giải phóng slot của một session vẫn đang hoạt động.
