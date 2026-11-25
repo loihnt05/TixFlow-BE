@@ -396,3 +396,5 @@ Implementing Adaptive Concurrency Limits
 dzone.com
 
 Bạn có thể phát triển một thuật toán tự điều chỉnh admission rate.
+
+Ví dụ:
