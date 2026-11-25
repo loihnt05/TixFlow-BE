@@ -192,3 +192,7 @@ Bạn phải giải quyết:
 Atomic operations.
 
 Distributed locking hoặc cơ chế đồng bộ phù hợp.
+
+Redis Lua Script.
+
+Kiểm soát giới hạn capacity trên nhiều server instance.
