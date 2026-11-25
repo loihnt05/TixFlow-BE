@@ -214,3 +214,7 @@ API Server 3
 Redis – Shared Queue State
 
 Nguồn dữ liệu hàng đợi dùng chung
+
+Một câu hỏi quan trọng:
+
+Nếu người dùng A gửi request đến Server 1 để tham gia queue, nhưng request tiếp theo lại được Load Balancer chuyển đến Server 3, Server 3 làm sao biết A đang ở vị trí nào?
