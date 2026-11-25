@@ -428,3 +428,7 @@ Server-Sent Events: Server đẩy dữ liệu một chiều.
 SignalR/WebSocket: Giao tiếp hai chiều realtime.
 
 Redis Pub/Sub: Phân phối thông báo giữa các backend instances.
+
+Một giải pháp là không cần thông báo mỗi khi vị trí thay đổi. Thay vào đó, client có thể nhận cập nhật theo chu kỳ, hoặc nhận sự kiện khi trạng thái của ticket thay đổi.
+
+Điểm đáng nghiên cứu là sự cân bằng giữa:
