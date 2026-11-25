@@ -519,3 +519,17 @@ Vì vậy, bạn có thể chọn chiến lược fail-closed: khi không thể 
 Công thức thứ hai thể hiện nguyên tắc FIFO: người vào trước không được admitted sau người vào sau, trong phạm vi cùng một chính sách ưu tiên và không xét trường hợp hủy hoặc hết hạn.
 
 Đây là những thuộc tính có thể kiểm chứng bằng automated tests và load tests.
+
+## Đối chiếu chín vấn đề với triển khai hiện tại
+
+| Vấn đề | Trạng thái | Cách triển khai hiện có / phần còn thiếu |
+| --- | --- | --- |
+| 1. Concurrency – truy cập đồng thời | Đang thực hiện | Các thao tác join và cấp lượt dùng Redis Lua Script để thực hiện nguyên tử; ngân sách cấp lượt theo giây được chia sẻ giữa các API replica. Tuy nhiên, hệ thống chưa có giới hạn ActiveUsers ≤ Capacity như ví dụ 500 người đang truy cập cùng lúc. |
+| 2. Distributed state – nhiều server dùng chung hàng đợi | Đã hoàn thành | Trạng thái entry, thứ tự queue và ngân sách grant nằm trong Redis; mỗi API replica đều có controller và cùng xử lý queue. Có test hai host dùng chung trạng thái, controller thay thế tiếp tục cấp lượt và Redis restart với AOF vẫn giữ thứ tự. |
+| 3. Fairness – công bằng FIFO | Đã hoàn thành | Redis INCR tạo số thứ tự ở phía server, Sorted Set xếp theo số đó, controller lấy phần tử đầu hàng. Cùng một user join lại khi entry còn hiệu lực sẽ giữ vị trí, nên refresh hoặc mở nhiều tab không tạo thêm vị trí. Randomized Pre-Queue trong tài liệu là hướng mở rộng, hiện chưa có. |
+| 4. Admission lifecycle – vòng đời quyền truy cập | Đang thực hiện | Đã có các trạng thái Waiting, Admitted, Consumed, Expired, Abandoned; entry chờ hết hạn sau 5 phút không hoạt động, grant hết hạn sau 2 phút, và một grant được ràng buộc với một ý định tạo Hold. Chưa có mô hình ACTIVE/COMPLETED và giải phóng slot đang truy cập, vì hiện chưa quản lý capacity đồng thời. Polling gia hạn entry đang chờ, nhưng chưa có heartbeat cho phiên đã được admitted. |
+| 5. Dynamic Admission Control – tự điều chỉnh tốc độ | Chưa thực hiện | MaxGrantsPerSecond hiện là giá trị cố định do Admin/Organizer cập nhật qua API quản trị. Monitoring đã thu thập chỉ số, nhưng chưa có thuật toán dùng latency, lỗi hoặc tải hệ thống để tự tăng giảm tốc độ cấp lượt. |
+| 6. Realtime – cập nhật trạng thái hàng đợi | Đã hoàn thành | Project chọn polling: frontend gọi status theo khoảng 3–5 giây do server trả về và cộng jitter để phân tán tải. API trả vị trí ước lượng, trạng thái và token khi đến lượt. Đây là cập nhật theo chu kỳ, không phải WebSocket/SignalR; chưa có bằng chứng đo với 10.000 người chờ. |
+| 7. Security – chống vượt phòng chờ và lạm dụng | Đang thực hiện | Backend tạo Hold yêu cầu admission token khi policy được bật; kiểm tra chữ ký, user, suất diễn, hạn dùng và trạng thái grant trong Redis. Grant chỉ dùng cho cùng một Hold intent; API có rate limit theo IP/user/client. Phần chống bot chuyên biệt và DDoS chưa thấy triển khai. |
+| 8. Reliability – xử lý sự cố | Đang thực hiện | Khi Redis không thể xác minh grant, gate trả 503 thay vì cho tạo Hold; có test Redis restart, nhiều replica và controller thay thế. Frontend cũng thử kết nối lại bằng queueId đã lưu. Tài liệu vẫn ghi chưa diễn tập đầy đủ mất mạng, Redis bị kill đột ngột và failover nhiều máy trong môi trường triển khai. |
+| 9. Performance benchmarking – chứng minh bằng số liệu | Đang thực hiện | Các phép đo local gồm ba cặp đối chứng Active/Disabled với 100 join mỗi run và một soak 10 phút với 1.000 join, 50 Hold/Paid/Ticket, không oversell. Đây không phải phép đo 5.000 join đồng thời hoặc xác nhận SLA production. Xem báo cáo bước 9 và báo cáo soak ngày 23/11/2026. |
