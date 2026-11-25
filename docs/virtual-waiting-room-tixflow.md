@@ -476,3 +476,7 @@ Replay attack (sử dụng lại request/token).
 Token bị đánh cắp.
 
 Người dùng chia sẻ token cho người khác.
+
+DDoS vào endpoint tham gia hàng đợi.
+
+Điểm quan trọng: Virtual Waiting Room không chỉ bảo vệ trang frontend mà phải bảo vệ cả backend và tài nguyên nghiệp vụ phía sau.
