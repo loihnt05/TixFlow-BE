@@ -424,3 +424,7 @@ Cân nhắc:
 Polling: Client định kỳ hỏi server.
 
 Server-Sent Events: Server đẩy dữ liệu một chiều.
+
+SignalR/WebSocket: Giao tiếp hai chiều realtime.
+
+Redis Pub/Sub: Phân phối thông báo giữa các backend instances.
