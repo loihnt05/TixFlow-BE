@@ -299,3 +299,7 @@ WAITING
 Đang chờ trong queue
 
 ADMITTED
+
+Đã được cấp quyền truy cập
+
+ACTIVE
