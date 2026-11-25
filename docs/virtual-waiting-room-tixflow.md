@@ -291,3 +291,7 @@ Hệ thống vẫn tính người này vào số lượng active users.
 Kết quả: Capacity bị chiếm dụng dù người dùng không còn hoạt động.
 
 Bạn cần xây dựng vòng đời quyền truy cập.
+
+Ticket / Admission State Machine
+
+WAITING
