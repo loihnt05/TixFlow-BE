@@ -222,3 +222,7 @@ Nếu người dùng A gửi request đến Server 1 để tham gia queue, nhưn
 Nếu mỗi server giữ queue riêng:
 
 Server 1 có thể nghĩ A ở vị trí 100.
+
+Server 2 có thể không biết A tồn tại.
+
+Server 3 có thể trả về một vị trí hoàn toàn khác.
