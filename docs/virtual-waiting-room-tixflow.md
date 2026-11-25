@@ -480,3 +480,7 @@ Người dùng chia sẻ token cho người khác.
 DDoS vào endpoint tham gia hàng đợi.
 
 Điểm quan trọng: Virtual Waiting Room không chỉ bảo vệ trang frontend mà phải bảo vệ cả backend và tài nguyên nghiệp vụ phía sau.
+
+## 8. Reliability – Khi hệ thống phòng chờ gặp sự cố?
+
+Đây là một tình huống rất thực tế.
