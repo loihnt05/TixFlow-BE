@@ -295,3 +295,7 @@ Bạn cần xây dựng vòng đời quyền truy cập.
 Ticket / Admission State Machine
 
 WAITING
+
+Đang chờ trong queue
+
+ADMITTED
