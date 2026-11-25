@@ -458,3 +458,7 @@ Nếu backend không xác thực admission token thì toàn bộ hệ thống ph
 Bạn phải bảo vệ các endpoint nghiệp vụ bằng cách:
 
 Xác thực token được server cấp.
+
+Kiểm tra token có đúng event không.
+
+Kiểm tra session có còn hiệu lực không.
