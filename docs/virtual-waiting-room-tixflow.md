@@ -414,3 +414,7 @@ Lưu ý: Không nên chỉ dựa vào CPU; cần có ngưỡng và cơ chế ch�
 ## 6. Realtime – Cập nhật hàng đợi cho hàng nghìn người
 
 Giả sử có 10.000 người đang chờ.
+
+Mỗi khi một người được admitted, vị trí của những người còn lại có thể thay đổi.
+
+Nếu bạn cập nhật từng người bằng cách gửi một message riêng cho tất cả người dùng mỗi lần có một thay đổi, hệ thống sẽ tạo ra rất nhiều message không cần thiết.
