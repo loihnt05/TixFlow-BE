@@ -23,3 +23,7 @@ Hệ thống lần lượt cấp quyền truy cập cho người đang chờ.
 Khi hết lượt truy cập hoặc hết thời gian cho phép, quyền truy cập được thu hồi và chuyển cho người tiếp theo.
 
 ## 2. Cách triển khai cơ chế hàng đợi
+
+### 2.1. Quản lý thứ tự bằng FIFO
+
+FIFO (First In, First Out) nghĩa là người vào trước được xử lý trước.
