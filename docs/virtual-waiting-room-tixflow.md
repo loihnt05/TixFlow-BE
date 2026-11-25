@@ -138,3 +138,7 @@ Sử dụng k6 để mô phỏng lượng người dùng lớn và Grafana để
 | Lua Script | Xử lý admission atomic |
 | TTL | Tự động hết hạn key |
 | Pub/Sub | Một lựa chọn mở rộng; TixFlow hiện dùng polling |
+
+## Các vấn đề kỹ thuật và phạm vi triển khai trong TixFlow
+
+## 1. Concurrency – Truy cập đồng thời
