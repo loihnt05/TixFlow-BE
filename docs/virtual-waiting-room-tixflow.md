@@ -208,3 +208,7 @@ Load Balancer
 API Server 1
 
 API Server 2
+
+API Server 3
+
+Redis – Shared Queue State
