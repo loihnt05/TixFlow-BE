@@ -269,3 +269,7 @@ Ví dụ, khi hai request có cùng timestamp, bạn cần sequence number tăng
 Ngoài ra, có một bài toán thú vị hơn: Randomized Pre-Queue.
 
 Thay vì ai đến trước trong giai đoạn mở bán được ưu tiên, hệ thống có thể tập hợp người dùng trong một khoảng thời gian trước giờ mở bán, sau đó phân phối vị trí ngẫu nhiên. Khi đã có thứ tự ban đầu, những người tiếp theo sẽ được xếp FIFO.
+
+Điều này giúp hạn chế lợi thế của người có kết nối mạng nhanh hơn trong một cuộc mở bán có thời điểm bắt đầu cố định.
+
+## 4. Admission Lifecycle – Quản lý vòng đời quyền truy cập
