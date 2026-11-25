@@ -472,3 +472,7 @@ Ngoài ra còn có:
 Bot tự động lấy nhiều ticket.
 
 Replay attack (sử dụng lại request/token).
+
+Token bị đánh cắp.
+
+Người dùng chia sẻ token cho người khác.
