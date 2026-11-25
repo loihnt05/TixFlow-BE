@@ -190,3 +190,5 @@ Nhiều request cùng được admitted
 Bạn phải giải quyết:
 
 Atomic operations.
+
+Distributed locking hoặc cơ chế đồng bộ phù hợp.
