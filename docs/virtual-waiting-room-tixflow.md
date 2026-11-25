@@ -317,3 +317,7 @@ Hết hạn
 Luồng trạng thái minh họa. Ngoài ra có thể có CANCELLED và các trạng thái lỗi.
 
 Bạn cần giải quyết những câu hỏi:
+
+A. Admission Token tồn tại bao lâu?
+
+Có thể dùng JWT hoặc một opaque token ngẫu nhiên được lưu trạng thái phía server.
