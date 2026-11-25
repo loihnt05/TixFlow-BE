@@ -259,3 +259,7 @@ Hãy xét những tình huống:
 | Người dùng mất mạng 30 giây | Có bị loại khỏi queue? |
 | Người dùng cố gửi request liên tục | Có thể chiếm nhiều vị trí không? |
 | Người dùng chỉnh giờ máy | Có ảnh hưởng thứ tự không? |
+
+Bạn cần định nghĩa một quy tắc rõ ràng:
+
+Thứ tự phải do server quyết định, không được phụ thuộc vào thời gian do client gửi lên.
