@@ -236,3 +236,7 @@ Nhiều server cùng cập nhật queue.
 Nhiều Background Worker cùng xử lý admission.
 
 Redis bị mất kết nối thì hệ thống phản ứng thế nào?
+
+Khi Redis restart, làm sao khôi phục trạng thái?
+
+Làm sao tránh cấp quyền hai lần?
