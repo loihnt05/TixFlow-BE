@@ -240,3 +240,7 @@ Redis bị mất kết nối thì hệ thống phản ứng thế nào?
 Khi Redis restart, làm sao khôi phục trạng thái?
 
 Làm sao tránh cấp quyền hai lần?
+
+Đây là bài toán Distributed State Management.
+
+## 3. Fairness – Đảm bảo công bằng
