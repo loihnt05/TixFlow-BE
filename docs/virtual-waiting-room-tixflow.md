@@ -29,3 +29,7 @@ Khi hết lượt truy cập hoặc hết thời gian cho phép, quyền truy c�
 FIFO (First In, First Out) nghĩa là người vào trước được xử lý trước.
 
 Ví dụ:
+
+ZADD queue:event-01 1001 user-A
+
+ZADD queue:event-01 1002 user-B
