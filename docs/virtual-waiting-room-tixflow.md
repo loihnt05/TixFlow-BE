@@ -468,3 +468,7 @@ Kiểm tra ticket đã được admitted chưa.
 Kiểm tra token có bị sử dụng sai session hoặc bị thu hồi không.
 
 Ngoài ra còn có:
+
+Bot tự động lấy nhiều ticket.
+
+Replay attack (sử dụng lại request/token).
