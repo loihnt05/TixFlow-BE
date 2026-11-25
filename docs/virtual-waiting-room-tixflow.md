@@ -505,3 +505,7 @@ Bạn phải quyết định hệ thống phản ứng như thế nào.
 | PostgreSQL không hoạt động | Giới hạn các nghiệp vụ cần ghi dữ liệu lâu dài |
 
 Đặc biệt, cần phân biệt hai khái niệm:
+
+Availability: Hệ thống có tiếp tục phục vụ được không?
+
+Consistency: Hệ thống có đảm bảo dữ liệu và trạng thái chính xác không?
