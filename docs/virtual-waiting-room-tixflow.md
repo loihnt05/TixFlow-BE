@@ -490,3 +490,7 @@ Giả sử đang có:
 10.000 người trong queue.
 
 500 người đã được admitted.
+
+Redis đột nhiên bị mất kết nối.
+
+Bạn phải quyết định hệ thống phản ứng như thế nào.
