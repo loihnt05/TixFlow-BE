@@ -343,3 +343,7 @@ C. Khi nào giải phóng slot?
 Khi:
 
 Người dùng hoàn thành giao dịch.
+
+Người dùng chủ động rời khỏi hệ thống.
+
+Session hết hạn.
