@@ -55,3 +55,7 @@ ZADD queue:event-01 1003 user-C
 Công thức đơn giản: Xem công thức trong bản DOCX.
 
 ### 2.3. Ước tính thời gian chờ
+
+Một tính năng hữu ích là cho người dùng biết họ phải chờ bao lâu.
+
+Công thức cơ bản: Xem công thức trong bản DOCX.
