@@ -484,3 +484,5 @@ DDoS vào endpoint tham gia hàng đợi.
 ## 8. Reliability – Khi hệ thống phòng chờ gặp sự cố?
 
 Đây là một tình huống rất thực tế.
+
+Giả sử đang có:
