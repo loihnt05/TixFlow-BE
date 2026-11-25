@@ -313,3 +313,7 @@ Hoàn thành
 EXPIRED
 
 Hết hạn
+
+Luồng trạng thái minh họa. Ngoài ra có thể có CANCELLED và các trạng thái lỗi.
+
+Bạn cần giải quyết những câu hỏi:
