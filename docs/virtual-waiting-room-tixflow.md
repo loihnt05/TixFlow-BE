@@ -41,3 +41,7 @@ ZADD queue:event-01 1003 user-C
 1. Đọc số người đang active.
 
 2. Tính số slot còn trống.
+
+3. Kiểm tra giới hạn tốc độ admission.
+
+4. Lấy các ticket đầu hàng đợi.
