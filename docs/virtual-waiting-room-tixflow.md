@@ -168,3 +168,7 @@ Nhưng hãy tưởng tượng 100 request cùng đọc activeUsers = 499 trướ
 Kết quả: cả 100 request đều có thể được cấp quyền.
 
 Minh họa race condition
+
+Active Users = 499 / 500
+
+Request 1
