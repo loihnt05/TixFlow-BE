@@ -59,3 +59,7 @@ Công thức đơn giản: Xem công thức trong bản DOCX.
 Một tính năng hữu ích là cho người dùng biết họ phải chờ bao lâu.
 
 Công thức cơ bản: Xem công thức trong bản DOCX.
+
+Ví dụ:
+
+Có 900 người phía trước.
