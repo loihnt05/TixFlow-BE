@@ -146,3 +146,7 @@ Sử dụng k6 để mô phỏng lượng người dùng lớn và Grafana để
 Giả sử hệ thống có cấu hình:
 
 Capacity: 500 người.
+
+Active users hiện tại: 499 người.
+
+Có 100 request cùng lúc muốn được admitted.
