@@ -494,3 +494,14 @@ Giả sử đang có:
 Redis đột nhiên bị mất kết nối.
 
 Bạn phải quyết định hệ thống phản ứng như thế nào.
+
+| Sự cố | Cách xử lý cần nghiên cứu |
+| --- | --- |
+| Redis mất kết nối | Tạm dừng admission, tránh cấp quyền không kiểm soát |
+| Backend restart | Khôi phục trạng thái từ Redis |
+| Worker bị crash | Worker khác tiếp tục xử lý an toàn |
+| SignalR disconnect | Client reconnect và lấy lại trạng thái |
+| Token hết hạn | Xác thực và cấp lại theo chính sách |
+| PostgreSQL không hoạt động | Giới hạn các nghiệp vụ cần ghi dữ liệu lâu dài |
+
+Đặc biệt, cần phân biệt hai khái niệm:
