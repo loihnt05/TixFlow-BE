@@ -392,3 +392,7 @@ Ví dụ, xây dựng các mức điều tiết:
 | Critical | 0 users/s |
 
 Implementing Adaptive Concurrency Limits
+
+dzone.com
+
+Bạn có thể phát triển một thuật toán tự điều chỉnh admission rate.
