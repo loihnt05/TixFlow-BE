@@ -361,3 +361,7 @@ Người dùng vi phạm điều kiện truy cập.
 Giả sử bạn đặt:
 
 Capacity = 500.
+
+Admission rate = 10 người/giây.
+
+Nhưng trên thực tế, hệ thống có thể hoạt động tốt khi có 500 người nhưng lại quá tải khi có 300 người nếu những người đó thực hiện nhiều thao tác nặng.
