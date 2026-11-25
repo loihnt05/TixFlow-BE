@@ -99,3 +99,7 @@ Có Virtual Waiting Room
 **500**
 
 Giới hạn active users giả định
+
+Đây là cấu hình thử nghiệm giả định, không phải kết quả benchmark.
+
+Các chỉ số cần thu thập:
