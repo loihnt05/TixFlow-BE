@@ -7,3 +7,7 @@ Bản Markdown chỉ chuyển phần chữ và bảng; hình cùng công thức 
 ## 1. Virtual Waiting Room là gì?
 
 Virtual Waiting Room là hệ thống phòng chờ trực tuyến, được sử dụng để kiểm soát lượng người dùng truy cập vào một website hoặc một chức năng có giới hạn khả năng xử lý.
+
+Ý tưởng cốt lõi:
+
+Người dùng truy cập website.
