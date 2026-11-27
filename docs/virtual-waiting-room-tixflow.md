@@ -24,13 +24,13 @@ Các trạng thái có trong mã là `Waiting`, `Admitted`, `Consumed`, `Expired
 
 `Consumed` nghĩa là grant đã được ràng buộc với một Hold intent, không chứng minh Hold thành công. Khi retry cùng idempotency key và cùng request hash, gate cho phép phát lại intent đó. Dùng grant cho intent khác sẽ bị từ chối. Token được bảo vệ bằng ASP.NET Data Protection và gắn với subject, suất diễn, queue ID, grant ID và hạn dùng. Backend kiểm tra cả token lẫn trạng thái grant trong Redis.
 
-TixFlow **chưa** có trạng thái phiên truy cập `ACTIVE`/`COMPLETED`, heartbeat cho người đã admitted hoặc cơ chế giải phóng slot active. Vì vậy không thể suy từ grant rate ra giới hạn số người hoạt động đồng thời.
+Mã đang bổ sung giới hạn số admission grant chưa dùng còn hạn bằng Redis Sorted Set và `maxConcurrentAdmissions` theo suất diễn; test tích hợp chưa chạy trên máy hiện tại. TixFlow **chưa** có trạng thái phiên truy cập `ACTIVE`/`COMPLETED`, heartbeat cho người đã admitted hoặc cơ chế giữ slot xuyên suốt checkout. Vì vậy giới hạn grant này không chứng minh số người đang mua vé đồng thời.
 
 Mã tham chiếu: [AdmissionTokens](../src/TixFlow.Api/Modules/WaitingRoom/AdmissionTokens.cs), [RedisWaitingRoomStore](../src/TixFlow.Infrastructure/WaitingRoom/RedisWaitingRoomStore.cs), [BookingModule](../src/TixFlow.Api/Modules/Booking/BookingModule.cs).
 
 ## Điều tiết tải và ví dụ 5.000 người
 
-Ví dụ 5.000 người đến cùng lúc và chỉ cho 500 người active trong bản Word là **mô hình nghiên cứu**. Bản hiện tại giới hạn số grant trong mỗi giây bằng `MaxGrantsPerSecond`; không có `activeUsers <= capacity` hay bộ đếm slot active. API cũng có rate limit theo IP, user và client để giảm lạm dụng request. Chưa có thuật toán tự điều chỉnh grant rate dựa trên latency, CPU, memory hoặc lỗi.
+Ví dụ 5.000 người đến cùng lúc và chỉ cho 500 người active trong bản Word là **mô hình nghiên cứu**. Bản hiện tại giới hạn số grant trong mỗi giây bằng `MaxGrantsPerSecond`; phần mã mới giới hạn thêm grant chưa dùng nhưng chưa có bất biến `activeUsers <= capacity` cho toàn hành trình mua vé. API cũng có rate limit theo IP, user và client để giảm lạm dụng request. Chưa có thuật toán tự điều chỉnh grant rate dựa trên latency, CPU, memory hoặc lỗi.
 
 Muốn triển khai giới hạn active thật, cần định nghĩa rõ thời điểm chiếm và giải phóng slot, timeout, retry, nhiều tab, nhiều replica và xử lý khi Redis mất kết nối. Phép thử cần chứng minh bất biến `activeUsers <= capacity` dưới tranh chấp đồng thời, thay vì chỉ quan sát một biểu đồ thông lượng.
 

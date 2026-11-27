@@ -42,6 +42,7 @@ public static class WaitingRoomManagementModule
         HttpContext context, TixFlowDbContext db, IConnectionMultiplexer redis, CancellationToken ct)
     {
         if (!Enum.IsDefined(request.State) || request.MaxGrantsPerSecond is < 1 or > 1000
+            || request.MaxConcurrentAdmissions is < 1 or > 100000
             || request.ExpectedVersion < 0 || string.IsNullOrWhiteSpace(request.Reason)
             || request.Reason.Trim().Length is < 10 or > 500)
             return Problem(400, "INVALID_WAITING_ROOM_POLICY");
@@ -74,18 +75,22 @@ public static class WaitingRoomManagementModule
                 if (version != request.ExpectedVersion) return Problem(409, "POLICY_VERSION_CONFLICT");
                 WaitingRoomPolicyState oldState = policy?.State ?? WaitingRoomPolicyState.Disabled;
                 int oldRate = policy?.MaxGrantsPerSecond ?? 5;
+                int oldCapacity = policy?.MaxConcurrentAdmissions ?? 500;
+                int newCapacity = request.MaxConcurrentAdmissions ?? oldCapacity;
                 if (policy is null)
                 {
-                    policy = new WaitingRoomPolicy(sessionId, request.MaxGrantsPerSecond);
+                    policy = new WaitingRoomPolicy(sessionId, request.MaxGrantsPerSecond,
+                        newCapacity);
                     db.WaitingRoomPolicies.Add(policy);
                 }
-                policy.Change(request.State, request.MaxGrantsPerSecond);
+                policy.Change(request.State, request.MaxGrantsPerSecond, newCapacity);
                 User actor = (User)context.Items[LocalUserMiddleware.UserKey]!;
                 db.AuditLogs.Add(new AuditLog(actor.Id, "WaitingRoomPolicyChanged", "WaitingRoomPolicy",
                     sessionId.ToString("D"), JsonSerializer.Serialize(new
                     {
-                        oldState = oldState.ToString(), oldRate, newState = request.State.ToString(),
-                        newRate = request.MaxGrantsPerSecond, version = policy.Version,
+                        oldState = oldState.ToString(), oldRate, oldCapacity,
+                        newState = request.State.ToString(), newRate = request.MaxGrantsPerSecond,
+                        newCapacity, version = policy.Version,
                         reason = request.Reason.Trim(), queueDepth
                     }), context.Connection.RemoteIpAddress?.ToString()));
                 await db.SaveChangesAsync(ct);
@@ -121,14 +126,15 @@ public static class WaitingRoomManagementModule
 
     private static WaitingRoomPolicyResponse ToResponse(Guid sessionId, WaitingRoomPolicy? policy, long? queueDepth) =>
         new(new WaitingRoomPolicyData(sessionId, policy?.State ?? WaitingRoomPolicyState.Disabled,
-            policy?.MaxGrantsPerSecond ?? 5, policy?.Version ?? 0, queueDepth));
+            policy?.MaxGrantsPerSecond ?? 5, policy?.Version ?? 0, queueDepth,
+            policy?.MaxConcurrentAdmissions ?? 500));
 
     private static IResult Problem(int status, string code) => Results.Problem(statusCode: status,
         title: code, detail: code, extensions: new Dictionary<string, object?> { ["code"] = code });
 }
 
 public sealed record WaitingRoomPolicyChange(WaitingRoomPolicyState State, int MaxGrantsPerSecond,
-    int ExpectedVersion, string Reason);
+    int ExpectedVersion, string Reason, int? MaxConcurrentAdmissions = null);
 public sealed record WaitingRoomPolicyResponse(WaitingRoomPolicyData Data);
 public sealed record WaitingRoomPolicyData(Guid EventSessionId, WaitingRoomPolicyState State,
-    int MaxGrantsPerSecond, int Version, long? QueueDepth);
+    int MaxGrantsPerSecond, int Version, long? QueueDepth, int MaxConcurrentAdmissions);

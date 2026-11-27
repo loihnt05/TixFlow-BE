@@ -20,6 +20,25 @@ public sealed class WaitingRoomResilienceTests(AuthApiFactory factory)
     private static readonly Guid TicketTypeId = Guid.Parse("50000000-0000-0000-0000-000000000012");
 
     [Fact]
+    public async Task TwoApiHostsCannotExceedSharedAdmissionCapacity()
+    {
+        using WebApplicationFactory<Program> replica = factory.WithWebHostBuilder(_ => { });
+        IWaitingRoomStore first = factory.Services.GetRequiredService<IWaitingRoomStore>();
+        IWaitingRoomStore second = replica.Services.GetRequiredService<IWaitingRoomStore>();
+        Guid sale = Guid.NewGuid();
+        for (int index = 0; index < 20; index++)
+            await first.JoinAsync(sale, $"capacity-replica-{index}", CancellationToken.None);
+
+        QueueEntrySnapshot?[] grants = await Task.WhenAll(Enumerable.Range(0, 20)
+            .Select(index => (index % 2 == 0 ? first : second)
+                .GrantNextAsync(sale, 1000, CancellationToken.None, 3)));
+        QueueEntrySnapshot[] issued = grants.OfType<QueueEntrySnapshot>().ToArray();
+        Assert.Equal(3, issued.Length);
+        Assert.Equal(new long[] { 1, 2, 3 }, issued.Select(entry => entry.Sequence).Order());
+        Assert.Equal(3, issued.Select(entry => entry.QueueId).Distinct().Count());
+    }
+
+    [Fact]
     public async Task TwoApiHostsShareFifoBudgetAndAdmissionToken()
     {
         using WebApplicationFactory<Program> replica = factory.WithWebHostBuilder(_ => { });

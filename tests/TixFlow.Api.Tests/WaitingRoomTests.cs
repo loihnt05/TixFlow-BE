@@ -70,6 +70,44 @@ public sealed class WaitingRoomTests(AuthApiFactory factory)
     }
 
     [Fact]
+    public async Task ConcurrentAdmissionCapacityReleasesOnConsumeAndAbandon()
+    {
+        IWaitingRoomStore store = factory.Services.GetRequiredService<IWaitingRoomStore>();
+        Guid sale = Guid.NewGuid();
+        QueueEntrySnapshot[] entries = new QueueEntrySnapshot[12];
+        for (int index = 0; index < entries.Length; index++)
+            entries[index] = await store.JoinAsync(sale, $"capacity-{index}", CancellationToken.None);
+
+        QueueEntrySnapshot?[] concurrent = await Task.WhenAll(Enumerable.Range(0, 12)
+            .Select(_ => store.GrantNextAsync(sale, 1000, CancellationToken.None, 2)));
+        QueueEntrySnapshot[] issued = concurrent.OfType<QueueEntrySnapshot>().ToArray();
+        Assert.Equal(2, issued.Length);
+        Assert.Equal(new long[] { 1, 2 }, issued.Select(entry => entry.Sequence).Order());
+        Assert.Equal(2, await factory.Services.GetRequiredService<IConnectionMultiplexer>()
+            .GetDatabase().SortedSetLengthAsync($"wr:active:{sale:D}"));
+
+        QueueEntrySnapshot first = issued.Single(entry => entry.Sequence == 1);
+        Assert.Equal("OK", await store.BindIntentAsync(first.QueueId, sale, first.GrantId!.Value,
+            "capacity-0", "key", "payload", CancellationToken.None));
+        Assert.Equal("OK", await store.BindIntentAsync(first.QueueId, sale, first.GrantId.Value,
+            "capacity-0", "key", "payload", CancellationToken.None));
+        QueueEntrySnapshot? third = await store.GrantNextAsync(sale, 1000, CancellationToken.None, 2);
+        Assert.Equal(3, third?.Sequence);
+
+        QueueEntrySnapshot second = issued.Single(entry => entry.Sequence == 2);
+        Assert.True(await store.AbandonAsync(second.QueueId, "capacity-1", CancellationToken.None));
+        QueueEntrySnapshot? fourth = await store.GrantNextAsync(sale, 1000, CancellationToken.None, 2);
+        Assert.Equal(4, fourth?.Sequence);
+
+        IConnectionMultiplexer redis = factory.Services.GetRequiredService<IConnectionMultiplexer>();
+        await redis.GetDatabase().HashSetAsync($"wr:entry:{third!.QueueId:D}", "expiresAt", 0);
+        await redis.GetDatabase().SortedSetAddAsync($"wr:active:{sale:D}", third.QueueId.ToString("D"), 0);
+        QueueEntrySnapshot? fifth = await store.GrantNextAsync(sale, 1000, CancellationToken.None, 2);
+        Assert.Equal(5, fifth?.Sequence);
+        Assert.Equal("Expired", (await store.GetAsync(third.QueueId, "capacity-2", CancellationToken.None))?.Status);
+    }
+
+    [Fact]
     public async Task AbandonRemovesTheEntryWithoutMovingOtherCustomers()
     {
         IWaitingRoomStore store = factory.Services.GetRequiredService<IWaitingRoomStore>();
@@ -355,10 +393,11 @@ public sealed class WaitingRoomTests(AuthApiFactory factory)
             Assert.Equal(0, (await Read(initial)).GetProperty("data").GetProperty("version").GetInt32());
 
             using HttpResponseMessage active = await admin.PutAsJsonAsync(path,
-                new { state = "Active", maxGrantsPerSecond = 5, expectedVersion = 0,
+                new { state = "Active", maxGrantsPerSecond = 5, maxConcurrentAdmissions = 2, expectedVersion = 0,
                     reason = "Open controlled sale" });
             Assert.True(active.StatusCode == HttpStatusCode.OK, await active.Content.ReadAsStringAsync());
             Assert.Equal(1, (await Read(active)).GetProperty("data").GetProperty("version").GetInt32());
+            Assert.Equal(2, (await Read(active)).GetProperty("data").GetProperty("maxConcurrentAdmissions").GetInt32());
             using HttpResponseMessage queued = await customer.PostAsJsonAsync("/api/v1/waiting-room/join",
                 new { eventSessionId = SessionId });
             Assert.Equal(HttpStatusCode.OK, queued.StatusCode);
@@ -375,6 +414,7 @@ public sealed class WaitingRoomTests(AuthApiFactory factory)
                     reason = "Pause for operator check" });
             Assert.Equal(HttpStatusCode.OK, paused.StatusCode);
             Assert.Equal(2, (await Read(paused)).GetProperty("data").GetProperty("version").GetInt32());
+            Assert.Equal(2, (await Read(paused)).GetProperty("data").GetProperty("maxConcurrentAdmissions").GetInt32());
 
             using HttpResponseMessage closed = await admin.PutAsJsonAsync(path,
                 new { state = "Closed", maxGrantsPerSecond = 3, expectedVersion = 2,

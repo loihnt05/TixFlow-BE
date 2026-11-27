@@ -40,6 +40,7 @@ public sealed class RedisWaitingRoomStore(IConnectionMultiplexer connection) : I
                     grantId=redis.call('HGET', oldKey, 'grantId') or cjson.null})
             end
             redis.call('ZREM', KEYS[3], existing)
+            redis.call('ZREM', 'wr:active:' .. ARGV[1], existing)
             redis.call('DEL', KEYS[1])
             if oldStatus == 'Waiting' or oldStatus == 'Admitted' then
                 redis.call('HSET', oldKey, 'status', 'Expired')
@@ -74,6 +75,7 @@ public sealed class RedisWaitingRoomStore(IConnectionMultiplexer connection) : I
             status = 'Expired'
             redis.call('HSET', entryKey, 'status', status)
             redis.call('ZREM', queueKey, id)
+            redis.call('ZREM', 'wr:active:' .. sale, id)
             if redis.call('GET', subjectKey) == id then redis.call('DEL', subjectKey) end
         elseif status == 'Waiting' then
             expiry = now + tonumber(ARGV[2])
@@ -100,6 +102,7 @@ public sealed class RedisWaitingRoomStore(IConnectionMultiplexer connection) : I
         if status == 'Waiting' or status == 'Admitted' then
             redis.call('HSET', KEYS[1], 'status', 'Abandoned')
             redis.call('ZREM', 'wr:queue:' .. sale, id)
+            redis.call('ZREM', 'wr:active:' .. sale, id)
             if redis.call('GET', subjectKey) == id then redis.call('DEL', subjectKey) end
         end
         return 1
@@ -114,6 +117,7 @@ public sealed class RedisWaitingRoomStore(IConnectionMultiplexer connection) : I
             local subjectKey = redis.call('HGET', KEYS[1], 'subjectKey')
             redis.call('HSET', KEYS[1], 'status', 'Rejected')
             redis.call('ZREM', 'wr:queue:' .. sale, id)
+            redis.call('ZREM', 'wr:active:' .. sale, id)
             if subjectKey and redis.call('GET', subjectKey) == id then redis.call('DEL', subjectKey) end
         end
         return 1
@@ -124,6 +128,9 @@ public sealed class RedisWaitingRoomStore(IConnectionMultiplexer connection) : I
         local now = nowParts[1] * 1000 + math.floor(nowParts[2] / 1000)
         local budgetKey = 'wr:budget:' .. ARGV[3] .. ':' .. nowParts[1]
         if tonumber(redis.call('GET', budgetKey) or '0') >= tonumber(ARGV[5]) then return 'BUDGET' end
+        local activeKey = 'wr:active:' .. ARGV[3]
+        redis.call('ZREMRANGEBYSCORE', activeKey, '-inf', now)
+        if redis.call('ZCARD', activeKey) >= tonumber(ARGV[6]) then return 'CAPACITY' end
         for i = 1, 100 do
             local head = redis.call('ZRANGE', KEYS[1], 0, 0)[1]
             if not head then return '' end
@@ -139,6 +146,8 @@ public sealed class RedisWaitingRoomStore(IConnectionMultiplexer connection) : I
                     'expiresAt', now + ARGV[2])
                 redis.call('EXPIRE', entryKey, ARGV[4])
                 redis.call('SET', subjectKey, head, 'PX', ARGV[2])
+                redis.call('ZADD', activeKey, now + tonumber(ARGV[2]), head)
+                redis.call('EXPIRE', activeKey, ARGV[7])
                 return cjson.encode({queueId=head, eventSessionId=ARGV[3], status='Admitted',
                     sequence=tonumber(redis.call('HGET', entryKey, 'sequence')),
                     joinedAtUnixMs=tonumber(redis.call('HGET', entryKey, 'joinedAt')),
@@ -170,9 +179,11 @@ public sealed class RedisWaitingRoomStore(IConnectionMultiplexer connection) : I
         local now = nowParts[1] * 1000 + math.floor(nowParts[2] / 1000)
         if tonumber(redis.call('HGET', entry, 'expiresAt') or '0') <= now then
             redis.call('HSET', entry, 'status', 'Expired')
+            redis.call('ZREM', 'wr:active:' .. ARGV[2], ARGV[7])
             return 'EXPIRED'
         end
         redis.call('HSET', entry, 'status', 'Consumed', 'intentKeyHash', ARGV[4], 'requestHash', ARGV[5])
+        redis.call('ZREM', 'wr:active:' .. ARGV[2], ARGV[7])
         redis.call('EXPIRE', entry, ARGV[6])
         local subjectKey = redis.call('HGET', entry, 'subjectKey')
         if subjectKey and redis.call('GET', subjectKey) == ARGV[7] then redis.call('DEL', subjectKey) end
@@ -210,15 +221,20 @@ public sealed class RedisWaitingRoomStore(IConnectionMultiplexer connection) : I
             [EntryKey(queueId.ToString("D"))], [subject]).WaitAsync(cancellationToken);
     }
 
-    public async Task<QueueEntrySnapshot?> GrantNextAsync(Guid eventSessionId, int maxGrantsPerSecond, CancellationToken cancellationToken)
+    public async Task<QueueEntrySnapshot?> GrantNextAsync(Guid eventSessionId, int maxGrantsPerSecond,
+        CancellationToken cancellationToken, int maxConcurrentAdmissions = 500)
     {
+        if (maxConcurrentAdmissions is < 1 or > 100000)
+            throw new ArgumentOutOfRangeException(nameof(maxConcurrentAdmissions));
         string sale = eventSessionId.ToString("D");
         string grantId = Guid.NewGuid().ToString("D");
         while (true)
         {
             RedisResult result = await connection.GetDatabase().ScriptEvaluateAsync(GrantScript,
-                [QueueKey(sale)], [grantId, GrantMilliseconds, sale, EntryRetentionSeconds, maxGrantsPerSecond]).WaitAsync(cancellationToken);
-            if (result.ToString() != "RETRY") return result.ToString() == "BUDGET" ? null : Parse(result);
+                [QueueKey(sale)], [grantId, GrantMilliseconds, sale, EntryRetentionSeconds,
+                    maxGrantsPerSecond, maxConcurrentAdmissions, SaleRetentionSeconds]).WaitAsync(cancellationToken);
+            if (result.ToString() != "RETRY")
+                return result.ToString() is "BUDGET" or "CAPACITY" ? null : Parse(result);
         }
     }
 

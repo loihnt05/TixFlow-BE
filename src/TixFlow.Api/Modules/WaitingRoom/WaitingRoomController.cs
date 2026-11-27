@@ -32,7 +32,8 @@ public sealed class WaitingRoomController(IServiceScopeFactory scopes, ILogger<W
                 var db = scope.ServiceProvider.GetRequiredService<TixFlowDbContext>();
                 var policies = await db.WaitingRoomPolicies.AsNoTracking()
                     .Where(policy => policy.State != WaitingRoomPolicyState.Disabled)
-                    .Select(policy => new { policy.EventSessionId, policy.MaxGrantsPerSecond, policy.State,
+                    .Select(policy => new { policy.EventSessionId, policy.MaxGrantsPerSecond,
+                        policy.MaxConcurrentAdmissions, policy.State,
                         SaleOpen = db.EventSessions.Any(session => session.Id == policy.EventSessionId
                             && session.Status == SessionStatus.OnSale && session.Event.Status == EventStatus.Published) })
                     .ToListAsync(stoppingToken);
@@ -44,7 +45,8 @@ public sealed class WaitingRoomController(IServiceScopeFactory scopes, ILogger<W
                     var store = scope.ServiceProvider.GetRequiredService<IWaitingRoomStore>();
                     foreach (var policy in active)
                         for (int index = 0; index < 200; index++)
-                            if (await store.GrantNextAsync(policy.EventSessionId, policy.MaxGrantsPerSecond, stoppingToken) is null)
+                            if (await store.GrantNextAsync(policy.EventSessionId, policy.MaxGrantsPerSecond,
+                                    stoppingToken, policy.MaxConcurrentAdmissions) is null)
                                 break;
                 }
                 if (++sample >= 20)

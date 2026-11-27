@@ -68,6 +68,7 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
             entity.HasKey(item => item.EventSessionId);
             entity.Property(item => item.State).HasConversion<string>().HasMaxLength(16).IsRequired();
             entity.Property(item => item.MaxGrantsPerSecond).IsRequired();
+            entity.Property(item => item.MaxConcurrentAdmissions).IsRequired();
             entity.Property(item => item.Version).IsRequired();
             entity.HasOne<EventSession>().WithOne().HasForeignKey<WaitingRoomPolicy>(item => item.EventSessionId)
                 .OnDelete(DeleteBehavior.Cascade);

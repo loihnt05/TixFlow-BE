@@ -17,9 +17,9 @@ public interface IWaitingRoomStore
     Task<bool> AbandonAsync(Guid queueId, string subject, CancellationToken cancellationToken);
     Task RejectAsync(Guid queueId, string subject, CancellationToken cancellationToken);
 
-    // The budget controller in the next phase will call this primitive. Redis pops one
-    // live entry atomically, so concurrent controller instances cannot grant it twice.
-    Task<QueueEntrySnapshot?> GrantNextAsync(Guid eventSessionId, int maxGrantsPerSecond, CancellationToken cancellationToken);
+    // Redis atomically enforces both the per-second budget and concurrent admission leases.
+    Task<QueueEntrySnapshot?> GrantNextAsync(Guid eventSessionId, int maxGrantsPerSecond,
+        CancellationToken cancellationToken, int maxConcurrentAdmissions = 500);
     Task<string> BindIntentAsync(Guid queueId, Guid eventSessionId, Guid grantId, string subject,
         string idempotencyKeyHash, string requestHash, CancellationToken cancellationToken);
 }

@@ -2,7 +2,7 @@
 
 ## Trước khi mở một đợt bán
 
-Áp dụng migration `014_waiting_room_policies.sql` và `015_waiting_room_policy_version.sql`. Kiểm tra API `/health/ready`, PostgreSQL, Redis có persistence AOF, frontend checkout nhận được `join/status`, và scraper nội bộ đọc `/internal/metrics` khi `Monitoring:Enabled=true`. Policy mặc định là `Disabled`, nên việc deploy code không tự bật hàng chờ.
+Áp dụng migration `014_waiting_room_policies.sql`, `015_waiting_room_policy_version.sql` và `016_waiting_room_admission_capacity.sql`. Kiểm tra API `/health/ready`, PostgreSQL, Redis có persistence AOF, frontend checkout nhận được `join/status`, và scraper nội bộ đọc `/internal/metrics` khi `Monitoring:Enabled=true`. Policy mặc định là `Disabled`, nên việc deploy code không tự bật hàng chờ.
 
 Admin hoặc Organizer sở hữu sự kiện đọc:
 
@@ -11,7 +11,7 @@ GET /api/v1/management/event-sessions/{sessionId}/waiting-room-policy
 Authorization: Bearer <token>
 ```
 
-Response có `state`, `maxGrantsPerSecond`, `version` và `queueDepth`. `queueDepth: null` nghĩa là không đọc được Redis; **không** xem như hàng chờ rỗng. Việc cấp lượt chỉ chạy khi policy `Active`, sự kiện `Published` và session `OnSale`.
+Response có `state`, `maxGrantsPerSecond`, `maxConcurrentAdmissions`, `version` và `queueDepth`. `queueDepth: null` nghĩa là không đọc được Redis; **không** xem như hàng chờ rỗng. Việc cấp lượt chỉ chạy khi policy `Active`, sự kiện `Published` và session `OnSale`.
 
 Để bật, gửi đúng `version` vừa đọc và lý do vận hành (10–500 ký tự):
 
@@ -20,7 +20,7 @@ PUT /api/v1/management/event-sessions/{sessionId}/waiting-room-policy
 Authorization: Bearer <token>
 Content-Type: application/json
 
-{"state":"Active","maxGrantsPerSecond":5,"expectedVersion":0,"reason":"Open controlled sale for launch"}
+{"state":"Active","maxGrantsPerSecond":5,"maxConcurrentAdmissions":500,"expectedVersion":0,"reason":"Open controlled sale for launch"}
 ```
 
 Server trả `409 POLICY_VERSION_CONFLICT` khi có người khác sửa trước; đọc lại policy rồi quyết định. Bật `Active` trả `503` nếu Redis không sẵn sàng, hoặc `409 SALES_WINDOW_CLOSED` nếu đợt bán chưa mở. Mỗi lần thay đổi ghi `audit_logs` trong cùng transaction với policy, gồm actor, trạng thái/rate trước và sau, version, lý do, queue depth quan sát được và IP.
@@ -29,7 +29,7 @@ Server trả `409 POLICY_VERSION_CONFLICT` khi có người khác sửa trước
 
 | State mới | Ảnh hưởng |
 | --- | --- |
-| `Active` | Controller cấp lượt theo budget Redis chung giữa các replica. Hold mới cần admission token. |
+| `Active` | Controller cấp lượt theo budget Redis chung giữa các replica và giới hạn số grant chưa dùng còn hiệu lực. Hold mới cần admission token. |
 | `Paused` | Không cấp lượt mới; khách đã được cấp lượt vẫn có thể tạo Hold bằng token còn hạn. Dùng khi cần dừng cấp lượt tạm thời. |
 | `Closed` | Chặn join và Hold mới; replay Hold đã commit vẫn hoạt động. Status của entry cũ chuyển `Rejected` khi client poll (cache trạng thái tối đa 100 ms). |
 | `Disabled` | Mở đường mua trực tiếp, không yêu cầu admission token. Entry cũ chuyển `Rejected` khi poll. Chỉ dùng khi đã chủ động quyết định bỏ Gate; lý do được audit. |
