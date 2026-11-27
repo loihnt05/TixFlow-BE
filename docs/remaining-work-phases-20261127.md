@@ -41,5 +41,6 @@ Backend và test project đã build sạch ở lượt trước. Test tích hợ
 
 ### 02B — Số liệu và trang Admin
 
+- [x] Admin check-in cập nhật vé từ response API; nếu tải lại dashboard thất bại sau khi check-in đã lưu, UI không báo nhầm thao tác check-in thất bại.
 - [ ] Đối chiếu Orders, Attendees, Analytics với DB cho từng Organizer và Admin; xác nhận ownership, trạng thái hủy và khung ngày Asia/Ho_Chi_Minh.
 - [ ] Kiểm tra các màn Admin cần cho demo và ghi rõ phạm vi quên mật khẩu/SMTP theo `APP-25..27`.
