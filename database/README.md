@@ -2,6 +2,16 @@
 
 ## Demo catalog mở rộng (DB nghiệm thu)
 
+### Làm mới hai fixture đặt vé nghiệm thu
+
+Sau khi đã migrate schema và có PostgreSQL của Docker Compose, tạo database riêng `tixflow_acceptance` rồi chạy:
+
+```powershell
+./scripts/Invoke-DemoAcceptanceRefresh.ps1 -AnchorUtc 2026-11-27T00:00:00Z
+```
+
+Script nạp `demo-acceptance-v1.sql`, sau đó `demo-acceptance-refresh-v2.sql` trên đúng `tixflow_acceptance`. Anchor UTC cố định mở cửa bán từ một ngày trước đến 30 ngày sau, đặt hai suất diễn sau 32 ngày; không reset tồn kho hay xóa giao dịch. Cùng một anchor có thể chạy lại; đổi anchor của cùng seed version hoặc refresh lần đầu khi fixture đã có Hold sẽ bị từ chối. Mỗi lần chạy thành công tạo manifest trong `artifacts/acceptance/seed-<run-id>/manifest.json` với seed version, anchor, timezone và SHA-256 của hai SQL. Dùng database nghiệm thu mới cho một chiến dịch khác; không chạy script này trên DB live.
+
 ### Bản ghi tham khảo từ Zipevent
 
 `demo-zipevent-reference-v1.sql` nạp 14 event có tên, khoảng ngày, venue và URL nguồn từ [danh sách Zipevent](https://www.zipeventapp.com/event/allevent) được đối chiếu ngày 10/11/2026. Chạy bằng `psql -v ON_ERROR_STOP=1 -v target_db=tixflow` (hoặc `tixflow_acceptance`). Các bản ghi có slug `zipevent-reference-01` đến `14`, ban đầu có `image_url` rỗng và không có ticket type/inventory; không nhập giá, mô tả hay quyền bán vé của Zipevent. Giờ đầu/cuối trong session chỉ là mốc để biểu diễn **khoảng ngày** trên catalog, không phải lịch suất diễn chi tiết. Chạy lại không nhân đôi row.

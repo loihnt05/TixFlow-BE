@@ -6,7 +6,7 @@
 | --- | --- | --- | --- | --- |
 | 01 | Hợp đồng API–frontend | Chốt lọc/paging catalog; chuẩn hóa ProblemDetails, retry và trạng thái lỗi UI (`APP-02..06`, `APP-07/08`) | Typecheck/build frontend; test response 400/401/403/404/409/422/5xx; ghi rõ filter client/server | Mã/build đạt, chờ browser |
 | 02 | Giao diện quản trị | Đối chiếu Orders, Attendees, Analytics, check-in, tiền tệ/ngày giờ (`APP-21..28`) | Mọi số liệu đọc DB; check-in lặp có thông báo và refresh giữ trạng thái | Sửa UI 02A đã build, chờ E2E |
-| 03 | Tài khoản và dữ liệu nghiệm thu | Chuẩn bị 2 Customer, 2 Organizer, Admin; seed demo có version, ngày còn hiệu lực (`AUTH-01..04`, `DATA-01..11`) | Tái tạo fixture, không trùng ID, đúng quyền sở hữu; lưu manifest không chứa secret | Chờ 02 và môi trường |
+| 03 | Tài khoản và dữ liệu nghiệm thu | Chuẩn bị 2 Customer, 2 Organizer, Admin; seed demo có version, ngày còn hiệu lực (`AUTH-01..04`, `DATA-01..11`) | Tái tạo fixture, không trùng ID, đúng quyền sở hữu; lưu manifest không chứa secret | Script refresh 03A đã viết, chờ DB |
 | 04 | E2E xác thực | Login, refresh, logout, quyền và ownership (`AUTH-05..15`) | Ma trận browser/API có Actual và evidence, không rò dữ liệu giữa user | Chờ 03 |
 | 05 | E2E mua vé | Catalog → Hold → payment → QR → check-in, race/expiry/restart (`APP-07..20`) | UI, API và DB khớp; `oversold=0`; có evidence payment fail và tranh vé | Chờ 04 |
 | 06 | Waiting Room capacity | Giới hạn grant đồng thời theo Redis; migration và quản trị policy | Test Redis/PostgreSQL đa replica và fail closed chạy qua | Mã đã viết, chờ test runtime |
@@ -44,3 +44,14 @@ Backend và test project đã build sạch ở lượt trước. Test tích hợ
 - [x] Admin check-in cập nhật vé từ response API; nếu tải lại dashboard thất bại sau khi check-in đã lưu, UI không báo nhầm thao tác check-in thất bại.
 - [ ] Đối chiếu Orders, Attendees, Analytics với DB cho từng Organizer và Admin; xác nhận ownership, trạng thái hủy và khung ngày Asia/Ho_Chi_Minh.
 - [ ] Kiểm tra các màn Admin cần cho demo và ghi rõ phạm vi quên mật khẩu/SMTP theo `APP-25..27`.
+
+## Phase 03A — Làm mới fixture nghiệm thu
+
+- [x] Script `Invoke-DemoAcceptanceRefresh.ps1` chỉ dùng database `tixflow_acceptance`, yêu cầu anchor UTC và tạo manifest SHA-256 sau khi SQL thành công.
+- [x] SQL v2 giữ ID fixture, chỉ cập nhật cửa sổ bán và thời gian hai session; cùng anchor có thể chạy lại, đổi anchor hoặc refresh lần đầu sau khi đã có Hold thì từ chối.
+- [ ] Chạy trên database nghiệm thu sạch; kiểm tra seed lần hai không nhân đôi hoặc đổi `updated_at_utc`; thử sai DB, đổi anchor và fixture đã có Hold đều bị từ chối. Lưu manifest và số row thực tế.
+
+## Phase 03B — Tài khoản và dữ liệu có quyền sở hữu
+
+- [ ] Chuẩn bị 2 Customer, 2 Organizer và 1 Admin trên Keycloak test; đăng nhập để đồng bộ `sub` và role, không tạo user giả trực tiếp trong DB.
+- [ ] Tạo dữ liệu Hold/Order/Payment/Ticket qua API thật, đối chiếu owner và inventory; đồng bộ ngày/case của bộ đánh giá AI.
