@@ -53,5 +53,6 @@ Backend và test project đã build sạch ở lượt trước. Test tích hợ
 
 ## Phase 03B — Tài khoản và dữ liệu có quyền sở hữu
 
+- [x] Gắn metadata fixture vào các ca AI có ID/ngày cố định; `Evaluate-Phase11.py --preflight-only` đọc catalog công khai, xác nhận event/session/ticket type còn hợp lệ trước khi đánh giá provider. Ca hết hạn hoặc thiếu dữ liệu dừng sớm; chưa tuyên bố DATA-09 đạt khi chưa chạy với DB thật.
 - [ ] Chuẩn bị 2 Customer, 2 Organizer và 1 Admin trên Keycloak test; đăng nhập để đồng bộ `sub` và role, không tạo user giả trực tiếp trong DB.
 - [ ] Tạo dữ liệu Hold/Order/Payment/Ticket qua API thật, đối chiếu owner và inventory; đồng bộ ngày/case của bộ đánh giá AI.
