@@ -5,7 +5,7 @@
 | Thứ tự | Phase nhỏ | Đầu việc còn phải đóng | Điều kiện chuyển bước | Trạng thái |
 | --- | --- | --- | --- | --- |
 | 01 | Hợp đồng API–frontend | Chốt lọc/paging catalog; chuẩn hóa ProblemDetails, retry và trạng thái lỗi UI (`APP-02..06`, `APP-07/08`) | Typecheck/build frontend; test response 400/401/403/404/409/422/5xx; ghi rõ filter client/server | Mã/build đạt, chờ browser |
-| 02 | Giao diện quản trị | Đối chiếu Orders, Attendees, Analytics, check-in, tiền tệ/ngày giờ (`APP-21..28`) | Mọi số liệu đọc DB; check-in lặp có thông báo và refresh giữ trạng thái | Mã hiện có, chờ E2E sau 01 |
+| 02 | Giao diện quản trị | Đối chiếu Orders, Attendees, Analytics, check-in, tiền tệ/ngày giờ (`APP-21..28`) | Mọi số liệu đọc DB; check-in lặp có thông báo và refresh giữ trạng thái | Sửa UI 02A đã build, chờ E2E |
 | 03 | Tài khoản và dữ liệu nghiệm thu | Chuẩn bị 2 Customer, 2 Organizer, Admin; seed demo có version, ngày còn hiệu lực (`AUTH-01..04`, `DATA-01..11`) | Tái tạo fixture, không trùng ID, đúng quyền sở hữu; lưu manifest không chứa secret | Chờ 02 và môi trường |
 | 04 | E2E xác thực | Login, refresh, logout, quyền và ownership (`AUTH-05..15`) | Ma trận browser/API có Actual và evidence, không rò dữ liệu giữa user | Chờ 03 |
 | 05 | E2E mua vé | Catalog → Hold → payment → QR → check-in, race/expiry/restart (`APP-07..20`) | UI, API và DB khớp; `oversold=0`; có evidence payment fail và tranh vé | Chờ 04 |
@@ -31,3 +31,15 @@ Backend và test project đã build sạch ở lượt trước. Test tích hợ
 ## Kiểm kê trước Phase 02
 
 `organizer-view.tsx` hiện gọi trực tiếp các API management `events`, `orders`, `attendees`, `analytics`; check-in gửi `POST /api/v1/check-ins`, xử lý lỗi vé đã dùng và đọc lại dữ liệu sau thành công. Backend có đúng các route đó. Vì vậy các dòng APP-21..24 trong checklist cũ là việc **nghiệm thu bằng dữ liệu thật**, không phải viết lại toàn bộ màn hình. Cần chạy E2E qua tài khoản Organizer và đối chiếu DB trước khi tick.
+
+### 02A — Check-in và lọc theo sự kiện
+
+- [x] Khi đổi sự kiện trong Organizer, chỉ giữ `manualSessionId` nếu session đó vẫn thuộc sự kiện đang chọn; nếu không, chọn session đầu hợp lệ. Không gửi check-in nhầm sang session của sự kiện trước.
+- [x] Sau check-in thành công, nếu tải lại danh sách lỗi, UI báo rõ check-in đã lưu và hướng dẫn làm mới; không hiển thị như thao tác check-in thất bại.
+- [x] `npm run lint` và `npm run build` đạt trên Next 16.4.6.
+- [ ] Dùng Organizer thật check-in một vé Issued, quét lặp, đổi bộ lọc sự kiện rồi check-in; refresh trang và đối chiếu API/DB. Đây là cổng để đóng 02A.
+
+### 02B — Số liệu và trang Admin
+
+- [ ] Đối chiếu Orders, Attendees, Analytics với DB cho từng Organizer và Admin; xác nhận ownership, trạng thái hủy và khung ngày Asia/Ho_Chi_Minh.
+- [ ] Kiểm tra các màn Admin cần cho demo và ghi rõ phạm vi quên mật khẩu/SMTP theo `APP-25..27`.
