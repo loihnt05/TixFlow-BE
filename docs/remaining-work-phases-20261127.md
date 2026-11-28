@@ -7,7 +7,7 @@
 | 01 | Hợp đồng API–frontend | Chốt lọc/paging catalog; chuẩn hóa ProblemDetails, retry và trạng thái lỗi UI (`APP-02..06`, `APP-07/08`) | Typecheck/build frontend; test response 400/401/403/404/409/422/5xx; ghi rõ filter client/server | Mã/build đạt, chờ browser |
 | 02 | Giao diện quản trị | Đối chiếu Orders, Attendees, Analytics, check-in, tiền tệ/ngày giờ (`APP-21..28`) | Mọi số liệu đọc DB; check-in lặp có thông báo và refresh giữ trạng thái | Sửa UI 02A đã build, chờ E2E |
 | 03 | Tài khoản và dữ liệu nghiệm thu | Chuẩn bị 2 Customer, 2 Organizer, Admin; seed demo có version, ngày còn hiệu lực (`AUTH-01..04`, `DATA-01..11`) | Tái tạo fixture, không trùng ID, đúng quyền sở hữu; lưu manifest không chứa secret | Script refresh 03A đã viết, chờ DB |
-| 04 | E2E xác thực | Login, refresh, logout, quyền và ownership (`AUTH-05..15`) | Ma trận browser/API có Actual và evidence, không rò dữ liệu giữa user | Chờ 03 |
+| 04 | E2E xác thực | Login, refresh, logout, quyền và ownership (`AUTH-05..15`) | Ma trận browser/API có Actual và evidence, không rò dữ liệu giữa user | Mã probe đã bổ sung, chờ 03 và browser |
 | 05 | E2E mua vé | Catalog → Hold → payment → QR → check-in, race/expiry/restart (`APP-07..20`) | UI, API và DB khớp; `oversold=0`; có evidence payment fail và tranh vé | Chờ 04 |
 | 06 | Waiting Room capacity | Giới hạn grant đồng thời theo Redis; migration và quản trị policy | Test Redis/PostgreSQL đa replica và fail closed chạy qua | Mã đã viết, chờ test runtime |
 | 07 | Waiting Room active session | Giữ slot từ Hold qua checkout, heartbeat/timeout, giải phóng đúng một lần | `ActiveUsers ≤ Capacity` dưới tranh chấp/restart; không rò slot | Chờ 06 |
@@ -59,3 +59,11 @@ Backend và test project đã build sạch ở lượt trước. Test tích hợ
 - [x] Thêm `scripts/Test-AcceptanceOwnership.ps1` để kiểm tra ma trận GET của hai event và hai order thuộc bốn người khác nhau; chỉ lưu mã HTTP/ID sau khi 14 kiểm tra 200/403/404 đạt. Chưa chạy vì cần tài khoản và dữ liệu API thật.
 - [ ] Chuẩn bị 2 Customer, 2 Organizer và 1 Admin trên Keycloak test; đăng nhập để đồng bộ `sub` và role, không tạo user giả trực tiếp trong DB.
 - [ ] Tạo dữ liệu Hold/Order/Payment/Ticket qua API thật, đối chiếu owner và inventory; đồng bộ ngày/case của bộ đánh giá AI.
+
+## Phase 04 — Chuẩn bị kiểm tra xác thực và quyền
+
+- [x] Account UI remount dữ liệu hồ sơ, order, ticket và QR khi `sub` đổi; frontend lint và production build đạt. Cần đổi tài khoản thật trong browser để nghiệm thu AUTH-14.
+- [x] Probe tài khoản kiểm tra claim JWT (`iss`, `aud`, `exp`, role, `sub`) với `/users/me`; API là bên xác thực chữ ký. Chưa chạy với token Keycloak thật.
+- [x] Probe GET không token/token sai/sai role cho 401/403; ma trận ownership bổ sung Hold, Ticket và QR của người khác. Chưa có dữ liệu và API runtime để chạy.
+- [x] Probe public config xác nhận frontend origin, callback/logout, CORS, discovery và realm import; trạng thái realm đang chạy vẫn phải kiểm tra bằng login browser.
+- [ ] Chạy AUTH-05..15 với 5 tài khoản test, ghi Actual/evidence và kiểm tra refresh, logout, đổi tài khoản, mất kết nối Keycloak/API trong browser. Không xem các probe tĩnh là nghiệm thu.
