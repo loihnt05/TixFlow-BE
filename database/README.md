@@ -16,6 +16,8 @@ Sau khi tạo 2 Customer, 2 Organizer và 1 Admin trên Keycloak test, đăng nh
 
 Khi mỗi Organizer đã có một event do mình sở hữu và mỗi Customer đã tạo một order qua API thật, chạy `./scripts/Test-AcceptanceOwnership.ps1 -OrganizerAEventId <uuid> -OrganizerBEventId <uuid> -CustomerAOrderId <uuid> -CustomerBOrderId <uuid>`. Script chỉ gọi GET: kiểm tra chủ sở hữu được 200, người còn lại bị 404, Admin được 200 và role không phù hợp bị 403. Mọi kết quả phải đạt mới ghi manifest mã HTTP và ID tài nguyên vào `artifacts/acceptance/ownership-*`; không lưu token hoặc nội dung order. Không dùng event baseline cùng owner để thay cho hai event riêng biệt của Organizer A/B.
 
+Với token Customer A và Organizer A hiện hành, chạy `./scripts/Test-AcceptanceAuthAccess.ps1 -BaseUrl http://localhost:8080` để kiểm tra 10 request GET không token, token sai cấu trúc và sai role trả đúng 401/403. Kết quả chỉ gồm route, actor và mã HTTP trong `artifacts/acceptance/auth-access-*`. Probe này không kiểm tra logout browser, refresh token hoặc JWT hết hạn; các ca đó vẫn cần E2E riêng.
+
 ### Bản ghi tham khảo từ Zipevent
 
 `demo-zipevent-reference-v1.sql` nạp 14 event có tên, khoảng ngày, venue và URL nguồn từ [danh sách Zipevent](https://www.zipeventapp.com/event/allevent) được đối chiếu ngày 10/11/2026. Chạy bằng `psql -v ON_ERROR_STOP=1 -v target_db=tixflow` (hoặc `tixflow_acceptance`). Các bản ghi có slug `zipevent-reference-01` đến `14`, ban đầu có `image_url` rỗng và không có ticket type/inventory; không nhập giá, mô tả hay quyền bán vé của Zipevent. Giờ đầu/cuối trong session chỉ là mốc để biểu diễn **khoảng ngày** trên catalog, không phải lịch suất diễn chi tiết. Chạy lại không nhân đôi row.
