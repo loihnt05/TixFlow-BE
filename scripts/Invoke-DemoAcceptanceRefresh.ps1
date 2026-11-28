@@ -22,6 +22,7 @@ $seedFiles = @(
     (Join-Path $repositoryRoot 'database/demo-acceptance-v1.sql'),
     (Join-Path $repositoryRoot 'database/demo-acceptance-refresh-v2.sql')
 )
+$verificationFile = Join-Path $repositoryRoot 'database/demo-acceptance-verify-v1.sql'
 
 Push-Location $repositoryRoot
 try {
@@ -35,6 +36,43 @@ try {
         }
     }
 
+    $verificationOutput = Get-Content -LiteralPath $verificationFile -Raw |
+        docker compose exec -T postgres psql -X -qAt -v ON_ERROR_STOP=1 `
+            -U tixflow -d tixflow_acceptance
+    if ($LASTEXITCODE -ne 0) {
+        throw "Fixture verification failed (exit $LASTEXITCODE)."
+    }
+    $verificationRows = @($verificationOutput | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    if ($verificationRows.Count -ne 1) {
+        throw "Fixture verification returned $($verificationRows.Count) rows; expected one JSON row."
+    }
+    try {
+        $verification = $verificationRows[0] | ConvertFrom-Json
+    }
+    catch {
+        throw 'Fixture verification returned invalid JSON.'
+    }
+    $expectedCounts = [ordered]@{
+        events = 2
+        sessions = 2
+        ticketTypes = 2
+        inventories = 2
+        seats = 2
+    }
+    foreach ($name in $expectedCounts.Keys) {
+        if ($verification.counts.$name -ne $expectedCounts[$name]) {
+            throw "Fixture $name count is $($verification.counts.$name); expected $($expectedCounts[$name])."
+        }
+    }
+    foreach ($name in @('eventWindows', 'sessionWindows', 'links', 'inventory', 'seats')) {
+        if ($verification.invariants.$name -ne $true) {
+            throw "Fixture invariant failed: $name."
+        }
+    }
+    if ([DateTimeOffset]::Parse($verification.anchorUtc).ToUniversalTime() -ne $parsed.ToUniversalTime()) {
+        throw 'Fixture anchor differs from the requested anchor.'
+    }
+
     $runId = [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffZ',
         [System.Globalization.CultureInfo]::InvariantCulture)
     $manifestDir = Join-Path $repositoryRoot "artifacts/acceptance/seed-$runId"
@@ -46,14 +84,10 @@ try {
         timeZone = 'Asia/Ho_Chi_Minh'
         randomSeed = 0
         appliedAtUtc = [DateTime]::UtcNow.ToString('o')
-        expectedFixtureCounts = [ordered]@{
-            events = 2
-            sessions = 2
-            ticketTypes = 2
-            inventories = 2
-            seats = 2
-        }
-        inputFiles = @($seedFiles | ForEach-Object {
+        expectedFixtureCounts = $expectedCounts
+        actualFixtureCounts = $verification.counts
+        fixtureInvariants = $verification.invariants
+        inputFiles = @(($seedFiles + $verificationFile) | ForEach-Object {
             [ordered]@{
                 path = [System.IO.Path]::GetRelativePath($repositoryRoot, $_).Replace('\', '/')
                 sha256 = (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash.ToLowerInvariant()

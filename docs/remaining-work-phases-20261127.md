@@ -49,6 +49,7 @@ Backend và test project đã build sạch ở lượt trước. Test tích hợ
 
 - [x] Script `Invoke-DemoAcceptanceRefresh.ps1` chỉ dùng database `tixflow_acceptance`, yêu cầu anchor UTC và tạo manifest SHA-256 sau khi SQL thành công.
 - [x] SQL v2 giữ ID fixture, chỉ cập nhật cửa sổ bán và thời gian hai session; cùng anchor có thể chạy lại, đổi anchor hoặc refresh lần đầu sau khi đã có Hold thì từ chối.
+- [x] Sau seed, truy vấn kiểm tra chỉ đọc đếm row thực tế và xác nhận liên kết, lịch, tồn kho; manifest chỉ được tạo sau khi mọi invariant đạt, kèm actual counts và hash của SQL kiểm tra.
 - [ ] Chạy trên database nghiệm thu sạch; kiểm tra seed lần hai không nhân đôi hoặc đổi `updated_at_utc`; thử sai DB, đổi anchor và fixture đã có Hold đều bị từ chối. Lưu manifest và số row thực tế.
 
 ## Phase 03B — Tài khoản và dữ liệu có quyền sở hữu
