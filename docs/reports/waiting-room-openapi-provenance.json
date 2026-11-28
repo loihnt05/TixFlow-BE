@@ -1,0 +1,9 @@
+{
+  "assembly": "src/TixFlow.Api/bin/Release/net8.0/TixFlow.Api.dll",
+  "assemblySha256": "b8bcba4966befac778db410a21061db26409d75f130a0735e339319a2ae3bb7f",
+  "revision": "e55966bfe881252f9d196be6efeca56db03e4afe",
+  "dirty": true,
+  "paths": 58,
+  "exportedUtc": "2026-11-23T08:40:45.1976849Z",
+  "environment": "Development; fixture DB/Redis endpoints unavailable; no business requests"
+}

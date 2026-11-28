@@ -16,6 +16,12 @@ public sealed class AuthorizationOperationFilter : IOperationFilter
             {
                 Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oidc" }
             }] = ["openid", "profile", "email"]
+        }, new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearer" }
+            }] = []
         }];
         operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Authentication required" });
         operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Role or local account status forbids access" });

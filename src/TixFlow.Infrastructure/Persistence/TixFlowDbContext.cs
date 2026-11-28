@@ -6,6 +6,7 @@ using TixFlow.Domain.Identity;
 using TixFlow.Domain.Messaging;
 using TixFlow.Domain.Orders;
 using TixFlow.Domain.Organizers;
+using TixFlow.Domain.WaitingRoom;
 
 namespace TixFlow.Infrastructure.Persistence;
 
@@ -51,6 +52,7 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
 
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<WaitingRoomPolicy> WaitingRoomPolicies => Set<WaitingRoomPolicy>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -60,6 +62,17 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
         ConfigureBooking(modelBuilder);
         ConfigureOrders(modelBuilder);
         ConfigureOperationalTables(modelBuilder);
+        modelBuilder.Entity<WaitingRoomPolicy>(entity =>
+        {
+            entity.ToTable("waiting_room_policies");
+            entity.HasKey(item => item.EventSessionId);
+            entity.Property(item => item.State).HasConversion<string>().HasMaxLength(16).IsRequired();
+            entity.Property(item => item.MaxGrantsPerSecond).IsRequired();
+            entity.Property(item => item.MaxConcurrentAdmissions).IsRequired();
+            entity.Property(item => item.Version).IsRequired();
+            entity.HasOne<EventSession>().WithOne().HasForeignKey<WaitingRoomPolicy>(item => item.EventSessionId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 
     private static void ConfigureUsers(ModelBuilder modelBuilder)
@@ -71,6 +84,7 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
             entity.Property(item => item.Email).HasMaxLength(320).IsRequired();
             entity.Property(item => item.NormalizedEmail).HasMaxLength(320).IsRequired();
             entity.Property(item => item.DisplayName).HasMaxLength(120).IsRequired();
+            entity.Property(item => item.PhoneNumber).HasMaxLength(32);
             entity.Property(item => item.PasswordHash).HasMaxLength(500);
             entity.Property(item => item.IdentitySubject).HasMaxLength(255);
             entity.HasIndex(item => item.IdentitySubject).IsUnique()
@@ -104,6 +118,11 @@ public sealed class TixFlowDbContext(DbContextOptions<TixFlowDbContext> options)
             entity.Property(item => item.Slug).HasMaxLength(180).IsRequired();
             entity.Property(item => item.Description).HasMaxLength(2000).IsRequired();
             entity.Property(item => item.ContactEmail).HasMaxLength(320).IsRequired();
+            entity.Property(item => item.AvatarUrl).HasMaxLength(1000);
+            entity.Property(item => item.WebsiteUrl).HasMaxLength(500);
+            entity.Property(item => item.IsVerified);
+            entity.Property(item => item.FollowerCount);
+            entity.Property(item => item.EventCount);
             entity.HasIndex(item => item.Slug).IsUnique();
             entity.HasIndex(item => item.OwnerUserId).IsUnique();
             entity.HasOne(item => item.OwnerUser)

@@ -8,6 +8,7 @@ using TixFlow.Api.Authentication;
 using TixFlow.Api.Modules.Users;
 using TixFlow.Api.Modules.Orders;
 using TixFlow.Api.Modules.Tickets;
+using TixFlow.Api.Modules.WaitingRoom;
 using System.Text.Json.Serialization;
 using TixFlow.Api.Performance;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -37,6 +38,9 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     if (IPAddress.TryParse(builder.Configuration["ReverseProxy:KnownProxy"], out var proxy)) options.KnownProxies.Add(proxy);
 });
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddSingleton<AdmissionTokens>();
+builder.Services.AddSingleton<WaitingRoomSaleStateCache>();
+builder.Services.AddHostedService<WaitingRoomController>();
 builder.Services.AddHostedService<MockPaymentSimulator>();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddOptions<BookingOptions>()
@@ -54,6 +58,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddIdentityAuthentication(builder.Configuration, builder.Environment);
+builder.Services.AddHttpClient("LoginToken");
 builder.Services.AddHealthChecks()
     .AddCheck<PostgresHealthCheck>("postgres");
 builder.Services.AddCors(options =>
@@ -123,6 +128,7 @@ if (app.Configuration.GetValue<bool>("Monitoring:Enabled"))
     app.MapMetrics("/internal/metrics");
 
 RouteGroupBuilder api = app.MapGroup("/api/v1");
+if (app.Environment.IsDevelopment()) api.MapDevelopmentLogin();
 api.MapGet("/system/info", (IHostEnvironment environment) => Results.Ok(new
 {
     application = "TixFlow.Api",
@@ -137,6 +143,8 @@ api.MapInventoryModule();
 api.MapBookingModule();
 api.MapOrdersModule();
 api.MapTicketsModule();
+api.MapWaitingRoomModule();
+api.MapWaitingRoomManagement();
 api.MapAssistantModule();
 api.MapUsersModule();
 api.MapOperations();

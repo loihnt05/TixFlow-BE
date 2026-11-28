@@ -28,7 +28,7 @@ public sealed record HoldPreview(Guid EventId, string EventName, string EventSlu
     decimal TotalAmount, string Currency, int HoldDurationMinutes, DateTimeOffset ConfirmBeforeUtc);
 public sealed record HoldProposal(string ConfirmationToken, HoldPreview Preview);
 public sealed record ConfirmationState(string Subject, Guid Nonce, HoldPreview Preview, BookingModule.CreateHoldRequest Request);
-public sealed record ConfirmHoldRequest(string ConfirmationToken, bool Confirmed);
+public sealed record ConfirmHoldRequest(string ConfirmationToken, bool Confirmed, string? AdmissionToken = null);
 public sealed record AssistantReply(string Message, string ConversationToken, bool Fallback,
     HoldProposal[] Proposals, string[] ToolsUsed);
 
@@ -42,7 +42,8 @@ public interface IAssistantBookingApi
     Task<JsonElement> SearchAsync(SearchEventsRequest request, CancellationToken ct);
     Task<JsonElement> DetailsAsync(Guid eventId, CancellationToken ct);
     Task<JsonElement> AvailabilityAsync(Guid sessionId, CancellationToken ct);
-    Task<IResult> CreateHoldAsync(BookingModule.CreateHoldRequest request, string idempotencyKey, CancellationToken ct);
+    Task<IResult> CreateHoldAsync(BookingModule.CreateHoldRequest request, string idempotencyKey,
+        string? admissionToken, CancellationToken ct);
 }
 
 public sealed class AssistantProblem(int status, string code) : Exception(code)

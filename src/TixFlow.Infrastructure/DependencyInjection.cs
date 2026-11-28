@@ -4,6 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using TixFlow.Infrastructure.Persistence;
 using TixFlow.Application.Identity;
 using TixFlow.Infrastructure.Identity;
+using StackExchange.Redis;
+using TixFlow.Application.WaitingRoom;
+using TixFlow.Infrastructure.WaitingRoom;
 
 namespace TixFlow.Infrastructure;
 
@@ -29,6 +32,17 @@ public static class DependencyInjection
                 .UseSnakeCaseNamingConvention());
 
         services.AddScoped<ILocalUserSynchronizer, LocalUserSynchronizer>();
+        services.AddSingleton<IConnectionMultiplexer>(_ =>
+        {
+            string redis = configuration.GetConnectionString("Redis")
+                ?? throw new InvalidOperationException("Connection string 'Redis' is not configured.");
+            ConfigurationOptions options = ConfigurationOptions.Parse(redis);
+            options.AbortOnConnectFail = false;
+            options.ConnectTimeout = 1000;
+            options.AsyncTimeout = 1000;
+            return ConnectionMultiplexer.Connect(options);
+        });
+        services.AddSingleton<IWaitingRoomStore, RedisWaitingRoomStore>();
         return services;
     }
 }

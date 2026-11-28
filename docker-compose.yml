@@ -179,7 +179,7 @@ services:
       - "127.0.0.1:8180:8080"
       - "127.0.0.1:9001:9000"
     volumes:
-      - ./infrastructure/keycloak:/opt/keycloak/data/import:ro
+      - ./infrastructure/keycloak/tixflow-realm.json:/opt/keycloak/data/import/tixflow-realm.json:ro
       - ./infrastructure/keycloak/providers:/opt/keycloak/providers:ro
     depends_on:
       keycloak-postgres:

@@ -71,6 +71,8 @@ def render(values, output):
     realm['bruteForceProtected'] = True
     # Custom theme is already bundled; never import development accounts or Swagger clients.
     realm['clients'] = [c for c in realm['clients'] if c['clientId'] in ['tixflow-api', 'tixflow-web']]
+    realm['scopeMappings'] = [mapping for mapping in realm.get('scopeMappings', [])
+                              if mapping.get('client') in {c['clientId'] for c in realm['clients']}]
     web = next(c for c in realm['clients'] if c['clientId'] == 'tixflow-web')
     origin = 'https://' + values['APP_DOMAIN']
     web['redirectUris'] = [origin + '/auth/callback']

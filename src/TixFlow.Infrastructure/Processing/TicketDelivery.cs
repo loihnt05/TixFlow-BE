@@ -45,8 +45,10 @@ public sealed class TicketDelivery(string connectionString, QrTokens? qrTokens =
             if (!await reader.ReadAsync(ct)) throw new PoisonMessageException("Order is missing.");
             eventId = reader.GetGuid(0); eventSessionId = reader.GetGuid(1);
         }
-        foreach (var target in new[] { (Sql: "SELECT id FROM events WHERE id = @id FOR UPDATE", Id: eventId),
-            (Sql: "SELECT id FROM event_sessions WHERE id = @id FOR UPDATE", Id: eventSessionId) })
+        // Delivery does not mutate the catalog parents; shared locks preserve catalog
+        // consistency without serializing issuance for unrelated orders in one sale.
+        foreach (var target in new[] { (Sql: "SELECT id FROM events WHERE id = @id FOR SHARE", Id: eventId),
+            (Sql: "SELECT id FROM event_sessions WHERE id = @id FOR SHARE", Id: eventSessionId) })
         {
             await using var command = new NpgsqlCommand(target.Sql, connection, tx);
             command.Parameters.AddWithValue("id", target.Id);

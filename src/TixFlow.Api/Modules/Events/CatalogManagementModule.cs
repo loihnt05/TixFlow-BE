@@ -5,6 +5,7 @@ using Npgsql;
 using TixFlow.Api.Authentication;
 using TixFlow.Domain.Events;
 using TixFlow.Domain.Identity;
+using TixFlow.Domain.Orders;
 using TixFlow.Domain.Organizers;
 using TixFlow.Infrastructure.Persistence;
 
@@ -12,6 +13,9 @@ namespace TixFlow.Api.Modules.Events;
 
 public static class CatalogManagementModule
 {
+    private static readonly TimeSpan VietnamOffset = TimeSpan.FromHours(7);
+    private const string VietnamTimeZoneId = "Asia/Ho_Chi_Minh";
+
     public static IEndpointRouteBuilder MapCatalogManagementModule(this IEndpointRouteBuilder endpoints)
     {
         RouteGroupBuilder management = endpoints.MapGroup("/management")
@@ -27,6 +31,7 @@ public static class CatalogManagementModule
         management.MapGet("/organizers/{organizerId:guid}", GetOrganizerAsync).RequireAuthorization("Admin");
         management.MapPut("/organizers/{organizerId:guid}", UpdateOrganizerAsync).RequireAuthorization("Admin");
         management.MapDelete("/organizers/{organizerId:guid}", DeleteOrganizerAsync).RequireAuthorization("Admin");
+        management.MapGet("/users", GetUsersAsync).RequireAuthorization("Admin");
 
         management.MapGet("/venues", GetVenuesAsync);
         management.MapPost("/venues", CreateVenueAsync);
@@ -48,6 +53,10 @@ public static class CatalogManagementModule
         management.MapGet("/event-sessions/{sessionId:guid}", GetSessionAsync);
         management.MapPut("/event-sessions/{sessionId:guid}", UpdateSessionAsync);
         management.MapDelete("/event-sessions/{sessionId:guid}", DeleteSessionAsync);
+
+        management.MapGet("/orders", GetManagedOrdersAsync);
+        management.MapGet("/attendees", GetManagedAttendeesAsync);
+        management.MapGet("/analytics", GetManagedAnalyticsAsync);
 
         return endpoints;
     }
@@ -583,6 +592,303 @@ public static class CatalogManagementModule
         return Results.NoContent();
     }
 
+    private static async Task<IResult> GetUsersAsync(
+        TixFlowDbContext dbContext,
+        CancellationToken cancellationToken)
+    {
+        ManagedUserResponse[] users = await dbContext.Users.AsNoTracking()
+            .OrderBy(item => item.Role)
+            .ThenBy(item => item.Email)
+            .Select(item => new ManagedUserResponse(
+                item.Id,
+                item.Email,
+                item.DisplayName,
+                item.PhoneNumber,
+                item.Role.ToString(),
+                item.Status.ToString(),
+                item.CreatedAtUtc))
+            .ToArrayAsync(cancellationToken);
+        return Results.Ok(users);
+    }
+
+    private static async Task<IResult> GetManagedOrdersAsync(
+        HttpContext context,
+        TixFlowDbContext dbContext,
+        CancellationToken cancellationToken,
+        Guid? eventId = null,
+        string? eventSlug = null,
+        string? status = null)
+    {
+        Guid? resolvedEventId = await ResolveScopedEventFilterAsync(eventId, eventSlug, context, dbContext, cancellationToken);
+        if ((eventId.HasValue || !string.IsNullOrWhiteSpace(eventSlug)) && !resolvedEventId.HasValue)
+            return NotFound("EVENT_NOT_FOUND", "Event was not found.");
+
+        IQueryable<Order> query = ScopeOrders(
+            dbContext.Orders.AsNoTracking()
+                .Include(item => item.User)
+                .Include(item => item.Items)
+                .Include(item => item.EventSession)
+                    .ThenInclude(session => session.Event)
+                        .ThenInclude(ev => ev.Organizer),
+            context);
+
+        if (resolvedEventId.HasValue)
+            query = query.Where(item => item.EventSession.EventId == resolvedEventId.Value);
+
+        if (!string.IsNullOrWhiteSpace(status) && Enum.TryParse<OrderStatus>(status.Trim(), true, out OrderStatus parsedStatus))
+            query = query.Where(item => item.Status == parsedStatus);
+
+        Order[] orders = await query
+            .OrderByDescending(item => item.CreatedAtUtc)
+            .ThenByDescending(item => item.Id)
+            .Take(500)
+            .AsSplitQuery()
+            .ToArrayAsync(cancellationToken);
+
+        ManagedOrderResponse[] response = orders.Select(order => new ManagedOrderResponse(
+            order.Id,
+            order.OrderNumber,
+            order.EventSession.EventId,
+            order.EventSession.Event.Slug,
+            order.EventSession.Event.Name,
+            order.EventSessionId,
+            order.EventSession.Name,
+            order.EventSession.StartsAtUtc,
+            order.UserId,
+            order.User.DisplayName,
+            order.User.Email,
+            order.User.PhoneNumber,
+            order.Items.Sum(i => i.Quantity),
+            string.Join(", ", order.Items.Select(i => $"{i.Quantity}x {i.TicketTypeNameSnapshot}")),
+            order.TotalAmount,
+            order.Currency.Trim(),
+            order.Status.ToString(),
+            order.CreatedAtUtc,
+            order.UpdatedAtUtc)).ToArray();
+
+        return Results.Ok(response);
+    }
+
+    private static async Task<IResult> GetManagedAttendeesAsync(
+        HttpContext context,
+        TixFlowDbContext dbContext,
+        CancellationToken cancellationToken,
+        Guid? eventId = null,
+        string? eventSlug = null,
+        Guid? eventSessionId = null)
+    {
+        Guid? resolvedEventId = await ResolveScopedEventFilterAsync(eventId, eventSlug, context, dbContext, cancellationToken);
+        if ((eventId.HasValue || !string.IsNullOrWhiteSpace(eventSlug)) && !resolvedEventId.HasValue)
+            return NotFound("EVENT_NOT_FOUND", "Event was not found.");
+
+        IQueryable<Ticket> query = ScopeTickets(
+            dbContext.Tickets.AsNoTracking()
+                .Include(item => item.User)
+                .Include(item => item.Seat)
+                .Include(item => item.OrderItem)
+                    .ThenInclude(orderItem => orderItem.Order)
+                .Include(item => item.EventSession)
+                    .ThenInclude(session => session.Event)
+                        .ThenInclude(ev => ev.Organizer),
+            context);
+
+        if (resolvedEventId.HasValue)
+            query = query.Where(item => item.EventSession.EventId == resolvedEventId.Value);
+
+        if (eventSessionId.HasValue)
+            query = query.Where(item => item.EventSessionId == eventSessionId.Value);
+
+        Ticket[] tickets = await query
+            .OrderByDescending(item => item.IssuedAtUtc)
+            .ThenBy(item => item.TicketCode)
+            .Take(500)
+            .AsSplitQuery()
+            .ToArrayAsync(cancellationToken);
+
+        ManagedAttendeeResponse[] response = tickets.Select(ticket => new ManagedAttendeeResponse(
+            ticket.Id,
+            ticket.TicketCode,
+            ticket.OrderItem.OrderId,
+            ticket.OrderItem.Order.OrderNumber,
+            ticket.OrderItem.Order.Status.ToString(),
+            ticket.EventSession.EventId,
+            ticket.EventSession.Event.Slug,
+            ticket.EventSession.Event.Name,
+            ticket.EventSessionId,
+            ticket.EventSession.Name,
+            ticket.EventSession.StartsAtUtc,
+            ticket.EventSession.EndsAtUtc,
+            ticket.UserId,
+            ticket.User.DisplayName,
+            ticket.User.Email,
+            ticket.User.PhoneNumber,
+            ticket.OrderItem.TicketTypeNameSnapshot,
+            ticket.OrderItem.UnitPrice,
+            ticket.OrderItem.Order.Currency.Trim(),
+            ticket.Seat is null ? null : $"{ticket.Seat.Section}-{ticket.Seat.RowLabel}-{ticket.Seat.SeatNumber}",
+            ticket.Status.ToString(),
+            ticket.IssuedAtUtc,
+            ticket.CheckedInAtUtc)).ToArray();
+
+        return Results.Ok(response);
+    }
+
+    private static async Task<IResult> GetManagedAnalyticsAsync(
+        HttpContext context,
+        TixFlowDbContext dbContext,
+        TimeProvider timeProvider,
+        CancellationToken cancellationToken,
+        int days = 14,
+        Guid? eventId = null,
+        string? eventSlug = null)
+    {
+        days = Math.Clamp(days <= 0 ? 14 : days, 1, 365);
+        Guid? resolvedEventId = await ResolveScopedEventFilterAsync(eventId, eventSlug, context, dbContext, cancellationToken);
+        if ((eventId.HasValue || !string.IsNullOrWhiteSpace(eventSlug)) && !resolvedEventId.HasValue)
+            return NotFound("EVENT_NOT_FOUND", "Event was not found.");
+
+        IQueryable<Event> eventsQuery = Scope(ManagedEvents(dbContext), context);
+        IQueryable<Order> ordersQuery = ScopeOrders(
+            dbContext.Orders.AsNoTracking()
+                .Include(item => item.Items)
+                .Include(item => item.EventSession),
+            context);
+        IQueryable<Ticket> ticketsQuery = ScopeTickets(
+            dbContext.Tickets.AsNoTracking()
+                .Include(item => item.OrderItem)
+                    .ThenInclude(orderItem => orderItem.Order)
+                .Include(item => item.EventSession),
+            context);
+
+        if (resolvedEventId.HasValue)
+        {
+            eventsQuery = eventsQuery.Where(item => item.Id == resolvedEventId.Value);
+            ordersQuery = ordersQuery.Where(item => item.EventSession.EventId == resolvedEventId.Value);
+            ticketsQuery = ticketsQuery.Where(item => item.EventSession.EventId == resolvedEventId.Value);
+        }
+
+        Event[] events = await eventsQuery.OrderByDescending(item => item.CreatedAtUtc).ToArrayAsync(cancellationToken);
+        Order[] orders = await ordersQuery.AsSplitQuery().ToArrayAsync(cancellationToken);
+        Ticket[] tickets = await ticketsQuery.AsSplitQuery().ToArrayAsync(cancellationToken);
+
+        Order[] paidOrders = orders.Where(item => item.Status == OrderStatus.Paid).ToArray();
+        Ticket[] activePaidTickets = tickets
+            .Where(item => item.OrderItem.Order.Status == OrderStatus.Paid
+                && (item.Status == TicketStatus.Issued || item.Status == TicketStatus.Used))
+            .ToArray();
+
+        DateTimeOffset nowVn = timeProvider.GetUtcNow().ToOffset(VietnamOffset);
+        DateOnly endLocalDate = DateOnly.FromDateTime(nowVn.DateTime);
+        DateOnly startLocalDate = endLocalDate.AddDays(-(days - 1));
+
+        var dailySeries = new DailySalesPoint[days];
+        for (int index = 0; index < days; index++)
+        {
+            DateOnly localDate = startLocalDate.AddDays(index);
+            Order[] dayPaidOrders = paidOrders
+                .Where(item => DateOnly.FromDateTime(item.CreatedAtUtc.ToOffset(VietnamOffset).DateTime) == localDate)
+                .ToArray();
+            int dayCancelledCount = orders.Count(item =>
+                (item.Status is OrderStatus.Cancelled or OrderStatus.Expired or OrderStatus.Refunded)
+                && DateOnly.FromDateTime(item.CreatedAtUtc.ToOffset(VietnamOffset).DateTime) == localDate);
+
+            dailySeries[index] = new DailySalesPoint(
+                localDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                localDate.ToString("dd/MM", CultureInfo.InvariantCulture),
+                dayPaidOrders.Sum(item => item.TotalAmount),
+                dayPaidOrders.Sum(item => item.Items.Sum(line => line.Quantity)),
+                dayPaidOrders.Length,
+                dayCancelledCount);
+        }
+
+        EventSalesSummary[] eventBreakdown = events.Select(ev =>
+        {
+            Order[] evPaidOrders = paidOrders.Where(item => item.EventSession.EventId == ev.Id).ToArray();
+            int evCancelledOrders = orders.Count(item =>
+                item.EventSession.EventId == ev.Id
+                && (item.Status is OrderStatus.Cancelled or OrderStatus.Expired or OrderStatus.Refunded));
+            Ticket[] evPaidTickets = activePaidTickets.Where(item => item.EventSession.EventId == ev.Id).ToArray();
+            int totalCapacity = ev.Sessions
+                .SelectMany(session => session.TicketTypes)
+                .Sum(ticket => ticket.Inventory is null ? ticket.Capacity : ticket.Inventory.TotalQuantity);
+
+            return new EventSalesSummary(
+                ev.Id,
+                ev.Slug,
+                ev.Name,
+                ev.Status.ToString(),
+                evPaidOrders.Sum(item => item.Items.Sum(line => line.Quantity)),
+                totalCapacity,
+                evPaidOrders.Sum(item => item.TotalAmount),
+                evPaidOrders.Length,
+                evCancelledOrders,
+                evPaidTickets.Length,
+                evPaidTickets.Count(item => item.Status == TicketStatus.Used));
+        }).ToArray();
+
+        var response = new ManagedAnalyticsResponse(
+            TimeZone: VietnamTimeZoneId,
+            Currency: "VND",
+            Days: days,
+            WindowStartLocalDate: startLocalDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+            WindowEndLocalDate: endLocalDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+            PolicyNote: "Doanh thu và số vé bán chỉ tính từ đơn hàng có trạng thái Paid. Các đơn PendingPayment, Cancelled, Expired và Refunded được tách riêng và không cộng vào doanh thu.",
+            TotalPaidRevenue: paidOrders.Sum(item => item.TotalAmount),
+            TotalTicketsSold: paidOrders.Sum(item => item.Items.Sum(line => line.Quantity)),
+            TotalPaidOrdersCount: paidOrders.Length,
+            TotalIssuedTicketsCount: activePaidTickets.Length,
+            TotalCheckedInCount: activePaidTickets.Count(item => item.Status == TicketStatus.Used),
+            PendingOrdersCount: orders.Count(item => item.Status == OrderStatus.PendingPayment),
+            CancelledOrdersCount: orders.Count(item => item.Status == OrderStatus.Cancelled),
+            ExpiredOrdersCount: orders.Count(item => item.Status == OrderStatus.Expired),
+            RefundedOrdersCount: orders.Count(item => item.Status == OrderStatus.Refunded),
+            ExcludedOrdersAmount: orders
+                .Where(item => item.Status is OrderStatus.Cancelled or OrderStatus.Expired or OrderStatus.Refunded)
+                .Sum(item => item.TotalAmount),
+            WindowPaidRevenue: dailySeries.Sum(point => point.PaidRevenue),
+            WindowTicketsSold: dailySeries.Sum(point => point.TicketsSold),
+            WindowPaidOrdersCount: dailySeries.Sum(point => point.PaidOrdersCount),
+            DailySeries: dailySeries,
+            EventBreakdown: eventBreakdown);
+
+        return Results.Ok(response);
+    }
+
+    private static async Task<Guid?> ResolveScopedEventFilterAsync(
+        Guid? eventId,
+        string? eventSlug,
+        HttpContext context,
+        TixFlowDbContext dbContext,
+        CancellationToken cancellationToken)
+    {
+        if (eventId.HasValue)
+        {
+            return await Scope(dbContext.Events.AsNoTracking(), context)
+                .Where(item => item.Id == eventId.Value)
+                .Select(item => (Guid?)item.Id)
+                .SingleOrDefaultAsync(cancellationToken);
+        }
+
+        if (!string.IsNullOrWhiteSpace(eventSlug))
+        {
+            string normalizedSlug = eventSlug.Trim().ToLowerInvariant();
+            if (Guid.TryParse(normalizedSlug, out Guid parsedGuid))
+            {
+                return await Scope(dbContext.Events.AsNoTracking(), context)
+                    .Where(item => item.Id == parsedGuid)
+                    .Select(item => (Guid?)item.Id)
+                    .SingleOrDefaultAsync(cancellationToken);
+            }
+
+            return await Scope(dbContext.Events.AsNoTracking(), context)
+                .Where(item => item.Slug == normalizedSlug)
+                .Select(item => (Guid?)item.Id)
+                .SingleOrDefaultAsync(cancellationToken);
+        }
+
+        return null;
+    }
+
     private static IQueryable<Event> ManagedEvents(TixFlowDbContext dbContext) => dbContext.Events.AsNoTracking()
         .Include(item => item.Organizer).Include(item => item.Venue)
         .Include(item => item.Sessions).ThenInclude(session => session.TicketTypes)
@@ -597,6 +903,12 @@ public static class CatalogManagementModule
 
     private static IQueryable<EventSession> ScopeSessions(IQueryable<EventSession> query, HttpContext context) =>
         IsAdmin(context) ? query : query.Where(item => item.Event.Organizer.OwnerUserId == CurrentUser(context).Id);
+
+    private static IQueryable<Order> ScopeOrders(IQueryable<Order> query, HttpContext context) =>
+        IsAdmin(context) ? query : query.Where(item => item.EventSession.Event.Organizer.OwnerUserId == CurrentUser(context).Id);
+
+    private static IQueryable<Ticket> ScopeTickets(IQueryable<Ticket> query, HttpContext context) =>
+        IsAdmin(context) ? query : query.Where(item => item.EventSession.Event.Organizer.OwnerUserId == CurrentUser(context).Id);
 
     private static async Task<Guid?> ResolveOrganizerIdAsync(Guid? requestedId, HttpContext context,
         TixFlowDbContext dbContext, CancellationToken cancellationToken)
@@ -709,4 +1021,28 @@ public static class CatalogManagementModule
         DateTimeOffset? SaleStartsAtUtc, DateTimeOffset? SaleEndsAtUtc, DateTimeOffset? PublishedAtUtc,
         long Version, DateTimeOffset CreatedAtUtc, DateTimeOffset UpdatedAtUtc,
         OrganizerResponse? Organizer, VenueResponse? Venue, SessionResponse[] Sessions);
+    private sealed record ManagedUserResponse(Guid Id, string Email, string DisplayName, string? PhoneNumber,
+        string Role, string Status, DateTimeOffset CreatedAtUtc);
+    private sealed record ManagedOrderResponse(Guid Id, string OrderNumber, Guid EventId, string EventSlug,
+        string EventTitle, Guid EventSessionId, string SessionName, DateTimeOffset SessionStartsAtUtc,
+        Guid BuyerUserId, string BuyerName, string BuyerEmail, string? BuyerPhone, int Quantity,
+        string TicketSummary, decimal TotalAmount, string Currency, string Status,
+        DateTimeOffset CreatedAtUtc, DateTimeOffset UpdatedAtUtc);
+    private sealed record ManagedAttendeeResponse(Guid TicketId, string TicketCode, Guid OrderId, string OrderNumber,
+        string OrderStatus, Guid EventId, string EventSlug, string EventTitle, Guid EventSessionId,
+        string SessionName, DateTimeOffset SessionStartsAtUtc, DateTimeOffset SessionEndsAtUtc,
+        Guid AttendeeUserId, string AttendeeName, string AttendeeEmail, string? AttendeePhone,
+        string TicketTypeName, decimal UnitPrice, string Currency, string? SeatLabel, string Status,
+        DateTimeOffset IssuedAtUtc, DateTimeOffset? CheckedInAtUtc);
+    private sealed record DailySalesPoint(string Date, string Label, decimal PaidRevenue, int TicketsSold,
+        int PaidOrdersCount, int CancelledOrdersCount);
+    private sealed record EventSalesSummary(Guid EventId, string EventSlug, string EventTitle, string Status,
+        int TicketsSold, int Capacity, decimal PaidRevenue, int PaidOrdersCount, int CancelledOrdersCount,
+        int IssuedTicketsCount, int CheckedInCount);
+    private sealed record ManagedAnalyticsResponse(string TimeZone, string Currency, int Days,
+        string WindowStartLocalDate, string WindowEndLocalDate, string PolicyNote, decimal TotalPaidRevenue,
+        int TotalTicketsSold, int TotalPaidOrdersCount, int TotalIssuedTicketsCount, int TotalCheckedInCount,
+        int PendingOrdersCount, int CancelledOrdersCount, int ExpiredOrdersCount, int RefundedOrdersCount,
+        decimal ExcludedOrdersAmount, decimal WindowPaidRevenue, int WindowTicketsSold,
+        int WindowPaidOrdersCount, DailySalesPoint[] DailySeries, EventSalesSummary[] EventBreakdown);
 }

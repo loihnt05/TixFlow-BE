@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +7,8 @@ using TixFlow.Domain.Identity;
 
 namespace TixFlow.Api.Authentication;
 
-public sealed class LocalUserMiddleware(RequestDelegate next)
+public sealed class LocalUserMiddleware(RequestDelegate next, IConfiguration configuration,
+    ILogger<LocalUserMiddleware> logger)
 {
     public static readonly object UserKey = new();
     public static readonly object ProfileKey = new();
@@ -31,7 +33,14 @@ public sealed class LocalUserMiddleware(RequestDelegate next)
             }
             try
             {
+                bool measure = configuration.GetValue<bool>("WaitingRoom:DiagnosticsEnabled")
+                    && (context.Request.Path.StartsWithSegments("/api/v1/waiting-room")
+                        || context.Request.Path.StartsWithSegments("/api/v1/holds"));
+                Stopwatch? timer = measure ? Stopwatch.StartNew() : null;
                 User user = await synchronizer.SynchronizeAsync(profile, context.RequestAborted);
+                if (timer is not null)
+                    logger.LogInformation("WaitingRoomTiming identity {Path} {ElapsedMs}",
+                        context.Request.Path.Value, timer.Elapsed.TotalMilliseconds);
                 if (user.Status != UserStatus.Active)
                 {
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;

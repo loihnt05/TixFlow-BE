@@ -2,6 +2,8 @@ using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Testcontainers.PostgreSql;
 using Testcontainers.RabbitMq;
+using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Containers;
 
 namespace TixFlow.Api.Tests;
 
@@ -27,9 +29,15 @@ public sealed partial class AuthApiFactory
         .WithImage(RabbitImage).WithUsername("tixflow_test").WithPassword("isolated_test_only")
         .WithCreateParameterModifier(p => { p.HostConfig.NanoCPUs = 1_000_000_000; p.HostConfig.Memory = 512L * 1024 * 1024; })
         .Build();
+    private readonly IContainer redis = new ContainerBuilder()
+        .WithImage("redis:7.4-alpine")
+        .WithPortBinding(6379, true)
+        .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(6379))
+        .Build();
 
     public string BrokerHost => rabbit.Hostname;
     public int BrokerPort => rabbit.GetMappedPublicPort(5672);
+    public string RedisConnectionString => $"{redis.Hostname}:{redis.GetMappedPublicPort(6379)}";
     public IConfiguration BrokerConfig => new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
     {
         ["RabbitMq:Host"] = BrokerHost, ["RabbitMq:Port"] = BrokerPort.ToString(System.Globalization.CultureInfo.InvariantCulture),
@@ -40,7 +48,7 @@ public sealed partial class AuthApiFactory
     {
         try
         {
-            await Task.WhenAll(postgres.StartAsync(), rabbit.StartAsync());
+            await Task.WhenAll(postgres.StartAsync(), rabbit.StartAsync(), redis.StartAsync());
             ConnectionString = new NpgsqlConnectionStringBuilder(postgres.GetConnectionString())
             {
                 MaxPoolSize = 40, MinPoolSize = 0, Timeout = 120, CommandTimeout = 120,
@@ -66,6 +74,7 @@ public sealed partial class AuthApiFactory
         catch
         {
             await rabbit.DisposeAsync();
+            await redis.DisposeAsync();
             await postgres.DisposeAsync();
             throw;
         }
@@ -83,6 +92,10 @@ public sealed partial class AuthApiFactory
     {
         await base.DisposeAsync();
         try { await rabbit.DisposeAsync(); }
-        finally { await postgres.DisposeAsync(); }
+        finally
+        {
+            try { await redis.DisposeAsync(); }
+            finally { await postgres.DisposeAsync(); }
+        }
     }
 }

@@ -32,6 +32,16 @@ public sealed class Organizer : Entity
 
     public string ContactEmail { get; private set; } = string.Empty;
 
+    public string? AvatarUrl { get; private set; }
+
+    public string? WebsiteUrl { get; private set; }
+
+    public bool IsVerified { get; private set; }
+
+    public int FollowerCount { get; private set; }
+
+    public int EventCount { get; private set; }
+
     public DateTimeOffset CreatedAtUtc { get; private set; } = DateTimeOffset.UtcNow;
 
     public DateTimeOffset UpdatedAtUtc { get; private set; } = DateTimeOffset.UtcNow;

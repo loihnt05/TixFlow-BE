@@ -36,6 +36,7 @@ public sealed partial class AuthApiFactory : WebApplicationFactory<Program>, IAs
         builder.ConfigureAppConfiguration((_, config) => config.AddInMemoryCollection(new Dictionary<string, string?>
         {
             ["ConnectionStrings:Postgres"] = ConnectionString,
+            ["ConnectionStrings:Redis"] = RedisConnectionString,
             ["CatalogCache:Enabled"] = "false",
             ["TrafficLimits:Enabled"] = "false",
             ["Authentication:Authority"] = Issuer,
@@ -67,12 +68,13 @@ public sealed partial class AuthApiFactory : WebApplicationFactory<Program>, IAs
     public string Token(string subject, string email, string[] roles, string? issuer = null,
         string audience = "tixflow-api", bool expired = false, bool wrongSignature = false,
         bool includeSubject = true, bool includeEmail = true, bool includeUsername = true,
-        string name = "Auth Test", int lifetimeMinutes = 5)
+        string name = "Auth Test", int lifetimeMinutes = 5, string? phoneNumber = null)
     {
         var claims = new Dictionary<string, object>
         {
             ["name"] = name, ["roles"] = roles
         };
+        if (phoneNumber is not null) claims["phone_number"] = phoneNumber;
         if (includeSubject) claims["sub"] = subject;
         if (includeEmail) claims["email"] = email;
         if (includeUsername) claims["preferred_username"] = email;

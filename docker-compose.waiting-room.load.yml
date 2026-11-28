@@ -1,0 +1,50 @@
+# Overlay for an isolated Waiting Room experiment; never use the phase-10 result label.
+services:
+  rabbitmq:
+    tmpfs: !override []
+  redis:
+    image: redis:7.4-alpine
+    command: [redis-server, --appendonly, 'yes']
+    cpus: 0.5
+    mem_limit: 256m
+    volumes:
+      - ${TIXFLOW_LOAD_PRIVATE:?required}/redis:/data
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+  api:
+    cpus: 1
+    mem_limit: 512m
+    environment:
+      ConnectionStrings__Redis: redis:6379
+      Assistant__KeyDirectory: /state/assistant-keys
+      WaitingRoom__DiagnosticsEnabled: ${TIXFLOW_LOAD_DIAGNOSTICS:-false}
+    depends_on:
+      redis: {condition: service_healthy}
+  api-replica:
+    extends:
+      file: docker-compose.load.yml
+      service: api
+    cpus: 1
+    mem_limit: 512m
+    environment:
+      ConnectionStrings__Redis: redis:6379
+      Assistant__KeyDirectory: /state/assistant-keys
+      WaitingRoom__DiagnosticsEnabled: ${TIXFLOW_LOAD_DIAGNOSTICS:-false}
+    depends_on:
+      redis: {condition: service_healthy}
+  nginx:
+    volumes: !override
+      - ./infrastructure/load/nginx-waiting-room.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+      - api-replica
+  k6:
+    environment:
+      WAITING_ROOM_MODE: ${TIXFLOW_LOAD_MODE:?required}
+      WAITING_ROOM_RATE: ${TIXFLOW_LOAD_RATE:-5}
+      WAITING_ROOM_ARRIVALS: ${TIXFLOW_LOAD_ARRIVALS:-100}
+      WAITING_ROOM_WINDOW_SECONDS: ${TIXFLOW_LOAD_WINDOW:-1}
+    command: [run, --out, json=/reports/raw.json.gz, /scripts/waiting-room.js]

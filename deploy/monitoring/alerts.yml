@@ -26,3 +26,18 @@ groups:
         for: 5m
         labels: {severity: warning}
         annotations: {summary: 'RabbitMQ backlog persists for 5 minutes'}
+      - alert: WaitingRoomQueueBacklog
+        expr: max(tixflow_waiting_room_queue_depth{job="api"}) > 100
+        for: 5m
+        labels: {severity: warning}
+        annotations: {summary: 'Waiting room queue remains above 100 entries'}
+      - alert: WaitingRoomControllerStalled
+        expr: max(tixflow_waiting_room_active_policies{job="api"}) > 0 and time() - max(tixflow_waiting_room_controller_last_success_seconds{job="api"}) > 30
+        for: 1m
+        labels: {severity: critical}
+        annotations: {summary: 'Active waiting room controller has not completed a loop for 30 seconds'}
+      - alert: WaitingRoomControllerErrors
+        expr: sum(increase(tixflow_waiting_room_controller_failures_total{job="api"}[5m])) > 0
+        for: 2m
+        labels: {severity: warning}
+        annotations: {summary: 'Waiting room controller encountered an error'}

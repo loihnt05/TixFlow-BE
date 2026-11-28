@@ -73,7 +73,8 @@ public sealed class Phase11AgentSpikeTests
         { Searches++; return Task.FromResult(JsonSerializer.SerializeToElement(new { events = Array.Empty<object>() })); }
         public Task<JsonElement> DetailsAsync(Guid id, CancellationToken ct) => throw new NotSupportedException();
         public Task<JsonElement> AvailabilityAsync(Guid id, CancellationToken ct) => throw new NotSupportedException();
-        public Task<IResult> CreateHoldAsync(BookingModule.CreateHoldRequest request, string key, CancellationToken ct)
+        public Task<IResult> CreateHoldAsync(BookingModule.CreateHoldRequest request, string key,
+            string? admissionToken, CancellationToken ct)
         { Writes++; throw new InvalidOperationException("Writes must never be exposed to the agent."); }
     }
     private sealed class AuditFixture : IAssistantAudit

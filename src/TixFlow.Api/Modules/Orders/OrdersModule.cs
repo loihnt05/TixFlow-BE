@@ -349,8 +349,10 @@ public static class PaymentSettlement
         if (reference is null) return await Finish(db, tx, callback.ProviderEventId, "Ignored", "PAYMENT_NOT_FOUND", ct);
         var sessionRef = await db.EventSessions.AsNoTracking().Where(x => x.Id == reference.EventSessionId)
             .Select(x => new { x.EventId }).SingleAsync(ct);
-        Event? eventItem = await db.Events.FromSqlInterpolated($"SELECT * FROM events WHERE id = {sessionRef.EventId} FOR UPDATE").SingleAsync(ct);
-        EventSession? session = await db.EventSessions.FromSqlInterpolated($"SELECT * FROM event_sessions WHERE id = {reference.EventSessionId} FOR UPDATE").SingleAsync(ct);
+        // Settlement only reads the catalog parents. Shared locks still exclude catalog
+        // changes while allowing independent orders for this sale to settle together.
+        Event? eventItem = await db.Events.FromSqlInterpolated($"SELECT * FROM events WHERE id = {sessionRef.EventId} FOR SHARE").SingleAsync(ct);
+        EventSession? session = await db.EventSessions.FromSqlInterpolated($"SELECT * FROM event_sessions WHERE id = {reference.EventSessionId} FOR SHARE").SingleAsync(ct);
         Hold? hold = await db.Holds.FromSqlInterpolated($"SELECT * FROM holds WHERE id = {reference.HoldId} FOR UPDATE").SingleAsync(ct);
         Order? order = await db.Orders.FromSqlInterpolated($"SELECT * FROM orders WHERE id = {reference.OrderId} FOR UPDATE").SingleAsync(ct);
         Payment? payment = await db.Payments.FromSqlInterpolated($"SELECT * FROM payments WHERE id = {callback.PaymentId} FOR UPDATE").SingleOrDefaultAsync(ct);

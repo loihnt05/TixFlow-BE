@@ -108,17 +108,46 @@ public sealed class CatalogManagementTests(AuthApiFactory factory)
             });
         Assert.Equal(HttpStatusCode.Conflict, editPublished.StatusCode);
 
+        JsonElement organizerAnalytics = await Body(await organizer.GetAsync($"/api/v1/management/analytics?days=14&eventId={eventId}"));
+        Assert.Equal("Asia/Ho_Chi_Minh", organizerAnalytics.GetProperty("timeZone").GetString());
+        Assert.Equal("VND", organizerAnalytics.GetProperty("currency").GetString());
+        Assert.Equal(14, organizerAnalytics.GetProperty("dailySeries").GetArrayLength());
+        Assert.Equal(HttpStatusCode.OK, (await organizer.GetAsync($"/api/v1/management/orders?eventId={eventId}")).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await organizer.GetAsync($"/api/v1/management/attendees?eventId={eventId}")).StatusCode);
+
         using HttpClient outsider = Client("Organizer", $"outsider-{suffix}@example.test");
         Assert.Equal(HttpStatusCode.NotFound,
             (await outsider.GetAsync($"/api/v1/management/events/{eventId}")).StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound,
+            (await outsider.GetAsync($"/api/v1/management/orders?eventId={eventId}")).StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound,
+            (await outsider.GetAsync($"/api/v1/management/attendees?eventId={eventId}")).StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound,
+            (await outsider.GetAsync($"/api/v1/management/analytics?eventId={eventId}")).StatusCode);
+        Assert.Equal(HttpStatusCode.Forbidden,
+            (await outsider.GetAsync("/api/v1/management/users")).StatusCode);
 
         using HttpClient admin = Client("Admin", $"admin-{suffix}@example.test");
         Assert.Equal(HttpStatusCode.OK,
             (await admin.GetAsync($"/api/v1/management/events/{eventId}")).StatusCode);
+        Assert.Equal(HttpStatusCode.OK,
+            (await admin.GetAsync($"/api/v1/management/orders?eventId={eventId}")).StatusCode);
+        Assert.Equal(HttpStatusCode.OK,
+            (await admin.GetAsync($"/api/v1/management/attendees?eventId={eventId}")).StatusCode);
+        Assert.Equal(HttpStatusCode.OK,
+            (await admin.GetAsync($"/api/v1/management/analytics?eventId={eventId}")).StatusCode);
+        Assert.Equal(HttpStatusCode.OK,
+            (await admin.GetAsync("/api/v1/management/users")).StatusCode);
 
         using HttpClient customer = Client("Customer", $"customer-{suffix}@example.test");
         Assert.Equal(HttpStatusCode.Forbidden,
             (await customer.GetAsync("/api/v1/management/events")).StatusCode);
+        Assert.Equal(HttpStatusCode.Forbidden,
+            (await customer.GetAsync("/api/v1/management/orders")).StatusCode);
+        Assert.Equal(HttpStatusCode.Forbidden,
+            (await customer.GetAsync("/api/v1/management/attendees")).StatusCode);
+        Assert.Equal(HttpStatusCode.Forbidden,
+            (await customer.GetAsync("/api/v1/management/analytics")).StatusCode);
         await CleanupAsync(suffix);
     }
 

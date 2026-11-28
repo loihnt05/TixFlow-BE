@@ -151,11 +151,12 @@ public static class TicketsModule
         if (ticketStatus == "Used") return Error(409, "TICKET_ALREADY_USED");
         if (ticketStatus != "Issued" || orderStatus != "Paid" || eventStatus != "Published"
             || sessionStatus is "Cancelled" or "Completed") return Error(409, "TICKET_INVALID");
-        await using (var window = new NpgsqlCommand("""
-            SELECT clock_timestamp() >= starts_at_utc - interval '60 minutes' AND clock_timestamp() < ends_at_utc
-            FROM event_sessions WHERE id = @id
-            """, connection, tx))
+        if (!request.BypassWindow || !manual)
         {
+            await using var window = new NpgsqlCommand("""
+                SELECT clock_timestamp() >= starts_at_utc - interval '60 minutes' AND clock_timestamp() < ends_at_utc
+                FROM event_sessions WHERE id = @id
+                """, connection, tx);
             window.Parameters.AddWithValue("id", sessionId);
             if (!Equals(await window.ExecuteScalarAsync(ct), true)) return Error(409, "CHECK_IN_WINDOW_CLOSED");
         }
@@ -193,7 +194,7 @@ public static class TicketsModule
 
     private static IResult Error(int status, string code) => Results.Problem(statusCode: status,
         title: code, extensions: new Dictionary<string, object?> { ["code"] = code });
-    public sealed record CheckInRequest(Guid EventSessionId, string? QrToken = null, string? TicketCode = null, string? Reason = null);
+    public sealed record CheckInRequest(Guid EventSessionId, string? QrToken = null, string? TicketCode = null, string? Reason = null, bool BypassWindow = false);
     public sealed record TicketView(Guid Id, string TicketCode, Guid OrderId, Guid OwnerId, string EventSlug,
         string EventTitle, DateTimeOffset EventDate, DateTimeOffset EventEndsAtUtc, string Venue, string TicketType,
         string Status, DateTimeOffset? CheckedInAtUtc, string? SeatLabel);
