@@ -1,9 +1,25 @@
 param(
-    [string]$BaseUrl = 'http://localhost:8080'
+    [string]$BaseUrl = 'http://localhost:8080',
+    [Parameter(Mandatory = $true)][string]$ExpectedIssuer,
+    [string]$ExpectedAudience = 'tixflow-api'
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+
+function Read-JwtPayload([string]$token, [string]$label) {
+    try {
+        $parts = $token.Split('.')
+        if ($parts.Count -ne 3) { throw 'Invalid JWT structure.' }
+        $base64 = $parts[1].Replace('-', '+').Replace('_', '/')
+        $base64 = $base64.PadRight($base64.Length + (4 - $base64.Length % 4) % 4, '=')
+        return [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($base64)) |
+            ConvertFrom-Json
+    }
+    catch {
+        throw "Malformed access token for $label."
+    }
+}
 
 $uri = $null
 if (-not [Uri]::TryCreate($BaseUrl, [UriKind]::Absolute, [ref]$uri) -or
@@ -27,6 +43,18 @@ foreach ($account in $accounts) {
     if ([string]::IsNullOrWhiteSpace($token)) {
         throw "Missing $($account.variable). Obtain a fresh test access token without saving it in Git."
     }
+    $claims = Read-JwtPayload $token $account.label
+    $applicationRoles = @($claims.roles | Where-Object { $_ -cin @('Customer', 'Organizer', 'Admin') })
+    $expiresAt = [DateTimeOffset]::FromUnixTimeSeconds([long]$claims.exp)
+    if ($claims.iss -cne $ExpectedIssuer -or
+        $ExpectedAudience -cnotin @($claims.aud) -or
+        $expiresAt -le [DateTimeOffset]::UtcNow -or
+        [string]::IsNullOrWhiteSpace([string]$claims.sub) -or
+        [string]::IsNullOrWhiteSpace([string]$claims.email) -or
+        [string]::IsNullOrWhiteSpace([string]$claims.preferred_username) -or
+        $applicationRoles.Count -ne 1 -or $applicationRoles[0] -cne $account.role) {
+        throw "Unexpected issuer, audience, expiry, identity or role in token for $($account.label)."
+    }
     try {
         $profile = Invoke-RestMethod -Method Get -Uri "$($BaseUrl.TrimEnd('/'))/api/v1/users/me" `
             -Headers @{ Authorization = "Bearer $token" } -TimeoutSec 15
@@ -39,7 +67,9 @@ foreach ($account in $accounts) {
         [string]::IsNullOrWhiteSpace([string]$profile.sub) -or
         [string]::IsNullOrWhiteSpace([string]$profile.email) -or
         @($profile.roles).Count -ne 1 -or $profile.roles[0] -cne $account.role -or
-        $profile.status -cne 'Active') {
+        $profile.status -cne 'Active' -or
+        $profile.sub -cne $claims.sub -or
+        $profile.email -cne $claims.email) {
         throw "Unexpected identity, role or status for $($account.label)."
     }
     $profiles += [pscustomobject]@{
@@ -66,6 +96,8 @@ $manifestPath = Join-Path $manifestDir 'manifest.json'
 [ordered]@{
     checkedAtUtc = [DateTime]::UtcNow.ToString('o')
     apiBaseUrl = $BaseUrl.TrimEnd('/')
+    expectedIssuer = $ExpectedIssuer
+    expectedAudience = $ExpectedAudience
     accounts = $profiles
 } | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $manifestPath -Encoding utf8
 Write-Host "Acceptance account manifest: $manifestPath"
