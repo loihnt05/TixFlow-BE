@@ -3,6 +3,10 @@ param(
     [Parameter(Mandatory = $true)][Guid]$OrganizerBEventId,
     [Parameter(Mandatory = $true)][Guid]$CustomerAOrderId,
     [Parameter(Mandatory = $true)][Guid]$CustomerBOrderId,
+    [Guid]$CustomerAHoldId,
+    [Guid]$CustomerBHoldId,
+    [Guid]$CustomerATicketId,
+    [Guid]$CustomerBTicketId,
     [string]$BaseUrl = 'http://localhost:8080'
 )
 
@@ -20,6 +24,14 @@ if ($OrganizerAEventId -eq [Guid]::Empty -or $OrganizerBEventId -eq [Guid]::Empt
     $CustomerAOrderId -eq [Guid]::Empty -or $CustomerBOrderId -eq [Guid]::Empty -or
     $OrganizerAEventId -eq $OrganizerBEventId -or $CustomerAOrderId -eq $CustomerBOrderId) {
     throw 'Provide four nonempty IDs, with distinct IDs for each owner pair.'
+}
+$checkHolds = $CustomerAHoldId -ne [Guid]::Empty -and $CustomerBHoldId -ne [Guid]::Empty
+$checkTickets = $CustomerATicketId -ne [Guid]::Empty -and $CustomerBTicketId -ne [Guid]::Empty
+if (($CustomerAHoldId -ne [Guid]::Empty) -ne ($CustomerBHoldId -ne [Guid]::Empty) -or
+    ($CustomerATicketId -ne [Guid]::Empty) -ne ($CustomerBTicketId -ne [Guid]::Empty) -or
+    ($checkHolds -and $CustomerAHoldId -eq $CustomerBHoldId) -or
+    ($checkTickets -and $CustomerATicketId -eq $CustomerBTicketId)) {
+    throw 'Provide distinct A/B Hold and Ticket IDs as complete pairs.'
 }
 
 $tokens = @{}
@@ -53,6 +65,28 @@ $checks = @(
     @{ actor = 'customerA'; resource = 'managementEvent'; path = "/api/v1/management/events/$OrganizerAEventId"; expected = 403 },
     @{ actor = 'organizerA'; resource = 'customerOrder'; path = "/api/v1/orders/$CustomerAOrderId"; expected = 403 }
 )
+if ($checkHolds) {
+    $checks += @(
+        @{ actor = 'customerA'; resource = 'holdA'; path = "/api/v1/holds/$CustomerAHoldId"; expected = 200 },
+        @{ actor = 'customerA'; resource = 'holdB'; path = "/api/v1/holds/$CustomerBHoldId"; expected = 404 },
+        @{ actor = 'customerB'; resource = 'holdB'; path = "/api/v1/holds/$CustomerBHoldId"; expected = 200 },
+        @{ actor = 'customerB'; resource = 'holdA'; path = "/api/v1/holds/$CustomerAHoldId"; expected = 404 },
+        @{ actor = 'admin'; resource = 'holdA'; path = "/api/v1/holds/$CustomerAHoldId"; expected = 200 },
+        @{ actor = 'admin'; resource = 'holdB'; path = "/api/v1/holds/$CustomerBHoldId"; expected = 200 }
+    )
+}
+if ($checkTickets) {
+    $checks += @(
+        @{ actor = 'customerA'; resource = 'ticketA'; path = "/api/v1/tickets/$CustomerATicketId"; expected = 200 },
+        @{ actor = 'customerA'; resource = 'ticketB'; path = "/api/v1/tickets/$CustomerBTicketId"; expected = 404 },
+        @{ actor = 'customerB'; resource = 'ticketB'; path = "/api/v1/tickets/$CustomerBTicketId"; expected = 200 },
+        @{ actor = 'customerB'; resource = 'ticketA'; path = "/api/v1/tickets/$CustomerATicketId"; expected = 404 },
+        @{ actor = 'admin'; resource = 'ticketA'; path = "/api/v1/tickets/$CustomerATicketId"; expected = 404 },
+        @{ actor = 'admin'; resource = 'ticketB'; path = "/api/v1/tickets/$CustomerBTicketId"; expected = 404 },
+        @{ actor = 'customerA'; resource = 'ticketBQr'; path = "/api/v1/tickets/$CustomerBTicketId/qr"; expected = 404 },
+        @{ actor = 'customerB'; resource = 'ticketAQr'; path = "/api/v1/tickets/$CustomerATicketId/qr"; expected = 404 }
+    )
+}
 
 $results = @()
 foreach ($check in $checks) {
@@ -90,7 +124,12 @@ $manifestPath = Join-Path $manifestDir 'manifest.json'
         organizerBEventId = $OrganizerBEventId.ToString()
         customerAOrderId = $CustomerAOrderId.ToString()
         customerBOrderId = $CustomerBOrderId.ToString()
+        customerAHoldId = if ($checkHolds) { $CustomerAHoldId.ToString() } else { $null }
+        customerBHoldId = if ($checkHolds) { $CustomerBHoldId.ToString() } else { $null }
+        customerATicketId = if ($checkTickets) { $CustomerATicketId.ToString() } else { $null }
+        customerBTicketId = if ($checkTickets) { $CustomerBTicketId.ToString() } else { $null }
     }
+    coverage = [ordered]@{ holds = $checkHolds; tickets = $checkTickets }
     checks = $results
 } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $manifestPath -Encoding utf8
 Write-Host "Acceptance ownership manifest: $manifestPath"
