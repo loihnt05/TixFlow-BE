@@ -56,5 +56,6 @@ Backend và test project đã build sạch ở lượt trước. Test tích hợ
 
 - [x] Gắn metadata fixture vào các ca AI có ID/ngày cố định; `Evaluate-Phase11.py --preflight-only` đọc catalog công khai, xác nhận event/session/ticket type còn hợp lệ trước khi đánh giá provider. Ca hết hạn hoặc thiếu dữ liệu dừng sớm; chưa tuyên bố DATA-09 đạt khi chưa chạy với DB thật.
 - [x] Thêm `scripts/Test-AcceptanceAccounts.ps1` để đọc `/users/me` bằng 5 JWT test, xác nhận role đơn, trạng thái Active và `id`/`sub`/email riêng biệt; chỉ sau khi tất cả đạt mới ghi manifest không có token vào `artifacts/acceptance/accounts-*`.
+- [x] Thêm `scripts/Test-AcceptanceOwnership.ps1` để kiểm tra ma trận GET của hai event và hai order thuộc bốn người khác nhau; chỉ lưu mã HTTP/ID sau khi 14 kiểm tra 200/403/404 đạt. Chưa chạy vì cần tài khoản và dữ liệu API thật.
 - [ ] Chuẩn bị 2 Customer, 2 Organizer và 1 Admin trên Keycloak test; đăng nhập để đồng bộ `sub` và role, không tạo user giả trực tiếp trong DB.
 - [ ] Tạo dữ liệu Hold/Order/Payment/Ticket qua API thật, đối chiếu owner và inventory; đồng bộ ngày/case của bộ đánh giá AI.
