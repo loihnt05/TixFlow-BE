@@ -14,5 +14,5 @@ export async function verifyCatalog(api, { eventId, sessionId, ticketTypeId }, n
   requireValue(availability.eventSessionId === sessionId && availability.availableQuantity >= 1, 'Fixture has no available ticket');
   requireValue(availability.heldQuantity >= 0 && availability.soldQuantity >= 0 &&
     availability.heldQuantity + availability.soldQuantity <= availability.totalQuantity, 'Invalid inventory counters');
-  return { ticket, availability };
+  return { ticket, session, availability };
 }
