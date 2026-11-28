@@ -8,7 +8,7 @@
 | 02 | Giao diện quản trị | Đối chiếu Orders, Attendees, Analytics, check-in, tiền tệ/ngày giờ (`APP-21..28`) | Mọi số liệu đọc DB; check-in lặp có thông báo và refresh giữ trạng thái | Sửa UI 02A đã build, chờ E2E |
 | 03 | Tài khoản và dữ liệu nghiệm thu | Chuẩn bị 2 Customer, 2 Organizer, Admin; seed demo có version, ngày còn hiệu lực (`AUTH-01..04`, `DATA-01..11`) | Tái tạo fixture, không trùng ID, đúng quyền sở hữu; lưu manifest không chứa secret | Script refresh 03A đã viết, chờ DB |
 | 04 | E2E xác thực | Login, refresh, logout, quyền và ownership (`AUTH-05..15`) | Ma trận browser/API có Actual và evidence, không rò dữ liệu giữa user | Mã probe đã bổ sung, chờ 03 và browser |
-| 05 | E2E mua vé | Catalog → Hold → payment → QR → check-in, race/expiry/restart (`APP-07..20`) | UI, API và DB khớp; `oversold=0`; có evidence payment fail và tranh vé | Chờ 04 |
+| 05 | E2E mua vé | Catalog → Hold → payment → QR → check-in, race/expiry/restart (`APP-07..20`) | UI, API và DB khớp; `oversold=0`; có evidence payment fail và tranh vé | Runner GA đã viết; chờ 04 và runtime |
 | 06 | Waiting Room capacity | Giới hạn grant đồng thời theo Redis; migration và quản trị policy | Test Redis/PostgreSQL đa replica và fail closed chạy qua | Mã đã viết, chờ test runtime |
 | 07 | Waiting Room active session | Giữ slot từ Hold qua checkout, heartbeat/timeout, giải phóng đúng một lần | `ActiveUsers ≤ Capacity` dưới tranh chấp/restart; không rò slot | Chờ 06 |
 | 08 | Admission thích ứng | Budget theo latency/lỗi/tải, hysteresis và metric quyết định; kiểm tra chống bot/bypass | Fault injection giảm/dừng grant và phục hồi có kiểm soát | Chờ 07 |
@@ -67,3 +67,10 @@ Backend và test project đã build sạch ở lượt trước. Test tích hợ
 - [x] Probe GET không token/token sai/sai role cho 401/403; ma trận ownership bổ sung Hold, Ticket và QR của người khác. Chưa có dữ liệu và API runtime để chạy.
 - [x] Probe public config xác nhận frontend origin, callback/logout, CORS, discovery và realm import; trạng thái realm đang chạy vẫn phải kiểm tra bằng login browser.
 - [ ] Chạy AUTH-05..15 với 5 tài khoản test, ghi Actual/evidence và kiểm tra refresh, logout, đổi tài khoản, mất kết nối Keycloak/API trong browser. Không xem các probe tĩnh là nghiệm thu.
+
+## Phase 05 — Runner giao dịch GA
+
+- [x] Chia mã thành HTTP/polling, catalog, Hold, checkout, payment, ticket/QR, check-in, cancellation và CLI; mỗi phần có commit riêng.
+- [x] 12 test ngoại tuyến kiểm tra logic runner đã đạt; báo cáo giữ ID và HTTP evidence khi lỗi, không chứa token/QR.
+- [ ] Chạy bốn kịch bản `purchase`, `cancel`, `failed`, `timeout` theo [hướng dẫn runner](booking-acceptance-runner.md); sau đó check-in trong cửa thời gian hợp lệ.
+- [ ] Browser E2E, reserved seats, tranh vé, hết hạn, restart, invariant DB và Waiting Room vẫn chưa nghiệm thu. Không chuyển các mục này sang PASS từ test giả lập.
